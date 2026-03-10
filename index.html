@@ -52,7 +52,7 @@
   <!-- ======= /Flyer Intro Overlay ======= -->
 
   <div class="page-watermark" aria-hidden="true"></div>
-  <header class="site-header">
+  <header class="site-header" id="siteHeader">
     <div class="header-ticker" aria-hidden="true">
       <div class="ticker-track">
         <span>S'Freibad Tanzt</span><span>✦</span>
@@ -362,22 +362,71 @@
       closeBtn.addEventListener('click', closePlayer);
 
       /* ---- Intro ---- */
+      function isMobile() {
+        return window.matchMedia('(max-width: 720px)').matches;
+      }
+
       function dismissIntro() {
         overlay.classList.add('intro-out');
         setTimeout(function () {
           overlay.hidden = true;
           document.body.classList.remove('intro-open');
         }, 600);
-        startMusic();
+        if (isMobile()) {
+          openPlayer();
+          setTimeout(function () {
+            closePlayer();
+          }, 2200);
+        } else {
+          startMusic();
+        }
       }
 
       introCta.addEventListener('click', dismissIntro);
-      /* Klick auf den dunklen Backdrop schließt auch */
       overlay.addEventListener('click', function (e) {
         if (e.target === overlay || e.target.classList.contains('intro-backdrop')) {
           dismissIntro();
         }
       });
+
+      /* ---- Header beim Scrollen ausblenden (mobil) ---- */
+      (function () {
+        var header = document.getElementById('siteHeader');
+        var lastY = window.scrollY || window.pageYOffset;
+        var threshold = 80;
+        var ticking = false;
+
+        function updateHeader() {
+          var y = window.scrollY || window.pageYOffset;
+          if (window.innerWidth > 720) {
+            header.classList.remove('header-hidden');
+            lastY = y;
+            ticking = false;
+            return;
+          }
+          if (y > threshold) {
+            if (y > lastY) {
+              header.classList.add('header-hidden');
+            } else {
+              header.classList.remove('header-hidden');
+            }
+          } else {
+            header.classList.remove('header-hidden');
+          }
+          lastY = y;
+          ticking = false;
+        }
+
+        function onScroll() {
+          if (!ticking) {
+            requestAnimationFrame(updateHeader);
+            ticking = true;
+          }
+        }
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', updateHeader);
+      })();
     })();
   </script>
 </body>

@@ -71,6 +71,7 @@ main, footer {
   box-shadow:
     0 1px 0 rgba(255, 73, 70, 0.18),
     0 4px 24px rgba(0, 0, 0, 0.5);
+  transition: transform 0.35s ease-out;
 }
 
 .header-ticker {
@@ -687,6 +688,10 @@ details p {
 }
 
 @media (max-width: 720px) {
+  .site-header.header-hidden {
+    transform: translateY(-100%);
+  }
+
   .nav-wrap,
   .footer-wrap {
     flex-direction: column;
