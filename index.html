@@ -334,11 +334,20 @@
       const frame    = document.getElementById('scFrame');
 
       /* ---- Player ---- */
+      function startMusic() {
+        if (!frame.src || frame.src === 'about:blank') {
+          frame.src = frame.dataset.src;
+        }
+        trigger.classList.add('is-playing');
+      }
+
       function openPlayer() {
         panel.hidden = false;
         trigger.setAttribute('aria-expanded', 'true');
         trigger.classList.add('is-playing');
-        frame.src = frame.dataset.src;
+        if (!frame.src || frame.src === 'about:blank') {
+          frame.src = frame.dataset.src;
+        }
       }
 
       function closePlayer() {
@@ -359,7 +368,7 @@
           overlay.hidden = true;
           document.body.classList.remove('intro-open');
         }, 600);
-        openPlayer();
+        startMusic();
       }
 
       introCta.addEventListener('click', dismissIntro);
