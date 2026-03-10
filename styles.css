@@ -46,6 +46,11 @@ a {
   margin: 0 auto;
 }
 
+main, footer {
+  position: relative;
+  z-index: 1;
+}
+
 .site-header {
   position: sticky;
   top: 0;
@@ -66,20 +71,25 @@ a {
 
 .ticker-track {
   display: flex;
-  gap: 1.4rem;
-  padding: 0.38rem 0;
+  gap: 2rem;
+  padding: 0.6rem 0;
   white-space: nowrap;
-  animation: ticker 28s linear infinite;
-  font-size: 0.78rem;
+  animation: ticker 35s linear infinite;
+  font-size: 1rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
   color: rgba(255, 247, 234, 0.95);
+  width: max-content;
+}
+
+.ticker-track span {
+  flex-shrink: 0;
 }
 
 @keyframes ticker {
   from { transform: translateX(0); }
-  to   { transform: translateX(-50%); }
+  to   { transform: translateX(-33.333%); }
 }
 
 .nav-wrap {
@@ -117,13 +127,14 @@ a {
 }
 
 .brand img {
-  width: 3rem;
-  height: 3rem;
+  width: 3.4rem;
+  height: 3.4rem;
   border-radius: 50%;
   object-fit: cover;
   position: relative;
   display: block;
   border: 2px solid #0a0505;
+  box-shadow: 0 0 0 4px rgba(255, 183, 3, 0.08);
 }
 
 .brand-text {
@@ -134,7 +145,7 @@ a {
 
 .brand-name {
   font-family: "Anton", Impact, sans-serif;
-  font-size: 1.25rem;
+  font-size: 1.4rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   line-height: 1;
@@ -235,6 +246,93 @@ a {
   grid-template-columns: minmax(0, 1.1fr) minmax(320px, 0.9fr);
   gap: 2rem;
   align-items: center;
+}
+
+.hero-copy {
+  position: relative;
+}
+
+.page-watermark {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    url("Freibad%20Tanzt%20Logo%20Original.png") center center / clamp(28rem, 55vw, 72rem) no-repeat;
+  opacity: 0.055;
+  filter: saturate(0.4) blur(1px);
+}
+
+.hero-mark {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 0 1.25rem;
+  padding: 0.9rem 1.1rem 0.9rem 0.9rem;
+  border-radius: 1.6rem;
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 183, 3, 0.08));
+  border: 1px solid rgba(255, 183, 3, 0.28);
+  box-shadow: 0 18px 44px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(12px);
+}
+
+.hero-mark-disc {
+  position: relative;
+  flex-shrink: 0;
+  width: clamp(6.5rem, 12vw, 9.5rem);
+  height: clamp(6.5rem, 12vw, 9.5rem);
+  padding: 0.38rem;
+  border-radius: 50%;
+  background: conic-gradient(from 180deg, var(--red), var(--yellow), #18a1cc, var(--red));
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.12),
+    0 0 30px rgba(255, 183, 3, 0.22);
+}
+
+.hero-mark-disc::before {
+  content: "";
+  position: absolute;
+  inset: 0.6rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 183, 3, 0.22), transparent 68%);
+  z-index: 0;
+}
+
+.hero-mark-disc img {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  display: block;
+  border-radius: 50%;
+  border: 3px solid #090909;
+  object-fit: cover;
+}
+
+.hero-mark-copy {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.hero-mark-label {
+  color: var(--yellow);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.hero-mark-copy strong {
+  font-family: "Anton", Impact, sans-serif;
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.hero-mark-copy span:last-child {
+  color: rgba(255, 247, 234, 0.78);
+  font-size: 0.95rem;
 }
 
 .eyebrow,
@@ -590,6 +688,16 @@ details p {
     justify-content: flex-start;
     overflow-x: auto;
     padding-bottom: 0.2rem;
+  }
+
+  .hero-mark {
+    width: 100%;
+    align-items: center;
+    padding: 0.85rem;
+  }
+
+  .hero-mark-copy span:last-child {
+    font-size: 0.88rem;
   }
 
   .section,
