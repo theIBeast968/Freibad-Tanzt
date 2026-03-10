@@ -1,4 +1,14 @@
+/* Lokale Schrift: Gin Test (abgelegt im Projektordner) */
+@font-face {
+  font-family: "Gin Test";
+  src: url("GinTest-Regular.otf") format("opentype");
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
+  --font-display: "Gin Test", Impact, sans-serif;
   --bg: #090909;
   --surface: #121212;
   --surface-soft: #1b1b1b;
@@ -144,7 +154,7 @@ main, footer {
 }
 
 .brand-name {
-  font-family: "Anton", Impact, sans-serif;
+  font-family: var(--font-display);
   font-size: 1.4rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -184,7 +194,7 @@ main, footer {
   border-radius: 999px;
   background: linear-gradient(135deg, var(--yellow) 0%, #ff9a00 100%);
   color: #1a1100 !important;
-  font-family: "Anton", Impact, sans-serif;
+  font-family: var(--font-display);
   font-size: 1.05rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
@@ -323,7 +333,7 @@ main, footer {
 }
 
 .hero-mark-copy strong {
-  font-family: "Anton", Impact, sans-serif;
+  font-family: var(--font-display);
   font-size: clamp(1.35rem, 2.6vw, 2rem);
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -353,7 +363,7 @@ h1,
 h2,
 h3,
 summary {
-  font-family: "Anton", Impact, sans-serif;
+  font-family: var(--font-display);
   letter-spacing: 0.03em;
 }
 
@@ -521,7 +531,7 @@ details p,
 }
 
 .event-strip-item strong {
-  font-family: "Anton", Impact, sans-serif;
+  font-family: var(--font-display);
   font-size: 1rem;
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -725,5 +735,293 @@ details p {
 
   .ticket-panel {
     padding: 1.4rem;
+  }
+}
+
+/* ============ Floating Music Player ============ */
+
+.music-player {
+  position: fixed;
+  bottom: 1.6rem;
+  right: 1.6rem;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.6rem;
+}
+
+.music-trigger {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.75rem 1.2rem;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--red-deep), #9b1b1b);
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow:
+    0 0 0 1px rgba(255, 255, 255, 0.1),
+    0 8px 28px rgba(0, 0, 0, 0.5);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: visible;
+}
+
+.music-trigger:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 0 1px rgba(255, 183, 3, 0.3),
+    0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+.music-trigger.is-playing {
+  background: linear-gradient(135deg, var(--yellow), #ff9a00);
+  color: #1a1100;
+}
+
+.music-trigger-icon {
+  line-height: 0;
+}
+
+.music-pulse {
+  position: absolute;
+  top: -3px;
+  right: -3px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--yellow);
+  box-shadow: 0 0 0 0 rgba(255, 183, 3, 0.6);
+  animation: pulse-ring 2s ease-out infinite;
+}
+
+.music-trigger.is-playing .music-pulse {
+  background: var(--red);
+  box-shadow: 0 0 0 0 rgba(255, 73, 70, 0.6);
+}
+
+@keyframes pulse-ring {
+  0%   { box-shadow: 0 0 0 0 rgba(255, 183, 3, 0.6); }
+  70%  { box-shadow: 0 0 0 10px rgba(255, 183, 3, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 183, 3, 0); }
+}
+
+.music-panel {
+  width: min(360px, calc(100vw - 3.2rem));
+  border-radius: 1.4rem;
+  overflow: hidden;
+  background: rgba(14, 5, 5, 0.97);
+  border: 1px solid rgba(255, 183, 3, 0.22);
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(20px);
+}
+
+.music-panel-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding: 0.9rem 1rem 0.9rem 1.1rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.07);
+}
+
+.music-panel-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.music-panel-label {
+  font-size: 0.65rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--yellow);
+}
+
+.music-panel-title {
+  font-family: var(--font-display);
+  font-size: 1rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.music-close {
+  flex-shrink: 0;
+  width: 2rem;
+  height: 2rem;
+  border: none;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.07);
+  color: rgba(255, 247, 234, 0.7);
+  cursor: pointer;
+  font-size: 0.85rem;
+  line-height: 1;
+  transition: background 0.2s;
+}
+
+.music-close:hover {
+  background: rgba(255, 73, 70, 0.25);
+  color: #fff;
+}
+
+.music-embed {
+  background: #000;
+}
+
+.music-embed iframe {
+  display: block;
+}
+
+.music-hint {
+  margin: 0;
+  padding: 0.45rem 1rem;
+  font-size: 0.7rem;
+  color: rgba(255, 247, 234, 0.35);
+  text-align: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+@media (max-width: 480px) {
+  .music-player {
+    bottom: 1rem;
+    right: 1rem;
+  }
+
+  .music-trigger-text {
+    display: none;
+  }
+
+  .music-trigger {
+    padding: 0.8rem;
+    border-radius: 50%;
+  }
+}
+
+/* ============ Intro Overlay ============ */
+
+.intro-open {
+  overflow: hidden;
+}
+
+.intro-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+.intro-overlay.intro-out {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.intro-backdrop {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 50% 40%, rgba(255, 73, 70, 0.45), transparent 55%),
+    rgba(5, 2, 2, 0.92);
+  backdrop-filter: blur(6px);
+  cursor: pointer;
+}
+
+.intro-inner {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.6rem;
+  padding: 2rem;
+  animation: intro-rise 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes intro-rise {
+  from {
+    opacity: 0;
+    transform: translateY(32px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.intro-flyer {
+  width: min(400px, calc(100vw - 4rem));
+  border-radius: 1.6rem;
+  box-shadow:
+    0 0 0 1px rgba(255, 183, 3, 0.25),
+    0 40px 80px rgba(0, 0, 0, 0.7),
+    0 0 60px rgba(255, 73, 70, 0.25);
+  transform: rotate(-1.5deg);
+  transition: transform 0.3s ease;
+}
+
+.intro-flyer:hover {
+  transform: rotate(0deg) scale(1.01);
+}
+
+.intro-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  background: linear-gradient(135deg, var(--yellow), #ff9a00);
+  color: #1a1100;
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  box-shadow:
+    0 0 0 1px rgba(255, 183, 3, 0.3),
+    0 16px 40px rgba(255, 183, 3, 0.35),
+    0 0 60px rgba(255, 183, 3, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  animation: cta-pulse 2.2s ease-in-out infinite;
+}
+
+@keyframes cta-pulse {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(255, 183, 3, 0.3), 0 16px 40px rgba(255, 183, 3, 0.35), 0 0 60px rgba(255, 183, 3, 0.15); }
+  50%       { box-shadow: 0 0 0 1px rgba(255, 183, 3, 0.5), 0 20px 50px rgba(255, 183, 3, 0.5),  0 0 90px rgba(255, 183, 3, 0.25); }
+}
+
+.intro-cta:hover {
+  transform: translateY(-3px) scale(1.03);
+  animation: none;
+  box-shadow: 0 24px 56px rgba(255, 183, 3, 0.45);
+}
+
+.intro-hint {
+  margin: 0;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255, 247, 234, 0.45);
+}
+
+@media (max-width: 480px) {
+  .intro-cta {
+    font-size: 1.1rem;
+    padding: 0.85rem 1.5rem;
   }
 }

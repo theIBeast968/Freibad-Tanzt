@@ -25,12 +25,32 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
-    href="https://fonts.googleapis.com/css2?family=Anton&family=Barlow:wght@400;500;600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
   >
   <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body class="intro-open">
+  <!-- ======= Flyer Intro Overlay ======= -->
+  <div class="intro-overlay" id="introOverlay" role="dialog" aria-modal="true" aria-label="Festival-Intro">
+    <div class="intro-backdrop"></div>
+    <div class="intro-inner">
+      <img
+        class="intro-flyer"
+        src="Rot_5.png"
+        alt="S'Freibad Tanzt – Flyer 17. bis 19. Juli Freibad Langenburg"
+      >
+      <button class="intro-cta" id="introCta">
+        <span>Jetzt feiern</span>
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+          <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6Z"/>
+        </svg>
+      </button>
+      <p class="intro-hint">Klick für Sound &amp; Einlass</p>
+    </div>
+  </div>
+  <!-- ======= /Flyer Intro Overlay ======= -->
+
   <div class="page-watermark" aria-hidden="true"></div>
   <header class="site-header">
     <div class="header-ticker" aria-hidden="true">
@@ -253,6 +273,43 @@
     </section>
   </main>
 
+  <!-- ======= Floating Music Player ======= -->
+  <div class="music-player" id="musicPlayer">
+    <button class="music-trigger" id="musicTrigger" aria-expanded="false" aria-controls="musicPanel">
+      <span class="music-trigger-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6Z"/>
+        </svg>
+      </span>
+      <span class="music-trigger-text">Live Set</span>
+      <span class="music-pulse" aria-hidden="true"></span>
+    </button>
+
+    <div class="music-panel" id="musicPanel" hidden>
+      <div class="music-panel-head">
+        <div class="music-panel-info">
+          <span class="music-panel-label">Now Playing</span>
+          <span class="music-panel-title">S'Freibad Tanzt · Summer Set</span>
+        </div>
+        <button class="music-close" id="musicClose" aria-label="Player schließen">✕</button>
+      </div>
+      <div class="music-embed">
+        <iframe
+          id="scFrame"
+          data-src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/phiiiiiips/closing-electronic-garden-13072024&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false&color=%23ffb703"
+          width="100%"
+          height="120"
+          scrolling="no"
+          frameborder="no"
+          allow="autoplay"
+          title="pHIPS – Closing Electronic Garden"
+          src="about:blank"
+        ></iframe>
+      </div>
+    </div>
+  </div>
+  <!-- ======= /Floating Music Player ======= -->
+
   <footer class="site-footer">
     <div class="container footer-wrap">
       <div>
@@ -266,5 +323,53 @@
       </div>
     </div>
   </footer>
+  <script>
+    (function () {
+      /* ---- Elemente ---- */
+      const overlay  = document.getElementById('introOverlay');
+      const introCta = document.getElementById('introCta');
+      const trigger  = document.getElementById('musicTrigger');
+      const panel    = document.getElementById('musicPanel');
+      const closeBtn = document.getElementById('musicClose');
+      const frame    = document.getElementById('scFrame');
+
+      /* ---- Player ---- */
+      function openPlayer() {
+        panel.hidden = false;
+        trigger.setAttribute('aria-expanded', 'true');
+        trigger.classList.add('is-playing');
+        frame.src = frame.dataset.src;
+      }
+
+      function closePlayer() {
+        panel.hidden = true;
+        trigger.setAttribute('aria-expanded', 'false');
+        trigger.classList.remove('is-playing');
+      }
+
+      trigger.addEventListener('click', function () {
+        panel.hidden ? openPlayer() : closePlayer();
+      });
+      closeBtn.addEventListener('click', closePlayer);
+
+      /* ---- Intro ---- */
+      function dismissIntro() {
+        overlay.classList.add('intro-out');
+        setTimeout(function () {
+          overlay.hidden = true;
+          document.body.classList.remove('intro-open');
+        }, 600);
+        openPlayer();
+      }
+
+      introCta.addEventListener('click', dismissIntro);
+      /* Klick auf den dunklen Backdrop schließt auch */
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay || e.target.classList.contains('intro-backdrop')) {
+          dismissIntro();
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
