@@ -1,0 +1,5 @@
+# Abwärtskompatibilität: alte Unterseiten → Single Page mit Hash
+/faq           /#faq        302
+/faq.html      /#faq        302
+/impressum     /#impressum  302
+/impressum.html /#impressum 302

@@ -28,6 +28,34 @@
   box-sizing: border-box;
 }
 
+/* ---- Skip-Link ---- */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  z-index: 9999;
+  padding: 0.6rem 1.2rem;
+  background: var(--yellow);
+  color: #1a0a00;
+  font-weight: 700;
+  border-radius: 0.5rem;
+  text-decoration: none;
+  transition: top 0.15s;
+}
+.skip-link:focus {
+  top: 0.75rem;
+}
+
+/* ---- Focus-Styles für Tastaturnavigation ---- */
+:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
 html {
   scroll-behavior: smooth;
 }
@@ -370,7 +398,7 @@ summary {
 
 h1 {
   margin: 0;
-  font-size: clamp(4rem, 12vw, 7.5rem);
+  font-size: clamp(3rem, 8vw, 5.5rem);
   line-height: 0.92;
   text-transform: uppercase;
   text-shadow:
@@ -382,14 +410,14 @@ h1 {
 
 h2 {
   margin: 0;
-  font-size: clamp(2.4rem, 5vw, 4.5rem);
+  font-size: clamp(1.8rem, 4vw, 3.2rem);
   line-height: 0.96;
   text-transform: uppercase;
 }
 
 h3 {
   margin: 0 0 0.8rem;
-  font-size: 2rem;
+  font-size: 1.5rem;
   text-transform: uppercase;
 }
 
@@ -420,7 +448,7 @@ details p,
   margin: 0;
   font-size: 1.08rem;
   line-height: 1.65;
-  color: rgba(255, 247, 234, 0.84);
+  color: rgba(255, 247, 234, 0.92);
 }
 
 .hero-text {
@@ -635,6 +663,215 @@ details p,
   border-color: rgba(255, 183, 3, 0.42);
 }
 
+.section-impressum {
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.section-impressum h3 {
+  font-size: 1.15rem;
+  text-transform: none;
+  letter-spacing: 0.02em;
+  margin-bottom: 0.3rem;
+}
+
+.section-impressum p {
+  font-size: 0.98rem;
+}
+
+.gallery-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 2rem;
+  align-items: end;
+  margin-bottom: 2rem;
+}
+
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.gallery-item {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  box-shadow: 0 18px 40px rgba(0, 0, 0, 0.55);
+  background: radial-gradient(circle at top, rgba(255, 183, 3, 0.18), rgba(0, 0, 0, 0.9));
+}
+
+.gallery-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease, opacity 0.4s ease;
+}
+
+.gallery-item::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent, rgba(0, 0, 0, 0.35));
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.gallery-item:hover img {
+  transform: scale(1.04);
+  opacity: 0.95;
+}
+
+.gallery-item:hover::after {
+  opacity: 1;
+}
+
+.gallery-item--hidden {
+  display: none;
+}
+
+.gallery-show-more {
+  display: block;
+  margin: 2rem auto 0;
+}
+
+.page-teaser-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  gap: 2rem;
+  align-items: end;
+  margin-bottom: 2rem;
+}
+
+.teaser-grid,
+.info-card-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.teaser-card,
+.info-card {
+  padding: 1.5rem;
+  border-radius: 1.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+  box-shadow: var(--shadow);
+}
+
+.teaser-label {
+  margin: 0 0 0.8rem;
+  color: var(--yellow);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+.teaser-card p:last-of-type,
+.info-card p {
+  margin: 0;
+  line-height: 1.7;
+  color: rgba(255, 247, 234, 0.92);
+}
+
+.teaser-card .button {
+  margin-top: 1.25rem;
+}
+
+.subpage-main {
+  padding-top: 2rem;
+}
+
+.subpage-hero {
+  padding: 3rem 0 1.5rem;
+}
+
+.subpage-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 0.8fr);
+  gap: 2rem;
+  align-items: center;
+}
+
+.subpage-panel {
+  padding: 1.4rem;
+  border-radius: 1.5rem;
+  background: linear-gradient(135deg, rgba(255, 183, 3, 0.12), rgba(255, 73, 70, 0.08));
+  border: 1px solid rgba(255, 183, 3, 0.22);
+  box-shadow: var(--shadow);
+}
+
+.subpage-panel p {
+  margin: 0;
+  color: rgba(255, 247, 234, 0.92);
+  line-height: 1.7;
+}
+
+.subpage-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  color: var(--cream);
+  font-weight: 700;
+  letter-spacing: 0.04em;
+}
+
+.subpage-section {
+  padding: 2rem 0 5rem;
+}
+
+.faq-page-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  gap: 2rem;
+  align-items: start;
+}
+
+.faq-page-grid .faq-list,
+.info-card-grid {
+  margin-top: 0;
+}
+
+.info-card h3 {
+  margin-bottom: 0.5rem;
+  font-size: 1.3rem;
+  text-transform: none;
+  letter-spacing: 0.02em;
+}
+
+.impressum-details {
+  display: block;
+  margin-top: 1.5rem;
+}
+
+.impressum-details > summary {
+  cursor: pointer;
+  padding: 1rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.04);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  list-style: none;
+}
+
+.impressum-details[open] > summary {
+  background: rgba(255, 183, 3, 0.14);
+  border-color: rgba(255, 183, 3, 0.5);
+}
+
+.impressum-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.impressum-details .info-card-grid {
+  margin-top: 1.5rem;
+}
+
 summary {
   cursor: pointer;
   font-size: 1.35rem;
@@ -690,7 +927,11 @@ details p {
   .faq-wrap,
   .ticket-panel,
   .feature-grid,
-  .lineup-grid {
+  .lineup-grid,
+  .teaser-grid,
+  .info-card-grid,
+  .subpage-hero-grid,
+  .faq-page-grid {
     grid-template-columns: 1fr;
   }
 
@@ -700,6 +941,18 @@ details p {
 
   .event-strip {
     padding: 0.8rem 1rem;
+  }
+
+  .gallery-intro {
+    grid-template-columns: 1fr;
+  }
+
+  .page-teaser-intro {
+    grid-template-columns: 1fr;
+  }
+
+  .gallery-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -738,11 +991,11 @@ details p {
   }
 
   h1 {
-    font-size: clamp(3.3rem, 18vw, 5rem);
+    font-size: clamp(2.4rem, 14vw, 3.8rem);
   }
 
   h2 {
-    font-size: clamp(2rem, 11vw, 3.1rem);
+    font-size: clamp(1.6rem, 9vw, 2.6rem);
   }
 
   .hero-actions,
@@ -756,6 +1009,10 @@ details p {
 
   .ticket-panel {
     padding: 1.4rem;
+  }
+
+  .gallery-grid {
+    grid-template-columns: 1fr;
   }
 }
 

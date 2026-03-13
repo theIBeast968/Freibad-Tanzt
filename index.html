@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="styles.css">
 </head>
 <body class="intro-open">
+  <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
   <!-- ======= Flyer Intro Overlay ======= -->
   <div class="intro-overlay" id="introOverlay" role="dialog" aria-modal="true" aria-label="Festival-Intro">
     <div class="intro-backdrop"></div>
@@ -85,15 +86,17 @@
       <nav class="site-nav" aria-label="Hauptnavigation">
         <a href="#infos">Infos</a>
         <a href="#lineup">Line-up</a>
+        <a href="#fotos">Fotos</a>
         <a href="#faq">FAQ</a>
+        <a href="#impressum">Impressum</a>
         <a href="https://www.instagram.com/s_freibad_tanzt_festival/" target="_blank" rel="noreferrer">Instagram</a>
         <a class="nav-cta" href="#tickets">Mehr Info</a>
       </nav>
     </div>
   </header>
 
-  <main id="top">
-    <section class="hero">
+  <main id="main-content">
+    <section id="top" class="hero">
       <div class="hero-overlay"></div>
       <div class="container hero-grid">
         <div class="hero-copy">
@@ -102,7 +105,7 @@
               <img src="Freibad%20Tanzt%20Logo%20Original.png" alt="S'Freibad Tanzt Festival-Logo">
             </div>
             <div class="hero-mark-copy">
-              <span class="hero-mark-label">Official Festival Mark</span>
+              <span class="hero-mark-label">S'Freibad Tanzt</span>
               <strong>Summer Festival 2026</strong>
               <span>17. – 19. Juli · Freibad Langenburg</span>
             </div>
@@ -170,16 +173,25 @@
 
       <div class="container feature-grid">
         <article class="feature-card">
-          <h3>Schirmbar & Drinks</h3>
-          <p>Kalte Getränke, Sommeratmosphäre und Treffpunkt für lange Festivalabende.</p>
+          <h3>Schirmbar – Mitsingen &amp; Anstoßen</h3>
+          <p>
+            Mitten im Festivalgelände wartet die Schirmbar als Party-Treffpunkt
+            für alle Feierwütigen: Während an der Bühne die Beats laufen, gibt es
+            hier Mallorca- und Partyhits zum Mitsingen, Tanzen und Abfeiern –
+            der Ort zum Treffen, Anstoßen und Feiern bis spät in die Nacht.
+          </p>
         </article>
         <article class="feature-card">
           <h3>Dance & Chill Area</h3>
           <p>Feiern, runterkommen und mit Freunden zwischen Beats und Sunset relaxen.</p>
         </article>
         <article class="feature-card">
-          <h3>Food, Ice Cream & Vibes</h3>
-          <p>Streetfood, Eis und Festivalmomente, die sich nach echtem Sommer anfühlen.</p>
+          <h3>Food, Drinks &amp; Ice Cream</h3>
+          <p>
+            Für den perfekten Festival-Snack ist gesorgt: Charly, Larewo,
+            Meyer Eis und der Freibad-Kiosk versorgen euch mit Essen, Drinks
+            und Eis – alles, was man für einen langen Festivaltag braucht.
+          </p>
         </article>
       </div>
     </section>
@@ -226,7 +238,7 @@
           <p class="section-label">Mehr Info</p>
           <h2>17.-19. Juli im Freibad Langenburg</h2>
           <p>
-            Alles Wichtige auf einen Blick
+            Tickets, Infos und aktuelle Updates direkt auf der Festival-Website.
           </p>
         </div>
         <div class="ticket-actions">
@@ -238,19 +250,33 @@
       </div>
     </section>
 
+    <section id="fotos" class="section section-dark">
+      <div class="container gallery-intro">
+        <div>
+          <p class="section-label">Fotos</p>
+          <h2>Rückblick auf S'Freibad Tanzt.</h2>
+        </div>
+        <div class="text-stack">
+          <p>
+            Eindrücke vom letzten Jahr – die Galerie wächst mit euren
+            Lieblingsmomenten. Weitere Fotos folgen nach und nach.
+          </p>
+        </div>
+      </div>
+      <div class="container gallery-grid" id="galleryGrid" aria-label="Festival-Fotogalerie"></div>
+    </section>
+
     <section id="faq" class="section section-dark">
       <div class="container faq-wrap">
-        <div class="faq-intro">
+        <div class="text-stack">
           <p class="section-label">FAQ</p>
           <h2>Die wichtigsten Fragen vorab.</h2>
           <p>
-            Diese Inhalte sind als saubere Platzhalter angelegt und können später
-            direkt mit euren finalen Infos ersetzt werden.
+            Alles, was Besucher vor dem Festival wissen wollen – kompakt zum Aufklappen.
           </p>
         </div>
-
         <div class="faq-list">
-          <details open>
+          <details>
             <summary>Wann findet S'Freibad Tanzt statt?</summary>
             <p>Das Festival ist für den 17. bis 19. Juli im Freibad Langenburg angekündigt.</p>
           </details>
@@ -260,7 +286,7 @@
           </details>
           <details>
             <summary>Ist das Line-up schon final?</summary>
-            <p>Die Seite ist so vorbereitet, dass Acts und genaue Spielzeiten später einfach eingetragen werden können.</p>
+            <p>Das Line-up wird rechtzeitig vor dem Festival bekannt gegeben. Schau bald wieder rein oder folg uns auf Instagram.</p>
           </details>
           <details>
             <summary>Wo gibt es weitere Infos?</summary>
@@ -269,6 +295,72 @@
         </div>
       </div>
     </section>
+
+    <section id="impressum" class="section section-dark section-impressum">
+      <div class="container">
+        <p class="section-label">Impressum &amp; Kontakt</p>
+        <h2>Offizielle Angaben zum Festival.</h2>
+        <p>
+          Alle Kontaktdaten, Vereinsangaben und rechtlichen Infos gesammelt auf einer eigenen, übersichtlichen Sektion.
+        </p>
+      </div>
+      <div class="container">
+        <details class="impressum-details">
+          <summary>Verein, Vorstand &amp; rechtliche Angaben anzeigen</summary>
+          <div class="info-card-grid">
+            <article class="info-card">
+              <h3>Verein &amp; Anschrift</h3>
+              <p>
+                Verein der Freibadfreunde Langenburg e. V.<br>
+                Friedenstraße 66<br>
+                74595 Langenburg<br>
+                Tel.: 07905 9407030<br>
+                E-Mail: freibadfreunde.langenburg@t-online.de
+              </p>
+            </article>
+            <article class="info-card">
+              <h3>Vorstand</h3>
+              <p>
+                Gemeinschaftlich vertretungsberechtigt:<br>
+                1. Vorsitzender: Philipp Höche<br>
+                Stellv. Vorsitzende: Anette Sperber
+              </p>
+            </article>
+            <article class="info-card">
+              <h3>Veranstaltung im Auftrag</h3>
+              <p>
+                Durchführung der Veranstaltung S'Freibad Tanzt im Auftrag des Vereins:<br>
+                Tobias Rath &amp; Team
+              </p>
+            </article>
+            <article class="info-card">
+              <h3>Registereintrag</h3>
+              <p>
+                Registergericht: Amtsgericht Ulm<br>
+                Registernummer: VR 690236
+              </p>
+            </article>
+            <article class="info-card">
+              <h3>Inhaltlich Verantwortlicher (§ 18 Abs. 2 MStV)</h3>
+              <p>
+                Philipp Höche<br>
+                Friedenstraße 66<br>
+                74595 Langenburg
+              </p>
+            </article>
+            <article class="info-card">
+              <h3>Alternative Streitbeilegung</h3>
+              <p>
+                Zur Teilnahme an einem Streitbeilegungsverfahren vor einer
+                Verbraucherschlichtungsstelle sind wir nicht verpflichtet und
+                nicht bereit.
+              </p>
+            </article>
+          </div>
+        </details>
+      </div>
+    </section>
+
   </main>
 
   <!-- ======= Floating Music Player ======= -->
@@ -317,7 +409,9 @@
       <div class="footer-links">
         <a href="#infos">Infos</a>
         <a href="#lineup">Line-up</a>
+        <a href="#fotos">Fotos</a>
         <a href="#faq">FAQ</a>
+        <a href="#impressum">Impressum</a>
       </div>
     </div>
     <div class="container footer-credit">
@@ -334,26 +428,92 @@
       const panel    = document.getElementById('musicPanel');
       const closeBtn = document.getElementById('musicClose');
       const frame    = document.getElementById('scFrame');
+      const MUSIC_FLAG_KEY = 'sfreibad_music';
+      const MUSIC_POS_KEY = 'sfreibad_music_pos';
       let widget = null;
       let widgetReady = false;
       let musicStarted = false;
       let playQueued = false;
 
       /* ---- Player ---- */
+      function getSavedPosition() {
+        const value = parseInt(sessionStorage.getItem(MUSIC_POS_KEY) || '0', 10);
+        return Number.isFinite(value) ? value : 0;
+      }
+
+      function savePosition(callback) {
+        if (widget && widgetReady) {
+          widget.getPosition(function (position) {
+            sessionStorage.setItem(MUSIC_POS_KEY, String(position || 0));
+            if (callback) callback();
+          });
+          return;
+        }
+
+        if (callback) callback();
+      }
+
+      function bindPositionPersistence() {
+        window.setInterval(function () {
+          savePosition();
+        }, 5000);
+
+        document.querySelectorAll('a[href]').forEach(function (link) {
+          var href = link.getAttribute('href');
+          if (!href || href.charAt(0) === '#' || /^(https?:|mailto:|tel:)/.test(href)) {
+            return;
+          }
+
+          link.addEventListener('click', function (event) {
+            if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey || link.target === '_blank') {
+              return;
+            }
+
+            event.preventDefault();
+            savePosition(function () {
+              window.location.href = link.href;
+            });
+          });
+        });
+      }
+
       function ensureWidget() {
         if (!frame.src || frame.src === 'about:blank') {
           frame.src = frame.dataset.src;
         }
 
-        if (!widget && window.SC && window.SC.Widget) {
+        function initWidget() {
+          if (widget || !window.SC || !window.SC.Widget) {
+            return;
+          }
+
           widget = window.SC.Widget(frame);
           widget.bind(window.SC.Widget.Events.READY, function () {
+            const savedPosition = getSavedPosition();
             widgetReady = true;
+
+            if (savedPosition > 0) {
+              widget.seekTo(savedPosition);
+            }
+
             if (playQueued) {
-              widget.play();
+              window.setTimeout(function () {
+                widget.play();
+              }, 180);
               playQueued = false;
             }
           });
+        }
+
+        if (window.SC && window.SC.Widget) {
+          initWidget();
+        } else if (!widget) {
+          const check = window.setInterval(function () {
+            if (window.SC && window.SC.Widget) {
+              window.clearInterval(check);
+              initWidget();
+            }
+          }, 80);
         }
       }
 
@@ -365,6 +525,7 @@
       function startMusic() {
         ensureWidget();
         markPlaying();
+        sessionStorage.setItem(MUSIC_FLAG_KEY, '1');
 
         if (widget) {
           if (widgetReady) {
@@ -402,6 +563,7 @@
         }
       });
       closeBtn.addEventListener('click', collapsePlayer);
+      bindPositionPersistence();
 
       /* ---- Intro ---- */
       function isMobile() {
@@ -429,6 +591,13 @@
           dismissIntro();
         }
       });
+
+      if (sessionStorage.getItem(MUSIC_FLAG_KEY)) {
+        overlay.hidden = true;
+        document.body.classList.remove('intro-open');
+        startMusic();
+        collapsePlayer();
+      }
 
       /* ---- Header beim Scrollen ausblenden (mobil) ---- */
       (function () {
@@ -467,6 +636,76 @@
 
         window.addEventListener('scroll', onScroll, { passive: true });
         window.addEventListener('resize', updateHeader);
+      })();
+
+      /* ---- Galerie-Bilder laden ---- */
+      (function () {
+        var grid = document.getElementById('galleryGrid');
+        if (!grid) return;
+
+        var galleryFiles = [
+          '20250815-sFreibadTanzt-14.JPG',
+          '20250815-sFreibadTanzt-15.JPG',
+          '20250815-sFreibadTanzt-19.JPG',
+          '20250815-sFreibadTanzt-25.JPG',
+          '20250815-sFreibadTanzt-31.JPG',
+          '20250815-sFreibadTanzt-36.JPG',
+          '20250815-sFreibadTanzt-37.JPG',
+          '20250815-sFreibadTanzt-44.JPG',
+          '20250815-sFreibadTanzt-48.JPG',
+          '20250815-sFreibadTanzt-66.JPG',
+          '20250815-sFreibadTanzt-67.JPG',
+          '20250815-sFreibadTanzt-69.JPG',
+          '20250815-sFreibadTanzt-75.JPG',
+          '20250815-sFreibadTanzt-81.JPG',
+          '20250815-sFreibadTanzt-82.JPG',
+          '20250815-sFreibadTanzt-86.JPG',
+          '20250815-sFreibadTanzt-87.JPG',
+          '20250815-sFreibadTanzt-93.JPG',
+          '20250815-sFreibadTanzt-100.JPG',
+          '20250815-sFreibadTanzt-105.JPG',
+          '20250815-sFreibadTanzt-109.JPG',
+          '20250815-sFreibadTanzt-113.JPG',
+          '20250815-sFreibadTanzt-116.JPG',
+          '20250815-sFreibadTanzt-144.JPG',
+          '20250815-sFreibadTanzt-146.JPG',
+          '20250815-sFreibadTanzt-150.JPG',
+          '20250815-sFreibadTanzt-151.JPG',
+          '20250815-sFreibadTanzt-160.JPG',
+          '20250815-sFreibadTanzt-165.JPG',
+          'DJI_0992.JPG',
+          'DJI_0999.JPG',
+          'PHOTO-2026-03-11-21-36-36.jpg',
+          'PHOTO-2026-03-11-21-36-36(1).jpg'
+        ];
+
+        var PREVIEW = 8;
+
+        galleryFiles.forEach(function (filename, idx) {
+          var wrapper = document.createElement('figure');
+          wrapper.className = 'gallery-item' + (idx >= PREVIEW ? ' gallery-item--hidden' : '');
+
+          var img = document.createElement('img');
+          img.loading = 'lazy';
+          img.alt = 'S\'Freibad Tanzt Festivalfoto';
+          img.src = 'gallery/' + filename;
+
+          wrapper.appendChild(img);
+          grid.appendChild(wrapper);
+        });
+
+        if (galleryFiles.length > PREVIEW) {
+          var showBtn = document.createElement('button');
+          showBtn.className = 'button button-outline gallery-show-more';
+          showBtn.textContent = 'Mehr Fotos anzeigen';
+          showBtn.addEventListener('click', function () {
+            grid.querySelectorAll('.gallery-item--hidden').forEach(function (el) {
+              el.classList.remove('gallery-item--hidden');
+            });
+            showBtn.parentNode.removeChild(showBtn);
+          });
+          grid.insertAdjacentElement('afterend', showBtn);
+        }
       })();
     })();
   </script>
