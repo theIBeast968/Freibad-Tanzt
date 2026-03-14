@@ -612,7 +612,13 @@ details p,
   gap: 1rem;
 }
 
-.feature-grid,
+.feature-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1.35rem;
+  margin-top: 2rem;
+}
+
 .lineup-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -630,6 +636,14 @@ details p,
   box-shadow: var(--shadow);
 }
 
+.feature-card,
+.lineup-card,
+.info-card {
+  display: grid;
+  align-content: start;
+  gap: 0.9rem;
+}
+
 .lineup-card {
   background:
     linear-gradient(180deg, rgba(255, 183, 3, 0.08), rgba(255, 255, 255, 0.02)),
@@ -638,7 +652,33 @@ details p,
 
 .lineup-day {
   display: inline-block;
-  margin-bottom: 0.9rem;
+  margin-bottom: 0.1rem;
+  color: var(--yellow);
+}
+
+.card-intro,
+.schedule-list,
+.card-points,
+.feature-card p,
+.lineup-card p {
+  margin: 0;
+}
+
+.card-intro {
+  color: rgba(255, 247, 234, 0.92);
+}
+
+.card-points,
+.schedule-list {
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.5rem;
+  line-height: 1.55;
+  color: rgba(255, 247, 234, 0.88);
+}
+
+.card-points li::marker,
+.schedule-list li::marker {
   color: var(--yellow);
 }
 
@@ -661,6 +701,16 @@ details p,
 
 .faq-list details[open] {
   border-color: rgba(255, 183, 3, 0.42);
+}
+
+.faq-list summary {
+  font-size: 1.05rem;
+  line-height: 1.35;
+}
+
+.faq-list details p {
+  margin: 0.8rem 0 0;
+  line-height: 1.65;
 }
 
 .section-impressum {
@@ -869,6 +919,37 @@ details p,
 }
 
 .impressum-details .info-card-grid {
+  margin-top: 1.5rem;
+}
+
+.faq-section-details {
+  display: block;
+  margin-top: 1.5rem;
+}
+
+.faq-section-details > summary {
+  cursor: pointer;
+  padding: 1rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.04);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  list-style: none;
+}
+
+.faq-section-details[open] > summary {
+  background: rgba(255, 183, 3, 0.14);
+  border-color: rgba(255, 183, 3, 0.5);
+}
+
+.faq-section-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq-section-details .faq-list {
   margin-top: 1.5rem;
 }
 
