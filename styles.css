@@ -664,8 +664,14 @@ details p,
   margin: 0;
 }
 
-.card-intro {
+.card-intro,
+.card-text {
   color: rgba(255, 247, 234, 0.92);
+}
+
+.card-text {
+  line-height: 1.65;
+  margin-top: 0.5rem;
 }
 
 .card-points,
