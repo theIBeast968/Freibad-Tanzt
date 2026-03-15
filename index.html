@@ -712,6 +712,8 @@
         }
 
         btn.addEventListener('click', function () {
+          var header = document.getElementById('siteHeader');
+          if (header) header.classList.remove('header-hidden');
           document.getElementById('top').scrollIntoView({ behavior: 'smooth', block: 'start' });
         });
         window.addEventListener('scroll', onScroll, { passive: true });
