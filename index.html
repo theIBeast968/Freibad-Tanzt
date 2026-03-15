@@ -662,31 +662,19 @@
         collapsePlayer();
       }
 
-      /* ---- Header beim Runterscrollen ausblenden (mobil) ---- */
+      /* ---- Header mobil nur am Seitenanfang sichtbar ---- */
       (function () {
         var header = document.getElementById('siteHeader');
-        var lastY = window.scrollY || window.pageYOffset;
         var threshold = 80;
         var ticking = false;
 
         function updateHeader() {
           var y = window.scrollY || window.pageYOffset;
-          if (window.innerWidth > 720) {
+          if (window.innerWidth > 720 || y <= threshold) {
             header.classList.remove('header-hidden');
-            lastY = y;
-            ticking = false;
-            return;
-          }
-          if (y > threshold) {
-            if (y > lastY) {
-              header.classList.add('header-hidden');
-            } else {
-              header.classList.remove('header-hidden');
-            }
           } else {
-            header.classList.remove('header-hidden');
+            header.classList.add('header-hidden');
           }
-          lastY = y;
           ticking = false;
         }
 
@@ -699,6 +687,7 @@
 
         window.addEventListener('scroll', onScroll, { passive: true });
         window.addEventListener('resize', updateHeader);
+        updateHeader();
       })();
 
       /* ---- Nach-oben-Button (sichtbar wenn gescrollt) ---- */
