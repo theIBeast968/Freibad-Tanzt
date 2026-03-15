@@ -3,7 +3,11 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0a0500">
   <title>S'Freibad Tanzt | Summer Festival in Langenburg</title>
+  <link rel="icon" type="image/png" sizes="32x32" href="favicon-32.png">
+  <link rel="apple-touch-icon" href="icon-192.png">
+  <link rel="manifest" href="manifest.webmanifest">
   <meta
     name="description"
     content="S'Freibad Tanzt – 17. & 18. Juli Partynächte, 19. Juli Familientag. Open Air Stage, Schirmbar, Zeltplatz im Freibad Langenburg."
@@ -447,6 +451,13 @@
   </div>
   <!-- ======= /Floating Music Player ======= -->
 
+  <!-- ======= Nach-oben-Button (mobil) ======= -->
+  <button type="button" class="back-to-top" id="backToTop" aria-label="Nach oben scrollen" title="Nach oben">
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M12 19V5M5 12l7-7 7 7"/>
+    </svg>
+  </button>
+
   <footer class="site-footer">
     <div class="container footer-wrap">
       <div>
@@ -466,6 +477,11 @@
     </div>
   </footer>
   <script src="https://w.soundcloud.com/player/api.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js').catch(function () {});
+    }
+  </script>
   <script>
     (function () {
       /* ---- Elemente ---- */
@@ -646,7 +662,7 @@
         collapsePlayer();
       }
 
-      /* ---- Header beim Scrollen ausblenden (mobil) ---- */
+      /* ---- Header beim Runterscrollen ausblenden (mobil) ---- */
       (function () {
         var header = document.getElementById('siteHeader');
         var lastY = window.scrollY || window.pageYOffset;
@@ -683,6 +699,35 @@
 
         window.addEventListener('scroll', onScroll, { passive: true });
         window.addEventListener('resize', updateHeader);
+      })();
+
+      /* ---- Nach-oben-Button (sichtbar wenn gescrollt) ---- */
+      (function () {
+        var btn = document.getElementById('backToTop');
+        if (!btn) return;
+        var threshold = 400;
+        var ticking = false;
+
+        function updateVisibility() {
+          var y = window.scrollY || window.pageYOffset;
+          var show = y > threshold;
+          btn.classList.toggle('back-to-top--visible', show);
+          ticking = false;
+        }
+
+        function onScroll() {
+          if (!ticking) {
+            requestAnimationFrame(updateVisibility);
+            ticking = true;
+          }
+        }
+
+        btn.addEventListener('click', function () {
+          document.getElementById('top').scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', updateVisibility);
+        updateVisibility();
       })();
 
       /* ---- Galerie-Bilder laden ---- */
