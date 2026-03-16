@@ -957,6 +957,99 @@ details p,
   margin-top: 1.5rem;
 }
 
+/* ---- Sponsoren (aufklappbar, nur Logos mit Links) ---- */
+.sponsors-details {
+  display: block;
+  margin-top: 1.5rem;
+}
+
+.sponsors-details > summary {
+  cursor: pointer;
+  padding: 1rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.04);
+  font-weight: 600;
+  list-style: none;
+}
+
+.sponsors-details > summary::-webkit-details-marker {
+  display: none;
+}
+
+.sponsors-details[open] > summary {
+  background: rgba(255, 183, 3, 0.14);
+  border-color: rgba(255, 183, 3, 0.5);
+}
+
+.sponsors-grid {
+  margin-top: 1.75rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.sponsor-logo-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: 100px;
+  transition: background 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+  text-decoration: none;
+}
+
+.sponsor-logo-link:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 183, 3, 0.3);
+  transform: translateY(-2px);
+}
+
+.sponsor-logo-link img {
+  display: block;
+  max-width: 100%;
+  max-height: 65px;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+  filter: brightness(0) invert(1);
+  opacity: 0.96;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.sponsor-logo-link:hover img {
+  transform: scale(1.05);
+  opacity: 1;
+}
+
+/* Meyer Eis: deutlich größer */
+.sponsor-logo-link--meyer .sponsor-logo-img--meyer,
+.sponsor-logo-link--meyer img {
+  max-height: 110px !important;
+}
+
+/* Getränke Center: kein Weiß-Filter, Originalfarben; Kachel transparent wie die anderen */
+.sponsor-logo-link--original {
+  background: rgba(255, 255, 255, 0.02);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.sponsor-logo-link--original:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 183, 3, 0.3);
+}
+
+.sponsor-logo-link--original img,
+.sponsor-logo-img--original {
+  filter: none !important;
+  opacity: 1 !important;
+  max-height: 82px;
+}
+
 summary {
   cursor: pointer;
   font-size: 1.35rem;
@@ -1081,6 +1174,20 @@ details p {
 
   h2 {
     font-size: clamp(1.6rem, 9vw, 2.6rem);
+  }
+
+  .sponsors-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.9rem;
+  }
+
+  .sponsor-logo-link {
+    min-height: 84px;
+    padding: 0.85rem 0.7rem;
+  }
+
+  .sponsor-logo-link img {
+    max-height: 58px;
   }
 
   .hero-actions,
