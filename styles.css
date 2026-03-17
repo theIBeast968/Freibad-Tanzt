@@ -1050,6 +1050,43 @@ details p,
   max-height: 82px;
 }
 
+/* Groundwerk: Originalfarben, leicht weißer Hintergrund, Logo zoomt Whitespace weg */
+.sponsor-logo-link--groundwerk {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.14);
+  overflow: hidden;
+}
+
+.sponsor-logo-link--groundwerk:hover {
+  background: rgba(255, 255, 255, 0.13);
+  border-color: rgba(255, 183, 3, 0.3);
+}
+
+.sponsor-logo-link--groundwerk img {
+  filter: none !important;
+  opacity: 1 !important;
+  max-height: 88px;
+  transform: scale(1.45);
+}
+
+.sponsor-logo-link--groundwerk:hover img {
+  transform: scale(1.52);
+}
+
+/* Schacht Club: Logo zoomt Whitespace weg */
+.sponsor-logo-link--schacht {
+  overflow: hidden;
+}
+
+.sponsor-logo-link--schacht img {
+  max-height: 88px;
+  transform: scale(2.3);
+}
+
+.sponsor-logo-link--schacht:hover img {
+  transform: scale(2.42);
+}
+
 summary {
   cursor: pointer;
   font-size: 1.35rem;

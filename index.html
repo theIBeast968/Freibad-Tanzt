@@ -380,6 +380,12 @@
             <a class="sponsor-logo-link" href="https://farmbau.eu" target="_blank" rel="noreferrer">
               <img src="Sponsoren Logos/Logo-Farmbau.svg" alt="Farmbau">
             </a>
+            <a class="sponsor-logo-link sponsor-logo-link--groundwerk" href="https://www.instagram.com/ground_werk_bautechnik/" target="_blank" rel="noreferrer">
+              <img src="Sponsoren Logos/Groundwerk.png" alt="Groundwerk Bautechnik">
+            </a>
+            <a class="sponsor-logo-link sponsor-logo-link--schacht" href="https://www.der-schacht.de/" target="_blank" rel="noreferrer">
+              <img src="Sponsoren Logos/schacht club.png" alt="Schacht Club">
+            </a>
           </div>
         </details>
       </div>
@@ -829,6 +835,18 @@
           grid.insertAdjacentElement('afterend', showBtn);
         }
       })();
+    })();
+  </script>
+  <script>
+    (function () {
+      function openSponsoren() {
+        if (window.location.hash === '#sponsoren') {
+          var d = document.querySelector('.sponsors-details');
+          if (d) d.open = true;
+        }
+      }
+      openSponsoren();
+      window.addEventListener('hashchange', openSponsoren);
     })();
   </script>
 </body>
