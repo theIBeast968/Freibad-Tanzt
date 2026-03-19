@@ -1087,6 +1087,24 @@ details p,
   transform: scale(2.42);
 }
 
+.sponsor-logo-link--pogomedia img {
+  filter: none;
+  transform: scale(1.4);
+}
+
+.sponsor-logo-link--pogomedia:hover img {
+  filter: none;
+  transform: scale(1.47);
+}
+
+.sponsor-logo-link--werlo img {
+  transform: scale(1.4);
+}
+
+.sponsor-logo-link--werlo:hover img {
+  transform: scale(1.47);
+}
+
 summary {
   cursor: pointer;
   font-size: 1.35rem;
