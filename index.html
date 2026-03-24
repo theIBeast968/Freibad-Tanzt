@@ -359,8 +359,8 @@
             <a class="sponsor-logo-link" href="https://www.schirmbar-langenburg.de" target="_blank" rel="noreferrer">
               <img src="Sponsoren Logos/Schirmbar_logo.png" alt="Schirmbar Langenburg">
             </a>
-            <a class="sponsor-logo-link sponsor-logo-link--meyer" href="https://www.meyereis.de" target="_blank" rel="noreferrer">
-              <img class="sponsor-logo-img--meyer" src="Sponsoren Logos/MeyerEis.png" alt="Meyer Eis">
+            <a class="sponsor-logo-link sponsor-logo-link--pruemmer" href="https://www.mulfingen.de/verzeichnis/visitenkarte.php?mandat=249869" target="_blank" rel="noreferrer">
+              <img src="Sponsoren Logos/pruemmer-festservice.png" alt="Prümmer Getränke- und Festservice">
             </a>
             <a class="sponsor-logo-link" href="https://www.larewo.de" target="_blank" rel="noreferrer">
               <img src="Sponsoren Logos/Larewo.png" alt="Larewo">
@@ -368,8 +368,8 @@
             <a class="sponsor-logo-link" href="https://freibad-langenburg.de" target="_blank" rel="noreferrer">
               <img src="Sponsoren Logos/freibadfreunde.png" alt="Freibadfreunde Langenburg">
             </a>
-            <a class="sponsor-logo-link sponsor-logo-link--original" href="https://getraenke-ley.de" target="_blank" rel="noreferrer">
-              <img class="sponsor-logo-img--original" src="Sponsoren Logos/GetraenkeCenter.png" alt="Getränke Center Wallhausen">
+            <a class="sponsor-logo-link sponsor-logo-link--meyer" href="https://www.meyereis.de" target="_blank" rel="noreferrer">
+              <img class="sponsor-logo-img--meyer" src="Sponsoren Logos/MeyerEis.png" alt="Meyer Eis">
             </a>
             <a class="sponsor-logo-link" href="https://blue-energy-elektro.de" target="_blank" rel="noreferrer">
               <img src="Sponsoren Logos/blueenergy.png" alt="Blue Energy Elektro">
@@ -377,8 +377,8 @@
             <a class="sponsor-logo-link" href="https://energie-rath.de" target="_blank" rel="noreferrer">
               <img src="Sponsoren Logos/LOGO_Rath_weiss_frei.png" alt="Energie Rath">
             </a>
-            <a class="sponsor-logo-link" href="https://farmbau.eu" target="_blank" rel="noreferrer">
-              <img src="Sponsoren Logos/Logo-Farmbau.svg" alt="Farmbau">
+            <a class="sponsor-logo-link sponsor-logo-link--riedbacher" href="https://www.riedbacher.de/" target="_blank" rel="noreferrer">
+              <img src="Sponsoren Logos/Riedbach.png" alt="Riedbacher Franken Bräu">
             </a>
             <a class="sponsor-logo-link sponsor-logo-link--groundwerk" href="https://www.instagram.com/ground_werk_bautechnik/" target="_blank" rel="noreferrer">
               <img src="Sponsoren Logos/Groundwerk.png" alt="Groundwerk Bautechnik">
@@ -391,6 +391,15 @@
             </a>
             <a class="sponsor-logo-link sponsor-logo-link--pogomedia" href="https://pogomedia.de/" target="_blank" rel="noreferrer">
               <img src="Sponsoren Logos/pogomedia.png" alt="Pogomedia">
+            </a>
+            <a class="sponsor-logo-link" href="https://farmbau.eu" target="_blank" rel="noreferrer">
+              <img src="Sponsoren Logos/Logo-Farmbau.svg" alt="Farmbau">
+            </a>
+            <a class="sponsor-logo-link sponsor-logo-link--diedrei" href="https://diedrei-gmbh.de/" target="_blank" rel="noreferrer">
+              <img src="Sponsoren Logos/3eventsolution.png" alt="die drei event-solutions">
+            </a>
+            <a class="sponsor-logo-link sponsor-logo-link--original" href="https://getraenke-ley.de" target="_blank" rel="noreferrer">
+              <img class="sponsor-logo-img--original" src="Sponsoren Logos/GetraenkeCenter.png" alt="Getränke Center Wallhausen">
             </a>
           </div>
         </details>
@@ -480,20 +489,20 @@
       <div class="music-panel-head">
         <div class="music-panel-info">
           <span class="music-panel-label">Now Playing</span>
-          <span class="music-panel-title">S'Freibad Tanzt · Summer Set</span>
+          <span class="music-panel-title">Mo_Commänders Birthday · Club Freischwimmer</span>
         </div>
         <button class="music-close" id="musicClose" aria-label="Player schließen">✕</button>
       </div>
       <div class="music-embed">
         <iframe
           id="scFrame"
-          data-src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fphiiiiiips%2Falina-b2b-phipselectronic-garden-almstadl-boilerroom-081125&auto_play=true&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false&color=%23ffb703"
+          data-src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Feskaliert%2Fmo_commanders-birthday-club-freischwimmer&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false&color=%23ffb703"
           width="100%"
           height="120"
           scrolling="no"
           frameborder="no"
           allow="autoplay"
-          title="ALINA B2B pHIPS @ Electronic Garden – Almstadl Boilerroom 08.11.25"
+          title="Mo_Commänders Birthday @ Club Freischwimmer (eskaliert)"
           src="about:blank"
         ></iframe>
       </div>
@@ -544,14 +553,51 @@
       const frame    = document.getElementById('scFrame');
       const MUSIC_FLAG_KEY = 'sfreibad_music';
       const MUSIC_POS_KEY = 'sfreibad_music_pos';
+      /** Erster Start / kein gespeicherter Fortschritt: ab 24:00 (ms, SoundCloud Widget API). */
+      const MUSIC_DEFAULT_START_MS = 24 * 60 * 1000;
+      const MUSIC_FADE_IN_MS = 1800;
       let widget = null;
       let widgetReady = false;
       let musicStarted = false;
       let playQueued = false;
+      let volumeFadeTimer = null;
+
+      function clearVolumeFade() {
+        if (volumeFadeTimer !== null) {
+          clearInterval(volumeFadeTimer);
+          volumeFadeTimer = null;
+        }
+      }
+
+      function playWithFadeIn() {
+        if (!widget || !widgetReady) {
+          return;
+        }
+        clearVolumeFade();
+        widget.setVolume(0);
+        widget.play();
+        var start = Date.now();
+        volumeFadeTimer = window.setInterval(function () {
+          if (!widget || !widgetReady) {
+            clearVolumeFade();
+            return;
+          }
+          var t = Math.min(1, (Date.now() - start) / MUSIC_FADE_IN_MS);
+          var eased = 1 - Math.pow(1 - t, 3);
+          widget.setVolume(Math.round(100 * eased));
+          if (t >= 1) {
+            clearVolumeFade();
+          }
+        }, 45);
+      }
 
       /* ---- Player ---- */
       function getSavedPosition() {
-        const value = parseInt(sessionStorage.getItem(MUSIC_POS_KEY) || '0', 10);
+        const raw = sessionStorage.getItem(MUSIC_POS_KEY);
+        if (raw === null) {
+          return null;
+        }
+        const value = parseInt(raw, 10);
         return Number.isFinite(value) ? value : 0;
       }
 
@@ -606,13 +652,15 @@
             const savedPosition = getSavedPosition();
             widgetReady = true;
 
-            if (savedPosition > 0) {
+            if (savedPosition === null) {
+              widget.seekTo(MUSIC_DEFAULT_START_MS);
+            } else if (savedPosition > 0) {
               widget.seekTo(savedPosition);
             }
 
             if (playQueued) {
               window.setTimeout(function () {
-                widget.play();
+                playWithFadeIn();
               }, 180);
               playQueued = false;
             }
@@ -643,7 +691,7 @@
 
         if (widget) {
           if (widgetReady) {
-            widget.play();
+            playWithFadeIn();
           } else {
             playQueued = true;
           }
@@ -772,7 +820,7 @@
         updateVisibility();
       })();
 
-      /* ---- Galerie-Bilder laden ---- */
+      /* ---- Galerie: 9 Vorschau (3×3 bei 3 Spalten), täglich andere Auswahl ---- */
       (function () {
         var grid = document.getElementById('galleryGrid');
         if (!grid) return;
@@ -813,22 +861,77 @@
           'PHOTO-2026-03-11-21-36-36(1).jpg'
         ];
 
-        var PREVIEW = 8;
+        var PREVIEW = 9;
 
-        galleryFiles.forEach(function (filename, idx) {
+        function hashString(str) {
+          var h = 2166136261;
+          for (var i = 0; i < str.length; i++) {
+            h ^= str.charCodeAt(i);
+            h = Math.imul(h, 16777619);
+          }
+          return h >>> 0;
+        }
+
+        function mulberry32(seed) {
+          return function () {
+            var t = (seed += 0x6d2b79f5);
+            t = Math.imul(t ^ (t >>> 15), t | 1);
+            t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+            return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+          };
+        }
+
+        function shuffleIndices(length, seed) {
+          var rng = mulberry32(seed);
+          var arr = [];
+          var i;
+          for (i = 0; i < length; i++) {
+            arr.push(i);
+          }
+          for (i = length - 1; i > 0; i--) {
+            var j = Math.floor(rng() * (i + 1));
+            var tmp = arr[i];
+            arr[i] = arr[j];
+            arr[j] = tmp;
+          }
+          return arr;
+        }
+
+        var now = new Date();
+        var dayKey =
+          now.getFullYear() +
+          '-' +
+          String(now.getMonth() + 1).padStart(2, '0') +
+          '-' +
+          String(now.getDate()).padStart(2, '0');
+        var shuffleSeed = hashString('sfreibad-gallery-v1-' + dayKey);
+        var order = shuffleIndices(galleryFiles.length, shuffleSeed);
+        var previewCount = Math.min(PREVIEW, galleryFiles.length);
+        var visibleIdx = order.slice(0, previewCount);
+        var hiddenIdx = order.slice(previewCount);
+
+        function appendFigure(fileIndex, hidden) {
+          var filename = galleryFiles[fileIndex];
           var wrapper = document.createElement('figure');
-          wrapper.className = 'gallery-item' + (idx >= PREVIEW ? ' gallery-item--hidden' : '');
+          wrapper.className = 'gallery-item' + (hidden ? ' gallery-item--hidden' : '');
 
           var img = document.createElement('img');
-          img.loading = 'lazy';
+          img.loading = hidden ? 'lazy' : 'eager';
           img.alt = 'S\'Freibad Tanzt Festivalfoto';
           img.src = 'gallery/' + filename;
 
           wrapper.appendChild(img);
           grid.appendChild(wrapper);
+        }
+
+        visibleIdx.forEach(function (fileIndex) {
+          appendFigure(fileIndex, false);
+        });
+        hiddenIdx.forEach(function (fileIndex) {
+          appendFigure(fileIndex, true);
         });
 
-        if (galleryFiles.length > PREVIEW) {
+        if (galleryFiles.length > previewCount) {
           var showBtn = document.createElement('button');
           showBtn.className = 'button button-outline gallery-show-more';
           showBtn.textContent = 'Mehr Fotos anzeigen';
@@ -846,9 +949,18 @@
   <script>
     (function () {
       function openSponsoren() {
-        if (window.location.hash === '#sponsoren') {
-          var d = document.querySelector('.sponsors-details');
-          if (d) d.open = true;
+        if (window.location.hash !== '#sponsoren') {
+          return;
+        }
+        var d = document.querySelector('.sponsors-details');
+        var el = document.getElementById('sponsoren');
+        if (d) {
+          d.open = true;
+        }
+        if (el) {
+          requestAnimationFrame(function () {
+            el.scrollIntoView({ block: 'start', behavior: 'smooth' });
+          });
         }
       }
       openSponsoren();
