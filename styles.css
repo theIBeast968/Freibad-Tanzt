@@ -1072,10 +1072,9 @@ details p,
   opacity: 1 !important;
 }
 
-/* Riedbacher, Prümmer & die drei: Originalfarben (Prümmer: kein invert — PNG wird sonst „kaputt“) */
+/* Riedbacher & die drei: Originalfarben */
 .sponsors-grid .sponsor-logo-link.sponsor-logo-link--riedbacher img,
-.sponsors-grid .sponsor-logo-link.sponsor-logo-link--diedrei img,
-.sponsors-grid .sponsor-logo-link.sponsor-logo-link--pruemmer img {
+.sponsors-grid .sponsor-logo-link.sponsor-logo-link--diedrei img {
   filter: none !important;
   opacity: 1 !important;
   width: auto;
@@ -1088,7 +1087,12 @@ details p,
   overflow: hidden;
 }
 
+/* Prümmer: ohne invert — nur Aufhellung, wirkt auf Grau/Schrift weißlicher */
 .sponsors-grid .sponsor-logo-link.sponsor-logo-link--pruemmer img {
+  filter: brightness(1.38) contrast(1.14) !important;
+  opacity: 1 !important;
+  width: auto;
+  mix-blend-mode: normal;
   max-height: 65px;
   transform: scale(1.69);
   transform-origin: center center;
