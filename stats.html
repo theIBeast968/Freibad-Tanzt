@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Besucherstatistik · S'Freibad Tanzt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0505;
+      --card: #141010;
+      --border: rgba(255, 183, 3, 0.2);
+      --yellow: #ffb703;
+      --text: rgba(255, 247, 234, 0.92);
+      --muted: rgba(255, 247, 234, 0.55);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Barlow", system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 1.5rem;
+    }
+    h1 { font-size: 1.35rem; font-weight: 700; margin: 0 0 0.25rem; }
+    .sub { color: var(--muted); font-size: 0.92rem; margin-bottom: 1.5rem; }
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      padding: 1.25rem 1.5rem;
+      max-width: 900px;
+      margin: 0 auto 1.25rem;
+    }
+    label { display: block; font-weight: 600; margin-bottom: 0.35rem; font-size: 0.9rem; }
+    input[type="password"] {
+      width: 100%;
+      max-width: 320px;
+      padding: 0.65rem 0.85rem;
+      border-radius: 0.6rem;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(0, 0, 0, 0.35);
+      color: var(--text);
+      font-size: 1rem;
+    }
+    button {
+      margin-top: 0.75rem;
+      padding: 0.65rem 1.2rem;
+      border-radius: 0.6rem;
+      border: none;
+      background: var(--yellow);
+      color: #1a0f00;
+      font-weight: 700;
+      font-family: inherit;
+      cursor: pointer;
+    }
+    button:hover { filter: brightness(1.06); }
+    .err { color: #ff6b6b; margin-top: 0.75rem; font-size: 0.9rem; }
+    .kpis {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+    .kpi {
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+    .kpi span { display: block; color: var(--muted); font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em; }
+    .kpi strong { font-size: 1.55rem; font-weight: 700; color: var(--yellow); }
+    h2 { font-size: 1.05rem; margin: 1.5rem 0 0.75rem; font-weight: 700; }
+    .chart { display: flex; align-items: flex-end; gap: 0.35rem; height: 140px; margin: 0.5rem 0 1rem; }
+    .bar-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      min-width: 0;
+    }
+    .bar {
+      width: 100%;
+      max-width: 48px;
+      background: linear-gradient(180deg, rgba(255, 183, 3, 0.85), rgba(255, 183, 3, 0.25));
+      border-radius: 0.35rem 0.35rem 0 0;
+      min-height: 4px;
+    }
+    .bar-meta { font-size: 0.68rem; color: var(--muted); margin-top: 0.35rem; text-align: center; line-height: 1.2; }
+    table { width: 100%; border-collapse: collapse; font-size: 0.88rem; }
+    th, td { text-align: left; padding: 0.45rem 0.5rem; border-bottom: 1px solid rgba(255, 255, 255, 0.08); }
+    th { color: var(--muted); font-weight: 600; font-size: 0.76rem; text-transform: uppercase; }
+    .logout { margin-top: 1rem; background: transparent; color: var(--muted); border: 1px solid rgba(255, 255, 255, 0.2); }
+    .note { font-size: 0.82rem; color: var(--muted); margin-top: 1.25rem; max-width: 900px; margin-left: auto; margin-right: auto; }
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body>
+  <div id="loginView" class="panel">
+    <h1>Besucherstatistik</h1>
+    <p class="sub">Geschützter Bereich – nur für Auftraggeber / Organisation.</p>
+    <form id="loginForm">
+      <label for="pw">Passwort</label>
+      <input id="pw" type="password" name="password" autocomplete="current-password" required>
+      <div>
+        <button type="submit">Anmelden</button>
+      </div>
+      <p id="loginErr" class="err hidden"></p>
+    </form>
+  </div>
+
+  <div id="dashView" class="hidden">
+    <h1 style="max-width:900px;margin:0 auto 0.25rem;">S'Freibad Tanzt – Auswertung</h1>
+    <p class="sub" style="max-width:900px;margin:0 auto 1.5rem;">Letzte 7 Kalendertage (Zeitzone Deutschland)</p>
+
+    <div class="panel" id="kpiPanel">
+      <div class="kpis">
+        <div class="kpi"><span>Seitenaufrufe (Summe)</span><strong id="kPv">–</strong></div>
+        <div class="kpi"><span>Eindeutige Besucher (Zeitraum)</span><strong id="kUniq">–</strong></div>
+      </div>
+      <h2>Seitenaufrufe pro Tag</h2>
+      <div class="chart" id="chartPv"></div>
+      <h2>Eindeutige Besucher pro Tag</h2>
+      <div class="chart" id="chartUniq"></div>
+      <h2>Beliebteste Pfade (Summe)</h2>
+      <table>
+        <thead><tr><th>Pfad</th><th>Aufrufe</th></tr></thead>
+        <tbody id="pathBody"></tbody>
+      </table>
+      <button type="button" class="logout" id="logoutBtn">Abmelden</button>
+    </div>
+
+    <p class="note">
+      Erhebung: anonyme Erst-Party-Statistik (aufgerufener Pfad, technische Kennung in <code>localStorage</code>).
+      Keine Weitergabe an Dritte. Details im Impressum unter „Besucherstatistik“.
+    </p>
+  </div>
+
+  <script>
+    (function () {
+      var TOKEN_KEY = 'sfreibad_stats_jwt';
+      var loginView = document.getElementById('loginView');
+      var dashView = document.getElementById('dashView');
+      var loginForm = document.getElementById('loginForm');
+      var loginErr = document.getElementById('loginErr');
+
+      function showLogin(msg) {
+        dashView.classList.add('hidden');
+        loginView.classList.remove('hidden');
+        if (msg) {
+          loginErr.textContent = msg;
+          loginErr.classList.remove('hidden');
+        } else {
+          loginErr.classList.add('hidden');
+        }
+      }
+
+      function showDash() {
+        loginView.classList.add('hidden');
+        loginErr.classList.add('hidden');
+        dashView.classList.remove('hidden');
+      }
+
+      function token() {
+        try {
+          return sessionStorage.getItem(TOKEN_KEY);
+        } catch (e) {
+          return null;
+        }
+      }
+
+      function setToken(t) {
+        try {
+          sessionStorage.setItem(TOKEN_KEY, t);
+        } catch (e) {}
+      }
+
+      function clearToken() {
+        try {
+          sessionStorage.removeItem(TOKEN_KEY);
+        } catch (e) {}
+      }
+
+      function barChart(el, series, key, scale) {
+        el.innerHTML = '';
+        var max = scale || 1;
+        series.forEach(function (row) {
+          var v = row[key] || 0;
+          var h = max ? Math.max(4, Math.round((v / max) * 120)) : 4;
+          var wrap = document.createElement('div');
+          wrap.className = 'bar-wrap';
+          var bar = document.createElement('div');
+          bar.className = 'bar';
+          bar.style.height = h + 'px';
+          bar.title = String(v);
+          var meta = document.createElement('div');
+          meta.className = 'bar-meta';
+          var parts = row.date.split('-');
+          meta.textContent = parts[2] + '.' + parts[1];
+          wrap.appendChild(bar);
+          wrap.appendChild(meta);
+          el.appendChild(wrap);
+        });
+      }
+
+      function render(data) {
+        document.getElementById('kPv').textContent = data.totals.pageviews;
+        document.getElementById('kUniq').textContent = data.totals.uniqueVisitors;
+        var maxPv = data.chartScale || 1;
+        var maxU = 1;
+        data.series.forEach(function (r) {
+          if (r.uniqueVisitors > maxU) maxU = r.uniqueVisitors;
+        });
+        barChart(document.getElementById('chartPv'), data.series, 'pageviews', maxPv);
+        barChart(document.getElementById('chartUniq'), data.series, 'uniqueVisitors', maxU);
+        var tb = document.getElementById('pathBody');
+        tb.innerHTML = '';
+        data.topPaths.forEach(function (row) {
+          var tr = document.createElement('tr');
+          tr.innerHTML = '<td><code>' + escapeHtml(row.path) + '</code></td><td>' + row.count + '</td>';
+          tb.appendChild(tr);
+        });
+      }
+
+      function escapeHtml(s) {
+        return String(s)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+
+      function loadDash() {
+        var t = token();
+        if (!t) {
+          showLogin('');
+          return;
+        }
+        fetch('/.netlify/functions/stats-data?days=7', {
+          headers: { Authorization: 'Bearer ' + t }
+        })
+          .then(function (r) {
+            if (r.status === 401) {
+              clearToken();
+              showLogin('Sitzung abgelaufen – bitte neu anmelden.');
+              return null;
+            }
+            return r.json();
+          })
+          .then(function (data) {
+            if (!data) return;
+            if (data.error) {
+              showLogin(data.error);
+              return;
+            }
+            render(data);
+            showDash();
+          })
+          .catch(function () {
+            showLogin('Netzwerkfehler beim Laden der Statistik.');
+          });
+      }
+
+      loginForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var pw = document.getElementById('pw').value;
+        loginErr.classList.add('hidden');
+        fetch('/.netlify/functions/stats-login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ password: pw })
+        })
+          .then(function (r) {
+            return r.json().then(function (j) {
+              return { ok: r.ok, body: j };
+            });
+          })
+          .then(function (res) {
+            if (!res.ok) {
+              showLogin(res.body.error || 'Anmeldung fehlgeschlagen');
+              return;
+            }
+            setToken(res.body.token);
+            document.getElementById('pw').value = '';
+            loadDash();
+          })
+          .catch(function () {
+            showLogin('Netzwerkfehler.');
+          });
+      });
+
+      document.getElementById('logoutBtn').addEventListener('click', function () {
+        clearToken();
+        showLogin('');
+      });
+
+      if (token()) {
+        loadDash();
+      } else {
+        showLogin('');
+      }
+    })();
+  </script>
+</body>
+</html>

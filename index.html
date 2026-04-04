@@ -466,6 +466,18 @@
                 nicht bereit.
               </p>
             </article>
+            <article class="info-card">
+              <h3>Besucherstatistik</h3>
+              <p>
+                Zur statistischen Auswertung der Nutzung dieser Website werden
+                anonym die aufgerufenen Seitenpfade sowie eine zufällig erzeugte,
+                technische Kennung im lokalen Speicher des Browsers
+                (<span lang="en">localStorage</span>) verarbeitet. Es werden
+                keine Namen, E-Mail-Adressen oder Profile zu Werbezwecken
+                gebildet. Die Auswertung erfolgt ausschließlich auf eigener
+                Infrastruktur.
+              </p>
+            </article>
           </div>
         </details>
       </div>
@@ -537,6 +549,7 @@
     </div>
   </footer>
   <script src="https://w.soundcloud.com/player/api.js"></script>
+  <script src="js/stats-track.js" defer></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').catch(function () {});
