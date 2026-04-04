@@ -1072,10 +1072,9 @@ details p,
   opacity: 1 !important;
 }
 
-/* Riedbacher, Prümmer & die drei: Originalfarben (Prümmer: kein invert — sonst Artefakte im PNG) */
+/* Riedbacher & die drei: Originalfarben */
 .sponsors-grid .sponsor-logo-link.sponsor-logo-link--riedbacher img,
-.sponsors-grid .sponsor-logo-link.sponsor-logo-link--diedrei img,
-.sponsors-grid .sponsor-logo-link.sponsor-logo-link--pruemmer img {
+.sponsors-grid .sponsor-logo-link.sponsor-logo-link--diedrei img {
   filter: none !important;
   opacity: 1 !important;
   width: auto;
@@ -1088,7 +1087,11 @@ details p,
   overflow: hidden;
 }
 
+/* Prümmer: Schwarzweiß-PNG → wie Blue Energy weiß auf dunklem Grund */
 .sponsors-grid .sponsor-logo-link.sponsor-logo-link--pruemmer img {
+  filter: brightness(0) invert(1) !important;
+  opacity: 0.96;
+  mix-blend-mode: normal;
   max-height: 65px;
   transform: scale(1.69);
   transform-origin: center center;
@@ -1119,7 +1122,7 @@ details p,
 
 .sponsor-logo-link--pruemmer:hover img {
   transform: scale(1.78);
-  opacity: 1 !important;
+  opacity: 1;
 }
 
 /* Groundwerk: Kachel wie Standard (kein eigener Hintergrund); kein Schatten/Glow am Logo */
