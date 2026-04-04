@@ -1165,6 +1165,24 @@ details p,
   transform: scale(1.47);
 }
 
+/* Charly: Originalfarben, noch ohne externen Link */
+.sponsor-logo-link--charly {
+  overflow: hidden;
+  cursor: default;
+}
+
+.sponsor-logo-link--charly img {
+  filter: none !important;
+  opacity: 1 !important;
+  max-height: 65px;
+  transform: scale(1.32);
+  transform-origin: center center;
+}
+
+.sponsor-logo-link--charly:hover img {
+  transform: scale(1.4);
+}
+
 .sponsor-logo-link--werlo img {
   transform: scale(1.4);
 }
@@ -1353,6 +1371,15 @@ details p {
 
   .sponsor-logo-link--groundwerk:hover img {
     transform: scale(2.34);
+  }
+
+  .sponsor-logo-link--charly img {
+    max-height: 58px;
+    transform: scale(1.26);
+  }
+
+  .sponsor-logo-link--charly:hover img {
+    transform: scale(1.33);
   }
 
   .hero-actions,
