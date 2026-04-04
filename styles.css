@@ -1072,9 +1072,10 @@ details p,
   opacity: 1 !important;
 }
 
-/* Riedbacher & die drei: Originalfarben */
+/* Riedbacher, Prümmer & die drei: Originalfarben (Prümmer: kein invert — PNG wird sonst „kaputt“) */
 .sponsors-grid .sponsor-logo-link.sponsor-logo-link--riedbacher img,
-.sponsors-grid .sponsor-logo-link.sponsor-logo-link--diedrei img {
+.sponsors-grid .sponsor-logo-link.sponsor-logo-link--diedrei img,
+.sponsors-grid .sponsor-logo-link.sponsor-logo-link--pruemmer img {
   filter: none !important;
   opacity: 1 !important;
   width: auto;
@@ -1087,11 +1088,7 @@ details p,
   overflow: hidden;
 }
 
-/* Prümmer: Schwarzweiß-PNG → wie Blue Energy weiß auf dunklem Grund */
 .sponsors-grid .sponsor-logo-link.sponsor-logo-link--pruemmer img {
-  filter: brightness(0) invert(1) !important;
-  opacity: 0.96;
-  mix-blend-mode: normal;
   max-height: 65px;
   transform: scale(1.69);
   transform-origin: center center;
@@ -1122,7 +1119,7 @@ details p,
 
 .sponsor-logo-link--pruemmer:hover img {
   transform: scale(1.78);
-  opacity: 1;
+  opacity: 1 !important;
 }
 
 /* Groundwerk: Kachel wie Standard (kein eigener Hintergrund); kein Schatten/Glow am Logo */
@@ -1178,12 +1175,12 @@ details p,
   filter: none !important;
   opacity: 1 !important;
   max-height: 65px;
-  transform: scale(2.26);
+  transform: scale(2.49);
   transform-origin: center center;
 }
 
 .sponsor-logo-link--charly:hover img {
-  transform: scale(2.35);
+  transform: scale(2.58);
 }
 
 .sponsor-logo-link--werlo img {
@@ -1389,11 +1386,11 @@ details p {
 
   .sponsor-logo-link--charly img {
     max-height: 58px;
-    transform: scale(2.07);
+    transform: scale(2.28);
   }
 
   .sponsor-logo-link--charly:hover img {
-    transform: scale(2.16);
+    transform: scale(2.37);
   }
 
   .hero-actions,
