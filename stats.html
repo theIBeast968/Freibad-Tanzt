@@ -117,7 +117,7 @@
 
   <div id="dashView" class="hidden">
     <h1 style="max-width:900px;margin:0 auto 0.25rem;">S'Freibad Tanzt – Auswertung</h1>
-    <p class="sub" style="max-width:900px;margin:0 auto 1.5rem;">Letzte 7 Kalendertage (Zeitzone Deutschland)</p>
+    <p class="sub" style="max-width:900px;margin:0 auto 1.5rem;">Letzte 30 Kalendertage (Zeitzone Deutschland)</p>
 
     <div class="panel" id="kpiPanel">
       <div class="kpis">
@@ -242,7 +242,7 @@
           showLogin('');
           return;
         }
-        fetch('/.netlify/functions/stats-data?days=7', {
+        fetch('/.netlify/functions/stats-data?days=30', {
           headers: { Authorization: 'Bearer ' + t }
         })
           .then(function (r) {
