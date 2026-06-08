@@ -463,6 +463,24 @@ details p,
   margin-top: 2rem;
 }
 
+.hero-actions .button-hero-tickets {
+  min-height: 3.85rem;
+  padding: 0 2.1rem;
+  font-size: 1.08rem;
+  letter-spacing: 0.07em;
+  box-shadow:
+    0 0 0 1px rgba(255, 183, 3, 0.3),
+    0 16px 40px rgba(255, 183, 3, 0.35),
+    0 0 60px rgba(255, 183, 3, 0.15);
+  animation: cta-pulse 2.2s ease-in-out infinite;
+}
+
+.hero-actions .button-hero-tickets:hover,
+.hero-actions .button-hero-tickets:focus-visible {
+  animation: none;
+  box-shadow: 0 24px 56px rgba(255, 183, 3, 0.45);
+}
+
 .button {
   display: inline-flex;
   align-items: center;
