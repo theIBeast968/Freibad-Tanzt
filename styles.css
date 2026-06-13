@@ -1002,6 +1002,71 @@ details p,
   color: var(--yellow);
 }
 
+.ticket-price-label {
+  margin: 0 0 0.65rem;
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.ticket-price-label--spaced {
+  margin-top: 1rem;
+}
+
+.ticket-price-note,
+.ticket-price-free,
+.ticket-price-link {
+  margin: 0.75rem 0 0;
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.86);
+}
+
+.ticket-price-link a,
+.ticket-price-note a,
+.info-card-note a {
+  color: var(--yellow);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
+.eintritt-grid {
+  margin-top: 2rem;
+}
+
+.info-card-lead {
+  margin: 0 0 0.75rem;
+  line-height: 1.5;
+  color: rgba(255, 247, 234, 0.92);
+}
+
+.info-card-lead--spaced {
+  margin-top: 1.15rem;
+}
+
+.info-card-list {
+  margin: 0;
+  padding-left: 1.1rem;
+  display: grid;
+  gap: 0.55rem;
+  line-height: 1.6;
+  color: rgba(255, 247, 234, 0.9);
+}
+
+.info-card-list li::marker {
+  color: var(--yellow);
+}
+
+.info-card-note {
+  margin: 0.85rem 0 0;
+  line-height: 1.55;
+  color: rgba(255, 247, 234, 0.88);
+}
+
+.info-card p + p {
+  margin-top: 0.75rem;
+}
+
 .ticket-tile-meta {
   grid-row: 3;
   margin: 0;
