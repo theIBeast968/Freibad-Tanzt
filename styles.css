@@ -1030,8 +1030,16 @@ details p,
   text-underline-offset: 0.15em;
 }
 
+#eintritt .eintritt-intro {
+  padding-bottom: 1.25rem;
+}
+
+#eintritt .eintritt-intro h2 {
+  margin-bottom: 1.75rem;
+}
+
 .eintritt-grid {
-  margin-top: 2rem;
+  margin-top: 2.5rem;
 }
 
 .info-card-lead {
