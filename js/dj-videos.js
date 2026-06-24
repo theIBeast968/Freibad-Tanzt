@@ -55,7 +55,7 @@ window.SFREIBAD_DJ_MEDIA = {
   },
   "malle-fritz": {
     name: "Malle Fritz",
-    slot: "Samstag · ganzer Abend · Schirmbar",
+    slot: "Samstag · 18:00 – 02:00 · Schirmbar",
     video: "videos/djs/malle-fritz.mp4",
     instagram: ""
   }
