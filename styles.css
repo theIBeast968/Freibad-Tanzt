@@ -882,12 +882,11 @@ details p,
 
 .dj-modal-panel {
   position: relative;
-  width: min(980px, calc(100vw - 2rem));
+  width: min(460px, calc(100vw - 2rem));
   max-height: min(86vh, 820px);
   display: grid;
-  grid-template-columns: minmax(0, 0.95fr) minmax(260px, 0.55fr);
-  gap: 1.25rem;
-  padding: 1.25rem;
+  gap: 1rem;
+  padding: 1rem;
   border-radius: 1.6rem;
   border: 1px solid rgba(255, 183, 3, 0.28);
   background:
@@ -915,12 +914,12 @@ details p,
 }
 
 .dj-modal-copy {
-  align-self: center;
-  padding: 1.5rem 1.25rem;
+  order: 2;
+  padding: 0.25rem 0.25rem 0.15rem;
 }
 
 .dj-modal-label {
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.45rem;
   color: var(--yellow);
   font-size: 0.75rem;
   font-weight: 900;
@@ -930,12 +929,12 @@ details p,
 
 .dj-modal-title {
   margin: 0;
-  font-size: clamp(2.4rem, 6vw, 5rem);
-  line-height: 0.9;
+  font-size: clamp(2rem, 8vw, 3.2rem);
+  line-height: 0.95;
 }
 
 .dj-modal-slot {
-  margin: 1rem 0 0;
+  margin: 0.65rem 0 0;
   max-width: 24rem;
   color: rgba(255, 247, 234, 0.78);
   font-weight: 800;
@@ -943,7 +942,9 @@ details p,
 }
 
 .dj-modal-media {
-  min-height: 420px;
+  order: 1;
+  min-height: 0;
+  aspect-ratio: 9 / 16;
   display: grid;
   place-items: center;
   overflow: hidden;
@@ -954,9 +955,10 @@ details p,
 
 .dj-modal-media video {
   width: 100%;
-  max-height: min(74vh, 720px);
+  height: 100%;
+  max-height: min(68vh, 620px);
   display: block;
-  object-fit: contain;
+  object-fit: cover;
   background: #000;
 }
 
@@ -2002,17 +2004,17 @@ details p {
   }
 
   .dj-modal-panel {
-    grid-template-columns: 1fr;
+    width: min(420px, calc(100vw - 1.25rem));
     max-height: 90vh;
     overflow: auto;
   }
 
   .dj-modal-copy {
-    padding: 1.1rem 0.75rem 0;
+    padding: 0.25rem 0.25rem 0.15rem;
   }
 
   .dj-modal-media {
-    min-height: 280px;
+    min-height: 0;
   }
 
   .page-teaser-intro {
