@@ -89,7 +89,7 @@
       </a>
       <nav class="site-nav" aria-label="Hauptnavigation">
         <a href="#infos">Infos</a>
-        <a href="#lineup">Programm</a>
+        <a href="#lineup">Timetable</a>
         <a href="#tickets">Tickets</a>
         <a href="#fotos">Fotos</a>
         <a href="#faq">FAQ</a>
@@ -234,45 +234,67 @@
     </section>
 
     <section id="lineup" class="section section-accent">
-      <div class="container">
-        <p class="section-label">Programm</p>
-        <h2>Drei Tage Sommer, Musik und Freibadgefühl.</h2>
+      <div class="container lineup-intro">
+        <p class="section-label">Timetable</p>
+        <h2>Das Line-up – wer wann auflegt.</h2>
+        <p class="lineup-download">
+          <a
+            class="button button-secondary button-secondary--compact"
+            href="timetable-sfreibad-tanzt-2026.pdf"
+            target="_blank"
+            rel="noopener noreferrer"
+          >Timetable als PDF</a>
+        </p>
       </div>
 
-      <div class="container lineup-grid">
-        <article class="lineup-card">
+      <div class="container timetable-grid">
+        <article class="lineup-card timetable-day">
           <span class="lineup-day">Freitag, 17. Juli</span>
-          <h3>Partynacht</h3>
-          <ul class="schedule-list">
-            <li>Tagsüber Freibadbetrieb zu den offiziellen Öffnungszeiten</li>
-            <li>Festivalbeginn ab 18:00 Uhr – Der Kapitän ruft auf zum Feiern</li>
-            <li>Open Air Stage – Bass Boat: 5 DJs sorgen für geile Beats</li>
-            <li>Schirmbar – Mitsingen &amp; Feiern: DJ Jörg, Party-Klassiker für Jung &amp; Alt</li>
-            <li>Lecker Essen &amp; Genießen</li>
-            <li>Süßes &amp; Eis ist auch dabei</li>
-            <li>3:00 Uhr ist leider Schluss</li>
-          </ul>
+          <div class="timetable-stage">
+            <h3>Hauptbühne</h3>
+            <p class="timetable-genre">Tech House &amp; Techno</p>
+            <ul class="timetable-slots">
+              <li><span class="timetable-time">18:00 – 20:00</span><span class="timetable-act">Bachøs</span></li>
+              <li><span class="timetable-time">20:00 – 22:00</span><span class="timetable-act">Moritz S.</span></li>
+              <li><span class="timetable-time">22:00 – 00:00</span><span class="timetable-act">pHIPS</span></li>
+            </ul>
+          </div>
+          <div class="timetable-stage">
+            <h3>Schirmbar</h3>
+            <p class="timetable-genre">Party-Klassiker 70er – 2000er</p>
+            <ul class="timetable-slots">
+              <li><span class="timetable-time">18:00 – 02:00</span><span class="timetable-act">DJ Jörg</span></li>
+            </ul>
+            <p class="timetable-tags">Discofox · Oldies · Rock · Dance</p>
+          </div>
         </article>
-        <article class="lineup-card">
+
+        <article class="lineup-card timetable-day">
           <span class="lineup-day">Samstag, 18. Juli</span>
-          <h3>Partynacht</h3>
-          <ul class="schedule-list">
-            <li>Tagsüber Freibadbetrieb zu den offiziellen Öffnungszeiten</li>
-            <li>Festivalbeginn ab 18:00 Uhr – Der Kapitän ruft auf zum Feiern</li>
-            <li>Open Air Stage – Bass Boat: 5 DJs sorgen für geile Beats</li>
-            <li>Schirmbar – Mitsingen &amp; Feiern: Fritz got the Hit´s</li>
-            <li>Lecker Essen &amp; Genießen</li>
-            <li>Süßes &amp; Eis ist auch dabei</li>
-            <li>3:00 Uhr ist leider Schluss</li>
-          </ul>
+          <div class="timetable-stage">
+            <h3>Hauptbühne</h3>
+            <p class="timetable-genre">Tech House &amp; Techno</p>
+            <ul class="timetable-slots">
+              <li><span class="timetable-time">18:00 – 20:00</span><span class="timetable-act">Lost in Sound</span></li>
+              <li><span class="timetable-time">20:00 – 22:00</span><span class="timetable-act">Monoklin</span></li>
+              <li><span class="timetable-time">22:00 – 00:00</span><span class="timetable-act">First Aid Techno</span></li>
+              <li><span class="timetable-time">00:00 – 02:00</span><span class="timetable-act">Chrizz Stoff</span></li>
+            </ul>
+          </div>
+          <div class="timetable-stage">
+            <h3>Schirmbar</h3>
+            <p class="timetable-genre">Mallorca &amp; Ballermann</p>
+            <ul class="timetable-slots">
+              <li><span class="timetable-time">Ganzer Abend</span><span class="timetable-act">Malle Fritz</span></li>
+            </ul>
+            <p class="timetable-tags">Mallorca · Ballermann · Party Hits</p>
+          </div>
         </article>
-        <article class="lineup-card">
+
+        <article class="lineup-card timetable-day">
           <span class="lineup-day">Sonntag, 19. Juli</span>
-          <h3>Familientag – Eintritt frei</h3>
-          <p class="card-intro">
-            Ein entspannter Abschluss für das ganze Wochenende – und eine herzliche Einladung an alle,
-            die Freitag &amp; Samstag verpasst haben.
-          </p>
+          <h3 class="timetable-day-title">Familientag</h3>
+          <p class="timetable-genre timetable-genre--highlight">Eintritt frei · Live-Band · Kinderprogramm</p>
           <ul class="schedule-list">
             <li>Ab 12:00 Uhr Mittagessen, Kaffee &amp; Kuchen</li>
             <li>Live-Band am Nachmittag</li>
@@ -782,7 +804,7 @@
       </div>
       <div class="footer-links">
         <a href="#infos">Infos</a>
-        <a href="#lineup">Programm</a>
+        <a href="#lineup">Timetable</a>
         <a href="#tickets">Tickets</a>
         <a href="#fotos">Fotos</a>
         <a href="#faq">FAQ</a>

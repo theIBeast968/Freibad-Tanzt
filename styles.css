@@ -653,6 +653,107 @@ details p,
   margin-top: 2rem;
 }
 
+#lineup .lineup-intro {
+  padding-bottom: 0.5rem;
+}
+
+#lineup .lineup-intro h2 {
+  margin-bottom: 1.25rem;
+}
+
+.lineup-download {
+  margin: 0;
+}
+
+.button-secondary--compact {
+  min-height: 2.75rem;
+  padding: 0 1.25rem;
+  font-size: 0.78rem;
+}
+
+.timetable-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+
+.timetable-day {
+  gap: 1.15rem;
+}
+
+.timetable-stage {
+  padding-top: 0.85rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.timetable-stage:first-of-type {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.timetable-stage h3,
+.timetable-day-title {
+  margin: 0 0 0.35rem;
+  font-size: 1.05rem;
+  font-family: var(--font-display);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.timetable-genre {
+  margin: 0 0 0.75rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--yellow);
+}
+
+.timetable-genre--highlight {
+  font-size: 0.85rem;
+  line-height: 1.5;
+  text-transform: none;
+  letter-spacing: 0.04em;
+}
+
+.timetable-slots {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.timetable-slots li {
+  display: grid;
+  grid-template-columns: minmax(5.5rem, 6.75rem) minmax(0, 1fr);
+  gap: 0.65rem;
+  align-items: baseline;
+  line-height: 1.4;
+}
+
+.timetable-time {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: rgba(255, 247, 234, 0.72);
+  font-variant-numeric: tabular-nums;
+}
+
+.timetable-act {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: rgba(255, 247, 234, 0.96);
+}
+
+.timetable-tags {
+  margin: 0.65rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: rgba(255, 247, 234, 0.75);
+}
+
 .feature-card,
 .lineup-card,
 .faq-list details {
@@ -1657,6 +1758,7 @@ details p {
   .ticket-stage,
   .feature-grid,
   .lineup-grid,
+  .timetable-grid,
   .teaser-grid,
   .info-card-grid,
   .subpage-hero-grid,
