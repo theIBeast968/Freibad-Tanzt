@@ -236,34 +236,37 @@
     <section id="lineup" class="section section-accent">
       <div class="container lineup-intro">
         <p class="section-label">Timetable</p>
-        <h2>Das Line-up – wer wann auflegt.</h2>
-        <p class="lineup-download">
+        <h2>Wer wann den Pool zum Beben bringt.</h2>
+        <div class="lineup-actions">
+          <p class="lineup-hint">DJ antippen, Preview starten, Ticket sichern.</p>
           <a
             class="button button-secondary button-secondary--compact"
             href="timetable-sfreibad-tanzt-2026.pdf"
             target="_blank"
             rel="noopener noreferrer"
           >Timetable als PDF</a>
-        </p>
+        </div>
       </div>
 
       <div class="container timetable-grid">
         <article class="lineup-card timetable-day">
           <span class="lineup-day">Freitag, 17. Juli</span>
+          <p class="timetable-day-kicker">Partynacht · ab 18:00 Uhr</p>
           <div class="timetable-stage">
-            <h3>Hauptbühne</h3>
+            <h3>Hauptbühne <span>Tech House &amp; Techno</span></h3>
             <p class="timetable-genre">Tech House &amp; Techno</p>
             <ul class="timetable-slots">
-              <li><span class="timetable-time">18:00 – 20:00</span><span class="timetable-act">Bachøs</span></li>
-              <li><span class="timetable-time">20:00 – 22:00</span><span class="timetable-act">Moritz S.</span></li>
-              <li><span class="timetable-time">22:00 – 00:00</span><span class="timetable-act">pHIPS</span></li>
+              <li><span class="timetable-time">18:00 – 20:00</span><button type="button" class="timetable-act timetable-act--preview" data-dj="bachos"><span>Bachøs</span><small>Preview</small></button></li>
+              <li><span class="timetable-time">20:00 – 22:00</span><button type="button" class="timetable-act timetable-act--preview" data-dj="moritz-s"><span>Moritz S.</span><small>Preview</small></button></li>
+              <li><span class="timetable-time">22:00 – 00:00</span><button type="button" class="timetable-act timetable-act--preview" data-dj="phips"><span>pHIPS</span><small>Preview</small></button></li>
+              <li><span class="timetable-time">00:00 – 02:00</span><button type="button" class="timetable-act timetable-act--preview" data-dj="chrizz-stoff"><span>Chrizz Stoff</span><small>Preview</small></button></li>
             </ul>
           </div>
           <div class="timetable-stage">
-            <h3>Schirmbar</h3>
+            <h3>Schirmbar <span>70er – 2000er</span></h3>
             <p class="timetable-genre">Party-Klassiker 70er – 2000er</p>
             <ul class="timetable-slots">
-              <li><span class="timetable-time">18:00 – 02:00</span><span class="timetable-act">DJ Jörg</span></li>
+              <li><span class="timetable-time">18:00 – 02:00</span><button type="button" class="timetable-act timetable-act--preview" data-dj="dj-jot"><span>DJ JOT</span><small>Preview</small></button></li>
             </ul>
             <p class="timetable-tags">Discofox · Oldies · Rock · Dance</p>
           </div>
@@ -271,21 +274,22 @@
 
         <article class="lineup-card timetable-day">
           <span class="lineup-day">Samstag, 18. Juli</span>
+          <p class="timetable-day-kicker">Partynacht · ab 18:00 Uhr</p>
           <div class="timetable-stage">
-            <h3>Hauptbühne</h3>
+            <h3>Hauptbühne <span>Tech House &amp; Techno</span></h3>
             <p class="timetable-genre">Tech House &amp; Techno</p>
             <ul class="timetable-slots">
-              <li><span class="timetable-time">18:00 – 20:00</span><span class="timetable-act">Lost in Sound</span></li>
-              <li><span class="timetable-time">20:00 – 22:00</span><span class="timetable-act">Monoklin</span></li>
-              <li><span class="timetable-time">22:00 – 00:00</span><span class="timetable-act">First Aid Techno</span></li>
-              <li><span class="timetable-time">00:00 – 02:00</span><span class="timetable-act">Chrizz Stoff</span></li>
+              <li><span class="timetable-time">18:00 – 20:00</span><button type="button" class="timetable-act timetable-act--preview" data-dj="lost-in-sound"><span>Lost in Sound</span><small>Preview</small></button></li>
+              <li><span class="timetable-time">20:00 – 22:00</span><button type="button" class="timetable-act timetable-act--preview" data-dj="monoklin"><span>Monoklin</span><small>Preview</small></button></li>
+              <li><span class="timetable-time">22:00 – 00:00</span><button type="button" class="timetable-act timetable-act--preview" data-dj="first-aid-techno"><span>First Aid Techno</span><small>Preview</small></button></li>
+              <li><span class="timetable-time">00:00 – 02:00</span><button type="button" class="timetable-act timetable-act--preview" data-dj="vybi"><span>Vybi</span><small>Preview</small></button></li>
             </ul>
           </div>
           <div class="timetable-stage">
-            <h3>Schirmbar</h3>
+            <h3>Schirmbar <span>Mallorca &amp; Ballermann</span></h3>
             <p class="timetable-genre">Mallorca &amp; Ballermann</p>
             <ul class="timetable-slots">
-              <li><span class="timetable-time">Ganzer Abend</span><span class="timetable-act">Malle Fritz</span></li>
+              <li><span class="timetable-time">Ganzer Abend</span><button type="button" class="timetable-act timetable-act--preview" data-dj="malle-fritz"><span>Malle Fritz</span><small>Preview</small></button></li>
             </ul>
             <p class="timetable-tags">Mallorca · Ballermann · Party Hits</p>
           </div>
@@ -293,6 +297,7 @@
 
         <article class="lineup-card timetable-day">
           <span class="lineup-day">Sonntag, 19. Juli</span>
+          <p class="timetable-day-kicker">Familientag · Eintritt frei</p>
           <h3 class="timetable-day-title">Familientag</h3>
           <p class="timetable-genre timetable-genre--highlight">Eintritt frei · Live-Band · Kinderprogramm</p>
           <ul class="schedule-list">
@@ -768,20 +773,20 @@
       <div class="music-panel-head">
         <div class="music-panel-info">
           <span class="music-panel-label">Now Playing</span>
-          <span class="music-panel-title">Mo_Commänders Birthday · Club Freischwimmer</span>
+          <span class="music-panel-title">Summer Techno Mix · Katy Harriz</span>
         </div>
         <button class="music-close" id="musicClose" aria-label="Player schließen">✕</button>
       </div>
       <div class="music-embed">
         <iframe
           id="scFrame"
-          data-src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Feskaliert%2Fmo_commanders-birthday-club-freischwimmer&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false&color=%23ffb703"
+          data-src="https://w.soundcloud.com/player/?url=https%3A%2F%2Fsoundcloud.com%2Fkatyharriz%2Fsummer-techno-mix&auto_play=false&hide_related=true&show_comments=false&show_user=false&show_reposts=false&visual=false&color=%23ffb703"
           width="100%"
           height="120"
           scrolling="no"
           frameborder="no"
           allow="autoplay"
-          title="Mo_Commänders Birthday @ Club Freischwimmer (eskaliert)"
+          title="Summer Techno Mix by Katy Harriz"
           src="about:blank"
         ></iframe>
       </div>
@@ -795,6 +800,23 @@
       <path d="M12 19V5M5 12l7-7 7 7"/>
     </svg>
   </button>
+
+  <div class="dj-modal" id="djModal" hidden role="dialog" aria-modal="true" aria-labelledby="djModalTitle">
+    <button class="dj-modal-backdrop" type="button" data-dj-close aria-label="DJ Preview schließen"></button>
+    <div class="dj-modal-panel">
+      <button class="dj-modal-close" type="button" data-dj-close aria-label="Schließen">×</button>
+      <div class="dj-modal-copy">
+        <p class="dj-modal-label">DJ Preview</p>
+        <h2 class="dj-modal-title" id="djModalTitle"></h2>
+        <p class="dj-modal-slot" id="djModalSlot"></p>
+      </div>
+      <div class="dj-modal-media" id="djModalMedia"></div>
+      <p class="dj-modal-fallback" id="djModalFallback" hidden>
+        Preview noch nicht hinterlegt. Schau auf
+        <a href="https://www.instagram.com/s_freibad_tanzt_festival/" target="_blank" rel="noopener noreferrer">Instagram</a>.
+      </p>
+    </div>
+  </div>
 
   <footer class="site-footer">
     <div class="container footer-wrap">
@@ -818,6 +840,8 @@
   </footer>
   <script src="https://w.soundcloud.com/player/api.js"></script>
   <script src="js/stats-track.js" defer></script>
+  <script src="js/dj-videos.js" defer></script>
+  <script src="js/dj-preview.js" defer></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').catch(function () {});
@@ -834,8 +858,7 @@
       const frame    = document.getElementById('scFrame');
       const MUSIC_FLAG_KEY = 'sfreibad_music';
       const MUSIC_POS_KEY = 'sfreibad_music_pos';
-      /** Erster Start / kein gespeicherter Fortschritt: ab 24:00 (ms, SoundCloud Widget API). */
-      const MUSIC_DEFAULT_START_MS = 24 * 60 * 1000;
+      const MUSIC_DEFAULT_START_MS = 0;
       const MUSIC_FADE_IN_MS = 1800;
       let widget = null;
       let widgetReady = false;
@@ -978,6 +1001,16 @@
           }
         }
       }
+
+      window.SFREIBAD_PAUSE_MUSIC = function () {
+        clearVolumeFade();
+        playQueued = false;
+        savePosition();
+        if (widget && widgetReady) {
+          widget.pause();
+        }
+        trigger.classList.remove('is-playing');
+      };
 
       function openPlayer() {
         panel.hidden = false;
