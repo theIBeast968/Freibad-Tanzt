@@ -1,4 +1,4 @@
-const CACHE = 'sfreibad-v3';
+const CACHE = 'sfreibad-v4';
 
 self.addEventListener('install', (event) => {
   event.waitUntil(

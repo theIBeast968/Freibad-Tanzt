@@ -43,13 +43,16 @@
     if (item.video) {
       var video = document.createElement('video');
       video.controls = true;
-      video.autoplay = true;
       video.playsInline = true;
-      video.preload = 'metadata';
+      video.setAttribute('playsinline', '');
+      video.setAttribute('webkit-playsinline', '');
+      video.preload = 'auto';
       video.src = item.video;
-      video.addEventListener('canplay', function () {
+
+      video.addEventListener('loadeddata', function () {
         video.play().catch(function () {});
       }, { once: true });
+
       mediaWrap.appendChild(video);
     } else if (item.instagram) {
       var link = document.createElement('a');
