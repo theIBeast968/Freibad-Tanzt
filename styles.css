@@ -860,22 +860,56 @@ details p,
     rgba(10, 10, 10, 0.45);
 }
 
-.family-flyer {
-  margin: 0 auto;
-  width: min(100%, 42rem);
-  padding: 0.7rem;
+.family-flyer-card {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.2fr);
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
   border-radius: 1.15rem;
   border: 1px solid rgba(255, 183, 3, 0.18);
   background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
-    rgba(0, 0, 0, 0.22);
+    linear-gradient(180deg, rgba(255, 255, 255, 0.055), rgba(255, 255, 255, 0.02)),
+    rgba(0, 0, 0, 0.2);
 }
 
-.family-flyer img {
+.family-flyer-card img {
   width: 100%;
-  height: auto;
+  aspect-ratio: 16 / 10;
   display: block;
+  object-fit: cover;
+  object-position: top center;
   border-radius: 0.85rem;
+}
+
+.family-flyer-card div {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.family-flyer-card strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 2.6vw, 2.1rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.family-flyer-card p {
+  margin: 0;
+  line-height: 1.55;
+  color: rgba(255, 247, 234, 0.86);
+}
+
+.family-flyer-card a {
+  width: fit-content;
+  color: var(--yellow);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
 }
 
 .family-band-card {
@@ -2204,6 +2238,10 @@ details p {
   }
 
   .family-band-card {
+    grid-template-columns: 1fr;
+  }
+
+  .family-flyer-card {
     grid-template-columns: 1fr;
   }
 
