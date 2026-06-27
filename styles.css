@@ -853,11 +853,32 @@ details p,
 }
 
 .timetable-day--family {
-  grid-column: 1 / -1;
   background:
     radial-gradient(circle at 18% 0%, rgba(255, 183, 3, 0.18), transparent 35%),
     linear-gradient(180deg, rgba(255, 183, 3, 0.08), rgba(255, 255, 255, 0.02)),
     rgba(10, 10, 10, 0.45);
+}
+
+#sonntag.familientag-intro {
+  margin-top: 3rem;
+  padding-top: 2.25rem;
+  border-top: 1px solid rgba(255, 183, 3, 0.2);
+}
+
+#sonntag.familientag-intro h2 {
+  margin-bottom: 0.85rem;
+}
+
+.familientag-lead {
+  margin: 0;
+  max-width: 44rem;
+  color: rgba(255, 247, 234, 0.82);
+  font-weight: 600;
+  line-height: 1.55;
+}
+
+.familientag-stage {
+  margin-top: 1.5rem;
 }
 
 .family-flyer-card {
