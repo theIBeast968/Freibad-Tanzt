@@ -860,6 +860,36 @@ details p,
     rgba(10, 10, 10, 0.45);
 }
 
+.family-flyer-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+  gap: 1rem;
+  align-items: start;
+}
+
+.family-flyer-grid figure {
+  margin: 0;
+  padding: 0.7rem;
+  border-radius: 1.15rem;
+  border: 1px solid rgba(255, 183, 3, 0.18);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.06), rgba(255, 255, 255, 0.02)),
+    rgba(0, 0, 0, 0.22);
+}
+
+.family-flyer-grid img {
+  width: 100%;
+  display: block;
+  border-radius: 0.85rem;
+}
+
+.family-flyer-grid figcaption {
+  margin-top: 0.55rem;
+  color: rgba(255, 247, 234, 0.74);
+  font-size: 0.82rem;
+  line-height: 1.4;
+}
+
 .family-band-card {
   display: grid;
   grid-template-columns: minmax(220px, 0.75fr) minmax(0, 1.25fr);
@@ -962,6 +992,65 @@ details p,
   font-weight: 900;
   letter-spacing: 0.09em;
   text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 0.16em;
+}
+
+.family-program-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.9rem;
+}
+
+.family-info-card {
+  display: grid;
+  gap: 0.45rem;
+  align-content: start;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255, 183, 3, 0.12), transparent 42%),
+    rgba(255, 255, 255, 0.045);
+}
+
+.family-info-card--wide {
+  grid-column: 1 / -1;
+}
+
+.family-info-card span {
+  color: var(--yellow);
+  font-size: 0.74rem;
+  font-weight: 900;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.family-info-card h4 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.25rem, 2.3vw, 1.75rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.family-info-card p,
+.family-info-card ul {
+  margin: 0;
+  color: rgba(255, 247, 234, 0.82);
+  line-height: 1.52;
+}
+
+.family-info-card ul {
+  padding-left: 1.05rem;
+}
+
+.family-info-card a {
+  width: fit-content;
+  color: var(--yellow);
+  font-size: 0.82rem;
+  font-weight: 900;
   text-decoration: underline;
   text-underline-offset: 0.16em;
 }
@@ -2120,6 +2209,11 @@ details p {
 
   .timetable-day--family {
     grid-column: auto;
+  }
+
+  .family-flyer-grid,
+  .family-program-grid {
+    grid-template-columns: 1fr;
   }
 
   .family-band-card {
