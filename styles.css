@@ -862,13 +862,17 @@ details p,
 
 .family-flyer-grid {
   display: grid;
-  grid-template-columns: minmax(0, 0.86fr) minmax(0, 1.14fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
-  align-items: start;
+  align-items: stretch;
 }
 
 .family-flyer-grid figure {
   margin: 0;
+  display: grid;
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 0.55rem;
+  height: 100%;
   padding: 0.7rem;
   border-radius: 1.15rem;
   border: 1px solid rgba(255, 183, 3, 0.18);
@@ -879,12 +883,18 @@ details p,
 
 .family-flyer-grid img {
   width: 100%;
+  height: 100%;
   display: block;
+  aspect-ratio: 4 / 5;
+  object-fit: contain;
+  object-position: center;
   border-radius: 0.85rem;
+  background: rgba(0, 0, 0, 0.14);
 }
 
 .family-flyer-grid figcaption {
-  margin-top: 0.55rem;
+  margin: 0;
+  min-height: 2.5rem;
   color: rgba(255, 247, 234, 0.74);
   font-size: 0.82rem;
   line-height: 1.4;
