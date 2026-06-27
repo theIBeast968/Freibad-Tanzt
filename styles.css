@@ -882,6 +882,21 @@ details p,
   border-radius: 0.85rem;
 }
 
+.family-flyer-thumb {
+  width: 100%;
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  border-radius: 0.85rem;
+  overflow: hidden;
+}
+
+.family-flyer-thumb:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 3px;
+}
+
 .family-flyer-card div {
   display: grid;
   gap: 0.55rem;
@@ -901,7 +916,8 @@ details p,
   color: rgba(255, 247, 234, 0.86);
 }
 
-.family-flyer-card a {
+.family-flyer-card a,
+.family-flyer-open {
   width: fit-content;
   color: var(--yellow);
   font-size: 0.78rem;
@@ -910,6 +926,21 @@ details p,
   text-transform: uppercase;
   text-decoration: underline;
   text-underline-offset: 0.16em;
+}
+
+.family-flyer-open {
+  padding: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+.family-info-card .family-flyer-open {
+  font-size: 0.82rem;
+  letter-spacing: 0;
+  text-transform: none;
+  font-weight: 900;
 }
 
 .family-band-card {
@@ -1077,12 +1108,88 @@ details p,
   text-underline-offset: 0.16em;
 }
 
-.dj-modal-open {
+.dj-modal-open,
+.flyer-modal-open {
   overflow: hidden;
 }
 
 .dj-modal[hidden] {
   display: none;
+}
+
+.flyer-modal[hidden] {
+  display: none;
+}
+
+.flyer-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 220;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+}
+
+.flyer-modal-backdrop {
+  position: absolute;
+  inset: 0;
+  border: 0;
+  background:
+    radial-gradient(circle at 50% 20%, rgba(255, 183, 3, 0.22), transparent 42%),
+    rgba(5, 2, 2, 0.84);
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+.flyer-modal-panel {
+  position: relative;
+  width: min(520px, calc(100vw - 1.5rem));
+  max-height: min(92vh, 900px);
+  display: grid;
+  gap: 0.75rem;
+  padding: 0.85rem;
+  border-radius: 1.35rem;
+  border: 1px solid rgba(255, 183, 3, 0.28);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255, 183, 3, 0.16), transparent 38%),
+    linear-gradient(180deg, rgba(34, 13, 7, 0.98), rgba(8, 3, 2, 0.98));
+  box-shadow:
+    0 30px 90px rgba(0, 0, 0, 0.76),
+    0 0 90px rgba(255, 73, 70, 0.18);
+  overflow: auto;
+}
+
+.flyer-modal-close {
+  position: absolute;
+  top: 0.65rem;
+  right: 0.65rem;
+  z-index: 1;
+  width: 2.2rem;
+  height: 2.2rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.flyer-modal-title {
+  margin: 0;
+  padding-right: 2.5rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2.5vw, 1.9rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.flyer-modal-media img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 0.85rem;
 }
 
 .dj-modal {

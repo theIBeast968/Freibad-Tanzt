@@ -301,11 +301,13 @@
           <h3 class="timetable-day-title">Familientag</h3>
           <p class="timetable-genre timetable-genre--highlight">Eintritt frei · Live-Band · Piratenschiff XXL · Spiele · Beachvolleyball</p>
           <div class="family-flyer-card">
-            <img src="attractions/family-day/familientag-flyer.png" alt="Familientag Flyer mit Programmübersicht">
+            <button type="button" class="family-flyer-thumb" data-flyer-src="attractions/family-day/familientag-flyer.png" data-flyer-title="Familientag" aria-label="Familientag Flyer öffnen">
+              <img src="attractions/family-day/familientag-flyer.png" alt="Familientag Flyer mit Programmübersicht">
+            </button>
             <div>
               <strong>Familientag</strong>
               <p>Sonntag, 19. Juli ab 11:00 Uhr im Freibad Langenburg. Eintritt frei – mit Live-Band, Hüpfburg, Wasserspielen, Essen und Aktivitäten für Groß und Klein.</p>
-              <a href="attractions/family-day/familientag-flyer.png" target="_blank" rel="noopener noreferrer">Flyer ansehen</a>
+              <button type="button" class="family-flyer-open" data-flyer-src="attractions/family-day/familientag-flyer.png" data-flyer-title="Familientag">Flyer ansehen</button>
             </div>
           </div>
           <div class="family-band-card">
@@ -347,7 +349,7 @@
                 <li>Anmeldung mit Mannschaftsname und Teilnehmer:innen bis 05.07.2026</li>
               </ul>
               <a href="tel:+491627559108">Martina Brandtner-Weidl: 0162 7559108</a>
-              <a href="attractions/family-day/beachvolleyball-flyer.png" target="_blank" rel="noopener noreferrer">Turnier-Flyer ansehen</a>
+              <button type="button" class="family-flyer-open" data-flyer-src="attractions/family-day/beachvolleyball-flyer.png" data-flyer-title="Beachvolleyball Spaßturnier">Turnier-Flyer ansehen</button>
             </article>
             <article class="family-info-card">
               <span>11:00 &amp; 13:00 Uhr</span>
@@ -878,6 +880,17 @@
     </div>
   </div>
 
+  <div class="flyer-modal" id="flyerModal" hidden role="dialog" aria-modal="true" aria-labelledby="flyerModalTitle">
+    <button class="flyer-modal-backdrop" type="button" data-flyer-close aria-label="Flyer schließen"></button>
+    <div class="flyer-modal-panel">
+      <button class="flyer-modal-close" type="button" data-flyer-close aria-label="Schließen">×</button>
+      <h2 class="flyer-modal-title" id="flyerModalTitle"></h2>
+      <div class="flyer-modal-media">
+        <img id="flyerModalImage" alt="">
+      </div>
+    </div>
+  </div>
+
   <footer class="site-footer">
     <div class="container footer-wrap">
       <div>
@@ -902,6 +915,7 @@
   <script src="js/stats-track.js" defer></script>
   <script src="js/dj-videos.js" defer></script>
   <script src="js/dj-preview.js" defer></script>
+  <script src="js/flyer-modal.js" defer></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').catch(function () {});

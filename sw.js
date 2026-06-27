@@ -1,4 +1,4 @@
-const CACHE = 'sfreibad-v4';
+const CACHE = 'sfreibad-v5';
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -9,6 +9,7 @@ self.addEventListener('install', (event) => {
         '/js/stats-track.js',
         '/js/dj-videos.js',
         '/js/dj-preview.js',
+        '/js/flyer-modal.js',
         '/styles.css',
         '/favicon-32.png',
         '/icon-192.png',
