@@ -914,8 +914,48 @@ details p,
   color: rgba(255, 247, 234, 0.86);
 }
 
+.family-attraction-card {
+  display: grid;
+  grid-template-columns: minmax(220px, 0.8fr) minmax(0, 1.2fr);
+  gap: 1rem;
+  align-items: center;
+  padding: 1rem;
+  border-radius: 1.15rem;
+  border: 1px solid rgba(24, 161, 204, 0.2);
+  background:
+    linear-gradient(135deg, rgba(24, 161, 204, 0.12), rgba(255, 183, 3, 0.06)),
+    rgba(0, 0, 0, 0.2);
+}
+
+.family-attraction-card img {
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  display: block;
+  object-fit: cover;
+  border-radius: 0.85rem;
+}
+
+.family-attraction-card div {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.family-attraction-card strong {
+  font-family: var(--font-display);
+  font-size: clamp(1.45rem, 2.6vw, 2.1rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: #fff;
+}
+
+.family-attraction-card p {
+  margin: 0;
+  line-height: 1.55;
+  color: rgba(255, 247, 234, 0.86);
+}
+
 .family-band-copy a,
-.family-bouncy-link {
+.family-attraction-card a {
   width: fit-content;
   color: var(--yellow);
   font-size: 0.78rem;
@@ -924,10 +964,6 @@ details p,
   text-transform: uppercase;
   text-decoration: underline;
   text-underline-offset: 0.16em;
-}
-
-.family-bouncy-link {
-  margin-top: -0.15rem;
 }
 
 .dj-modal-open {
@@ -2087,6 +2123,10 @@ details p {
   }
 
   .family-band-card {
+    grid-template-columns: 1fr;
+  }
+
+  .family-attraction-card {
     grid-template-columns: 1fr;
   }
 
