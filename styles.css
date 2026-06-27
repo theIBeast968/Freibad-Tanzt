@@ -860,16 +860,9 @@ details p,
     rgba(10, 10, 10, 0.45);
 }
 
-.family-flyer-grid {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  align-items: stretch;
-}
-
-.family-flyer-grid figure {
-  margin: 0;
-  height: 100%;
+.family-flyer {
+  margin: 0 auto;
+  width: min(100%, 42rem);
   padding: 0.7rem;
   border-radius: 1.15rem;
   border: 1px solid rgba(255, 183, 3, 0.18);
@@ -878,15 +871,11 @@ details p,
     rgba(0, 0, 0, 0.22);
 }
 
-.family-flyer-grid img {
+.family-flyer img {
   width: 100%;
-  height: 100%;
+  height: auto;
   display: block;
-  aspect-ratio: 4 / 5;
-  object-fit: contain;
-  object-position: center;
   border-radius: 0.85rem;
-  background: rgba(0, 0, 0, 0.14);
 }
 
 .family-band-card {
@@ -2210,7 +2199,6 @@ details p {
     grid-column: auto;
   }
 
-  .family-flyer-grid,
   .family-program-grid {
     grid-template-columns: 1fr;
   }
