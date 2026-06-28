@@ -34,27 +34,8 @@
   >
   <link rel="stylesheet" href="styles.css">
 </head>
-<body class="intro-open">
+<body>
   <a class="skip-link" href="#main-content">Zum Inhalt springen</a>
-  <!-- ======= Flyer Intro Overlay ======= -->
-  <div class="intro-overlay" id="introOverlay" role="dialog" aria-modal="true" aria-label="Festival-Intro">
-    <div class="intro-backdrop"></div>
-    <div class="intro-inner">
-      <img
-        class="intro-flyer"
-        src="Rot_5.png"
-        alt="S'Freibad Tanzt – Flyer 17. bis 19. Juli Freibad Langenburg"
-      >
-      <button class="intro-cta" id="introCta" type="button">
-        <span>Jetzt feiern</span>
-        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M12 3v10.55A4 4 0 1 0 14 17V7h4V3h-6Z"/>
-        </svg>
-      </button>
-      <p class="intro-hint">Klick für Sound &amp; Einlass</p>
-    </div>
-  </div>
-  <!-- ======= /Flyer Intro Overlay ======= -->
 
   <div class="page-watermark" aria-hidden="true"></div>
   <header class="site-header" id="siteHeader">
@@ -932,13 +913,10 @@
   <script>
     (function () {
       /* ---- Elemente ---- */
-      const overlay  = document.getElementById('introOverlay');
-      const introCta = document.getElementById('introCta');
       const trigger  = document.getElementById('musicTrigger');
       const panel    = document.getElementById('musicPanel');
       const closeBtn = document.getElementById('musicClose');
       const frame    = document.getElementById('scFrame');
-      const MUSIC_FLAG_KEY = 'sfreibad_music';
       const MUSIC_POS_KEY = 'sfreibad_music_pos';
       const MUSIC_DEFAULT_START_MS = 0;
       const MUSIC_FADE_IN_MS = 1800;
@@ -1073,7 +1051,6 @@
       function startMusic() {
         ensureWidget();
         markPlaying();
-        sessionStorage.setItem(MUSIC_FLAG_KEY, '1');
 
         if (widget) {
           if (widgetReady) {
@@ -1122,40 +1099,6 @@
       });
       closeBtn.addEventListener('click', collapsePlayer);
       bindPositionPersistence();
-
-      /* ---- Intro ---- */
-      function isMobile() {
-        return window.matchMedia('(max-width: 720px)').matches;
-      }
-
-      function dismissIntro() {
-        overlay.classList.add('intro-out');
-        setTimeout(function () {
-          overlay.hidden = true;
-          document.body.classList.remove('intro-open');
-        }, 600);
-        startMusic();
-        if (isMobile()) {
-          openPlayer();
-          setTimeout(function () {
-            collapsePlayer();
-          }, 2200);
-        }
-      }
-
-      introCta.addEventListener('click', dismissIntro);
-      overlay.addEventListener('click', function (e) {
-        if (e.target === overlay || e.target.classList.contains('intro-backdrop')) {
-          dismissIntro();
-        }
-      });
-
-      if (sessionStorage.getItem(MUSIC_FLAG_KEY)) {
-        overlay.hidden = true;
-        document.body.classList.remove('intro-open');
-        startMusic();
-        collapsePlayer();
-      }
 
       /* ---- Header mobil nur am Seitenanfang sichtbar ---- */
       (function () {
