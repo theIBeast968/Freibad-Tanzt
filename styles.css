@@ -1719,6 +1719,59 @@ details p,
   margin-bottom: 1.75rem;
 }
 
+#camping .camping-intro {
+  padding-bottom: 1.25rem;
+}
+
+#camping .camping-intro h2 {
+  margin-bottom: 0.85rem;
+}
+
+.camping-lead {
+  margin: 0;
+  max-width: 44rem;
+  line-height: 1.6;
+  color: rgba(255, 247, 234, 0.88);
+  font-weight: 600;
+}
+
+.camping-grid {
+  margin-top: 2rem;
+}
+
+.camping-card--wide {
+  grid-column: 1 / -1;
+}
+
+.camping-card--volunteer {
+  border-color: rgba(255, 183, 3, 0.22);
+  background:
+    radial-gradient(circle at 0% 0%, rgba(255, 183, 3, 0.12), transparent 42%),
+    linear-gradient(180deg, rgba(255, 255, 255, 0.05), rgba(255, 255, 255, 0.02));
+}
+
+.camping-card--volunteer p + p {
+  margin-top: 0.75rem;
+}
+
+.camping-cta {
+  margin-top: 2rem;
+}
+
+.camping-cta p {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.55;
+  color: rgba(255, 247, 234, 0.92);
+}
+
+.camping-cta a {
+  color: var(--yellow);
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
 .eintritt-grid {
   margin-top: 2.5rem;
 }
