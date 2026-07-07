@@ -1799,6 +1799,13 @@ details p,
   color: var(--yellow);
 }
 
+.info-card-list a {
+  color: var(--yellow);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+}
+
 .info-card-note {
   margin: 0.85rem 0 0;
   line-height: 1.55;
