@@ -2220,30 +2220,15 @@ details p,
   opacity: 1 !important;
 }
 
-.sponsors-grid .sponsor-logo-link.sponsor-logo-link--foerch img {
-  filter: none !important;
-  opacity: 1 !important;
-  max-height: 58px;
-}
-
-.sponsor-logo-link--foerch {
-  background: rgba(255, 255, 255, 0.94);
-  border-color: rgba(255, 255, 255, 0.2);
-}
-
-.sponsor-logo-link--foerch:hover {
-  background: #fff;
-}
-
 .sponsors-grid .sponsor-logo-link.sponsor-logo-link--huepfburg img {
   filter: none !important;
   opacity: 1 !important;
-  max-height: 72px;
-  transform: scale(1.05);
+  max-height: 96px;
+  transform: scale(1.12);
 }
 
 .sponsor-logo-link--huepfburg:hover img {
-  transform: scale(1.1);
+  transform: scale(1.18);
 }
 
 /* Riedbacher & die drei: Originalfarben */
