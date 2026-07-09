@@ -1735,6 +1735,18 @@ details p,
   font-weight: 600;
 }
 
+.camping-notice {
+  margin-top: 1.5rem;
+}
+
+.camping-notice-card p + p {
+  margin-top: 0.85rem;
+}
+
+.camping-notice-times {
+  margin: 0.75rem 0 0;
+}
+
 .camping-grid {
   margin-top: 2rem;
 }
