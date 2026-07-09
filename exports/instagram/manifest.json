@@ -1,0 +1,50 @@
+{
+  "width": 1080,
+  "height": 1350,
+  "sections": [
+    {
+      "section": "01-infos",
+      "slides": [
+        "exports/instagram/01-infos/01-infos-slide-01.png"
+      ],
+      "count": 1
+    },
+    {
+      "section": "02-timetable",
+      "slides": [
+        "exports/instagram/02-timetable/02-timetable-slide-01.png"
+      ],
+      "count": 1
+    },
+    {
+      "section": "03-sonntag",
+      "slides": [
+        "exports/instagram/03-sonntag/03-sonntag-slide-01.png",
+        "exports/instagram/03-sonntag/03-sonntag-slide-02.png"
+      ],
+      "count": 2
+    },
+    {
+      "section": "04-camping",
+      "slides": [
+        "exports/instagram/04-camping/04-camping-slide-01.png",
+        "exports/instagram/04-camping/04-camping-slide-02.png"
+      ],
+      "count": 2
+    },
+    {
+      "section": "05-tickets",
+      "slides": [
+        "exports/instagram/05-tickets/05-tickets-slide-01.png"
+      ],
+      "count": 1
+    },
+    {
+      "section": "06-sponsoren",
+      "slides": [
+        "exports/instagram/06-sponsoren/06-sponsoren-slide-01.png"
+      ],
+      "count": 1
+    }
+  ]
+}
