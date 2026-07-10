@@ -5,39 +5,48 @@
     {
       "section": "01-infos",
       "slides": [
-        "exports/instagram/01-infos/01-infos-slide-01.png"
+        "exports/instagram/01-infos/01-infos-slide-01.png",
+        "exports/instagram/01-infos/01-infos-slide-02.png",
+        "exports/instagram/01-infos/01-infos-slide-03.png",
+        "exports/instagram/01-infos/01-infos-slide-04.png"
       ],
-      "count": 1
+      "count": 4
     },
     {
       "section": "02-timetable",
       "slides": [
-        "exports/instagram/02-timetable/02-timetable-slide-01.png"
+        "exports/instagram/02-timetable/02-timetable-slide-01.png",
+        "exports/instagram/02-timetable/02-timetable-slide-02.png"
       ],
-      "count": 1
+      "count": 2
     },
     {
       "section": "03-sonntag",
       "slides": [
         "exports/instagram/03-sonntag/03-sonntag-slide-01.png",
-        "exports/instagram/03-sonntag/03-sonntag-slide-02.png"
+        "exports/instagram/03-sonntag/03-sonntag-slide-02.png",
+        "exports/instagram/03-sonntag/03-sonntag-slide-03.png"
       ],
-      "count": 2
+      "count": 3
     },
     {
       "section": "04-camping",
       "slides": [
         "exports/instagram/04-camping/04-camping-slide-01.png",
-        "exports/instagram/04-camping/04-camping-slide-02.png"
+        "exports/instagram/04-camping/04-camping-slide-02.png",
+        "exports/instagram/04-camping/04-camping-slide-03.png",
+        "exports/instagram/04-camping/04-camping-slide-04.png"
       ],
-      "count": 2
+      "count": 4
     },
     {
       "section": "05-tickets",
       "slides": [
-        "exports/instagram/05-tickets/05-tickets-slide-01.png"
+        "exports/instagram/05-tickets/05-tickets-slide-01.png",
+        "exports/instagram/05-tickets/05-tickets-slide-02.png",
+        "exports/instagram/05-tickets/05-tickets-slide-03.png"
       ],
-      "count": 1
+      "count": 3
     },
     {
       "section": "06-sponsoren",

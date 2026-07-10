@@ -1,2 +1,4 @@
 node_modules/
 .netlify/
+.venv-screenshot/
+exports/__pycache__/
