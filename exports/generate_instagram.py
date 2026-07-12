@@ -113,7 +113,10 @@ SECTIONS = [
         "slides": [
             [".ticket-poster-card", ".ticket-facts", ".ticket-qr-wrap"],
             [".ticket-info-body > .ticket-info-block:nth-of-type(1)"],
-            [".ticket-info-body > .ticket-info-block:nth-of-type(2)", ".ticket-info-highlights"],
+            [
+                ".ticket-info-body > .ticket-info-block:nth-of-type(2)",
+                ".ticket-info-body > .ticket-info-block:nth-of-type(3)",
+            ],
         ],
     },
     {
