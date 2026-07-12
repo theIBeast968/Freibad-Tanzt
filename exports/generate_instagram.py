@@ -363,11 +363,11 @@ RENDER_STYLE = """
     }
 
     .ig-ticket-slide-03 .ticket-info-block h3 {
-      font-size: 1.05rem !important;
+      font-size: 1.35rem !important;
     }
 
     .ig-ticket-slide-03 .ticket-info-block--transparency h3 {
-      font-size: 1.75rem !important;
+      font-size: 2.1rem !important;
       line-height: 1.12 !important;
     }
 
@@ -375,17 +375,17 @@ RENDER_STYLE = """
     .ig-ticket-slide-03 .ticket-info-prices li,
     .ig-ticket-slide-03 .ticket-price-free,
     .ig-ticket-slide-03 .ticket-price-link {
-      font-size: 1.22rem !important;
+      font-size: 1.45rem !important;
       line-height: 1.48 !important;
     }
 
     .ig-ticket-slide-03 .ticket-transparency-lead {
-      font-size: 1.28rem !important;
+      font-size: 1.55rem !important;
       line-height: 1.45 !important;
     }
 
     .ig-ticket-slide-03 .ticket-info-block--transparency p {
-      font-size: 1.14rem !important;
+      font-size: 1.35rem !important;
       line-height: 1.52 !important;
     }
 
