@@ -286,6 +286,57 @@
     .vertical .big-prize { font-size: 3.8rem; }
     .vertical .content { padding-top: 120px; padding-bottom: 96px; }
 
+    .ticket-fan {
+      position: relative;
+      z-index: 2;
+      height: 500px;
+      margin: 1.5rem 0 0.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .ticket-fan img {
+      position: absolute;
+      width: 300px;
+      border-radius: 12px;
+      border: 3px solid rgba(255, 247, 234, 0.92);
+      box-shadow:
+        0 18px 40px rgba(0, 0, 0, 0.55),
+        0 0 26px rgba(255, 77, 158, 0.45);
+    }
+
+    .ticket-fan img:nth-child(1) {
+      transform: rotate(-16deg) translateX(-150px) translateY(28px);
+    }
+
+    .ticket-fan img:nth-child(2) {
+      transform: translateY(-14px) scale(1.06);
+      z-index: 3;
+    }
+
+    .ticket-fan img:nth-child(3) {
+      transform: rotate(16deg) translateX(150px) translateY(28px);
+    }
+
+    .fan-badge {
+      position: absolute;
+      z-index: 4;
+      bottom: -6px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 0.55rem 1.5rem;
+      border-radius: 999px;
+      font-family: "Gin Test", Impact, sans-serif;
+      font-size: 1.7rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      white-space: nowrap;
+      color: #120408;
+      background: linear-gradient(135deg, #ffb703, #ff8c00);
+      box-shadow: 0 0 22px rgba(255, 183, 3, 0.7);
+    }
+
     .reel-hero {
       margin-top: 2rem;
       text-align: center;
@@ -303,11 +354,16 @@
   <div class="frame carousel" id="carousel-01">
     <img class="logo" src="../Freibad Tanzt Logo Original.png" alt="">
     <img class="watermark" src="../Freibad Tanzt Logo Original.png" alt="">
-    <div class="neon-ring"></div>
     <div class="content">
       <p class="label">Gewinnspiel</p>
       <h1 class="title">Sei live dabei!</h1>
-      <div class="panel" style="margin-top: 3rem;">
+      <div class="ticket-fan">
+        <img src="gewinnspiel-ticket.png" alt="">
+        <img src="gewinnspiel-ticket.png" alt="">
+        <img src="gewinnspiel-ticket.png" alt="">
+        <span class="fan-badge">3 Freikarten pro Gewinner</span>
+      </div>
+      <div class="panel" style="margin-top: 1.5rem;">
         <p class="big-prize">2× 3 Freikarten<br>inkl. 3 Freibier</p>
         <p class="sub">s'Freibad tanzt · Freibad Langenburg</p>
       </div>
