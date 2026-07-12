@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gewinnspiel Export</title>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: "Gin Test";
+      src: url("../GinTest-Regular.otf") format("opentype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #000;
+      font-family: "Barlow", Arial, sans-serif;
+    }
+
+    .frame {
+      position: relative;
+      overflow: hidden;
+      color: #fff7ea;
+      background:
+        radial-gradient(circle at 50% 18%, rgba(255, 120, 0, 0.55) 0%, rgba(255, 60, 0, 0.18) 28%, transparent 52%),
+        radial-gradient(circle at 12% 88%, rgba(255, 73, 70, 0.22), transparent 42%),
+        radial-gradient(circle at 88% 78%, rgba(255, 183, 3, 0.14), transparent 38%),
+        linear-gradient(165deg, #3a0810 0%, #180408 45%, #0a0204 100%);
+    }
+
+    .frame::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: radial-gradient(rgba(255, 255, 255, 0.14) 1px, transparent 1px);
+      background-size: 14px 14px;
+      opacity: 0.22;
+      pointer-events: none;
+    }
+
+    .frame::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at center, transparent 35%, rgba(0, 0, 0, 0.55) 100%);
+      pointer-events: none;
+    }
+
+    .carousel { width: 1080px; height: 1350px; }
+    .vertical { width: 1080px; height: 1920px; }
+
+    .content {
+      position: relative;
+      z-index: 2;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      padding: 56px 64px 64px;
+    }
+
+    .label {
+      font-size: 30px;
+      font-weight: 900;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #ffb703;
+      text-align: center;
+      text-shadow: 0 0 12px rgba(255, 183, 3, 0.65);
+    }
+
+    .title {
+      margin-top: 18px;
+      font-family: "Gin Test", Impact, sans-serif;
+      font-size: 72px;
+      line-height: 1.05;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      text-align: center;
+      color: #fff;
+      text-shadow:
+        0 0 8px rgba(255, 77, 158, 0.9),
+        0 0 24px rgba(255, 77, 158, 0.75),
+        0 0 48px rgba(255, 20, 120, 0.45);
+    }
+
+    .title--yellow {
+      color: #fff6d0;
+      text-shadow:
+        0 0 8px rgba(255, 183, 3, 0.95),
+        0 0 24px rgba(255, 183, 3, 0.8),
+        0 0 48px rgba(255, 120, 0, 0.5);
+    }
+
+    .logo {
+      position: absolute;
+      top: 42px;
+      right: 48px;
+      width: 118px;
+      height: 118px;
+      border-radius: 50%;
+      object-fit: cover;
+      z-index: 3;
+      filter: drop-shadow(0 0 18px rgba(255, 183, 3, 0.45));
+    }
+
+    .watermark {
+      position: absolute;
+      left: 50%;
+      top: 54%;
+      width: 760px;
+      height: 760px;
+      transform: translate(-50%, -50%);
+      opacity: 0.14;
+      object-fit: contain;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .panel {
+      margin-top: auto;
+      margin-bottom: auto;
+      padding: 2rem 2.2rem;
+      border: 2px solid rgba(255, 77, 158, 0.75);
+      border-radius: 1.35rem;
+      background:
+        linear-gradient(135deg, rgba(255, 183, 3, 0.08), rgba(255, 73, 70, 0.06)),
+        rgba(8, 2, 4, 0.58);
+      box-shadow:
+        0 0 24px rgba(255, 77, 158, 0.35),
+        inset 0 0 30px rgba(255, 77, 158, 0.08);
+    }
+
+    .panel h3 {
+      margin-bottom: 1rem;
+      font-family: "Gin Test", Impact, sans-serif;
+      font-size: 2.35rem;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: #ffb703;
+      text-shadow: 0 0 16px rgba(255, 183, 3, 0.55);
+    }
+
+    .panel p,
+    .panel li {
+      font-size: 1.42rem;
+      font-weight: 700;
+      line-height: 1.5;
+      color: rgba(255, 247, 234, 0.95);
+    }
+
+    .panel ul {
+      list-style: none;
+      display: grid;
+      gap: 0.85rem;
+    }
+
+    .panel li {
+      position: relative;
+      padding-left: 1.5rem;
+    }
+
+    .panel li::before {
+      content: "✦";
+      position: absolute;
+      left: 0;
+      color: #ffb703;
+      text-shadow: 0 0 10px rgba(255, 183, 3, 0.8);
+    }
+
+    .highlight {
+      color: #ffb703;
+      text-shadow: 0 0 12px rgba(255, 183, 3, 0.65);
+    }
+
+    .big-prize {
+      font-family: "Gin Test", Impact, sans-serif;
+      font-size: 3.4rem;
+      line-height: 1.12;
+      text-align: center;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      color: #fff;
+      text-shadow:
+        0 0 10px rgba(255, 77, 158, 0.9),
+        0 0 28px rgba(255, 77, 158, 0.7);
+    }
+
+    .sub {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 1.35rem;
+      font-weight: 700;
+      color: rgba(255, 247, 234, 0.9);
+    }
+
+    .steps {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .step {
+      display: grid;
+      grid-template-columns: 3.2rem 1fr;
+      gap: 1rem;
+      align-items: start;
+      padding: 1rem 1.1rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 183, 3, 0.35);
+      background: rgba(0, 0, 0, 0.28);
+    }
+
+    .step-num {
+      width: 3.2rem;
+      height: 3.2rem;
+      display: grid;
+      place-items: center;
+      border-radius: 999px;
+      font-family: "Gin Test", Impact, sans-serif;
+      font-size: 1.5rem;
+      color: #120408;
+      background: linear-gradient(135deg, #ffb703, #ff8c00);
+      box-shadow: 0 0 18px rgba(255, 183, 3, 0.65);
+    }
+
+    .step strong {
+      display: block;
+      font-size: 1.35rem;
+      margin-bottom: 0.2rem;
+      color: #ffb703;
+    }
+
+    .step span {
+      font-size: 1.18rem;
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .cta {
+      margin-top: auto;
+      text-align: center;
+      padding: 1.2rem 1.6rem;
+      border-radius: 999px;
+      font-family: "Gin Test", Impact, sans-serif;
+      font-size: 1.55rem;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: #120408;
+      background: linear-gradient(135deg, #ffb703, #ff8c00);
+      box-shadow:
+        0 0 20px rgba(255, 183, 3, 0.75),
+        0 0 40px rgba(255, 120, 0, 0.35);
+    }
+
+    .handle {
+      margin-top: 1rem;
+      text-align: center;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #ffb703;
+    }
+
+    .neon-ring {
+      position: absolute;
+      left: 50%;
+      top: 58%;
+      width: 620px;
+      height: 620px;
+      transform: translate(-50%, -50%);
+      border: 3px solid rgba(255, 77, 158, 0.45);
+      border-radius: 50%;
+      box-shadow: 0 0 40px rgba(255, 77, 158, 0.25);
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .vertical .title { font-size: 82px; }
+    .vertical .panel p,
+    .vertical .panel li { font-size: 1.55rem; }
+    .vertical .big-prize { font-size: 3.8rem; }
+    .vertical .content { padding-top: 120px; padding-bottom: 96px; }
+
+    .reel-hero {
+      margin-top: 2rem;
+      text-align: center;
+    }
+
+    .reel-hero .big-prize { font-size: 4rem; }
+
+    .story-sticker-zone {
+      margin-top: auto;
+      padding-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="frame carousel" id="carousel-01">
+    <img class="logo" src="../Freibad Tanzt Logo Original.png" alt="">
+    <img class="watermark" src="../Freibad Tanzt Logo Original.png" alt="">
+    <div class="neon-ring"></div>
+    <div class="content">
+      <p class="label">Gewinnspiel</p>
+      <h1 class="title">Sei live dabei!</h1>
+      <div class="panel" style="margin-top: 3rem;">
+        <p class="big-prize">2× 3 Freikarten<br>inkl. 3 Freibier</p>
+        <p class="sub">s'Freibad tanzt · Freibad Langenburg</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame carousel" id="carousel-02">
+    <img class="logo" src="../Freibad Tanzt Logo Original.png" alt="">
+    <img class="watermark" src="../Freibad Tanzt Logo Original.png" alt="">
+    <div class="content">
+      <p class="label">Verlosung</p>
+      <h2 class="title title--yellow">Das gibt's zu gewinnen</h2>
+      <div class="panel">
+        <p class="big-prize" style="font-size: 2.8rem;">2 Gewinner erhalten je</p>
+        <ul style="margin-top: 1.2rem;">
+          <li><span class="highlight">3 Freikarten</span> – Gewinner + 2 Begleitungen</li>
+          <li><span class="highlight">3 Freibier</span> für eure Crew</li>
+          <li>Einlass <span class="highlight">Freitag oder Samstag</span> nach Wahl</li>
+          <li>Abwicklung über <span class="highlight">Gästeliste an der Kasse</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame carousel" id="carousel-03">
+    <img class="logo" src="../Freibad Tanzt Logo Original.png" alt="">
+    <img class="watermark" src="../Freibad Tanzt Logo Original.png" alt="">
+    <div class="content">
+      <p class="label">Zeitraum</p>
+      <h2 class="title">Wann läuft's?</h2>
+      <div class="panel">
+        <h3>Teilnahmezeitraum</h3>
+        <p>Samstag, <span class="highlight">11.07.</span> bis Mittwoch, <span class="highlight">15.07.2026, 21:00 Uhr</span></p>
+        <h3 style="margin-top: 1.5rem;">Ziehung</h3>
+        <p>Mittwoch, <span class="highlight">15.07.2026</span> (abends)</p>
+        <p style="margin-top: 1rem;">Gewinner werden per <span class="highlight">Direktnachricht</span> benachrichtigt.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame carousel" id="carousel-04">
+    <img class="logo" src="../Freibad Tanzt Logo Original.png" alt="">
+    <img class="watermark" src="../Freibad Tanzt Logo Original.png" alt="">
+    <div class="content">
+      <p class="label">Teilnahme</p>
+      <h2 class="title title--yellow">So machst du mit</h2>
+      <div class="panel">
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div><strong>@s_freibad_tanzt_festival folgen</strong><span>Profil folgen, damit wir dich erreichen.</span></div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div><strong>Gewinnspiel-Beitrag liken</strong><span>Den offiziellen Post mit dem Herzen markieren.</span></div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div><strong>2 Freunde markieren</strong><span>In den Kommentaren @ erwähnen.</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame carousel" id="carousel-05">
+    <img class="logo" src="../Freibad Tanzt Logo Original.png" alt="">
+    <img class="watermark" src="../Freibad Tanzt Logo Original.png" alt="">
+    <div class="content">
+      <p class="label">Extra-Chance</p>
+      <h2 class="title">Story teilen</h2>
+      <div class="panel">
+        <p class="big-prize" style="font-size: 2.5rem;">Doppelte Chance auf den Gewinn</p>
+        <ul style="margin-top: 1.4rem;">
+          <li>Beitrag in deine <span class="highlight">Instagram-Story</span> teilen</li>
+          <li><span class="highlight">@s_freibad_tanzt_festival</span> markieren</li>
+          <li>So erhöhst du deine Gewinnchance</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame carousel" id="carousel-06">
+    <img class="logo" src="../Freibad Tanzt Logo Original.png" alt="">
+    <img class="watermark" src="../Freibad Tanzt Logo Original.png" alt="">
+    <div class="content">
+      <p class="label">Teilnahmebedingungen</p>
+      <h2 class="title title--yellow">Kurz &amp; klar</h2>
+      <div class="panel">
+        <ul>
+          <li>Teilnahme ab <span class="highlight">16 Jahren</span></li>
+          <li>Keine Verbindung zu Instagram</li>
+          <li>Gewinn nicht in bar auszahlbar</li>
+          <li>Rechtsweg ausgeschlossen</li>
+          <li>Benachrichtigung per Direktnachricht</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame carousel" id="carousel-07">
+    <img class="logo" src="../Freibad Tanzt Logo Original.png" alt="">
+    <img class="watermark" src="../Freibad Tanzt Logo Original.png" alt="">
+    <div class="content">
+      <p class="label">Jetzt mitmachen</p>
+      <h2 class="title">Zum Gewinnspiel</h2>
+      <div class="panel" style="text-align: center;">
+        <p class="big-prize" style="font-size: 2.6rem;">Auf Instagram<br>mitspielen!</p>
+        <p class="sub" style="margin-top: 1.5rem;">Link in Bio · Gewinnspiel-Beitrag öffnen</p>
+      </div>
+      <div class="cta">Zum Gewinnspiel auf Instagram</div>
+      <p class="handle">@s_freibad_tanzt_festival</p>
+    </div>
+  </div>
+
+  <div class="frame vertical" id="reel-01">
+    <img class="logo" src="../Freibad Tanzt Logo Original.png" alt="">
+    <img class="watermark" src="../Freibad Tanzt Logo Original.png" alt="">
+    <div class="neon-ring"></div>
+    <div class="content">
+      <p class="label">Gewinnspiel</p>
+      <h1 class="title">Sei live dabei!</h1>
+      <div class="reel-hero panel">
+        <p class="big-prize">2× 3 Freikarten<br>inkl. 3 Freibier</p>
+        <p class="sub">11.07. – 15.07. · Ziehung am 15.07.</p>
+      </div>
+      <div class="cta story-sticker-zone">Jetzt auf Instagram mitmachen</div>
+      <p class="handle">@s_freibad_tanzt_festival</p>
+    </div>
+  </div>
+
+  <div class="frame vertical" id="reel-02">
+    <img class="logo" src="../Freibad Tanzt Logo Original.png" alt="">
+    <img class="watermark" src="../Freibad Tanzt Logo Original.png" alt="">
+    <div class="content">
+      <p class="label">Teilnahme</p>
+      <h2 class="title title--yellow">In 3 Schritten</h2>
+      <div class="panel">
+        <div class="steps">
+          <div class="step">
+            <div class="step-num">1</div>
+            <div><strong>Folgen</strong><span>@s_freibad_tanzt_festival</span></div>
+          </div>
+          <div class="step">
+            <div class="step-num">2</div>
+            <div><strong>Liken</strong><span>Gewinnspiel-Beitrag liken</span></div>
+          </div>
+          <div class="step">
+            <div class="step-num">3</div>
+            <div><strong>Markieren</strong><span>2 Freunde kommentieren</span></div>
+          </div>
+        </div>
+        <p style="margin-top: 1.2rem; text-align: center;">+ Story teilen für Extra-Chance</p>
+      </div>
+      <div class="cta story-sticker-zone">Zum Gewinnspiel</div>
+    </div>
+  </div>
+
+  <div class="frame vertical" id="reel-03">
+    <img class="logo" src="../Freibad Tanzt Logo Original.png" alt="">
+    <img class="watermark" src="../Freibad Tanzt Logo Original.png" alt="">
+    <div class="content">
+      <p class="label">Gewinn</p>
+      <h2 class="title">Das wartet auf dich</h2>
+      <div class="panel">
+        <ul>
+          <li><span class="highlight">3 Freikarten</span> pro Gewinner</li>
+          <li><span class="highlight">3 Freibier</span> inklusive</li>
+          <li>Freitag <span class="highlight">oder</span> Samstag</li>
+          <li>Gästeliste an der Kasse</li>
+        </ul>
+      </div>
+      <div class="cta story-sticker-zone">Zum Gewinnspiel auf Instagram</div>
+      <p class="handle">@s_freibad_tanzt_festival</p>
+    </div>
+  </div>
+
+  <div class="frame vertical" id="story-01">
+    <img class="logo" src="../Freibad Tanzt Logo Original.png" alt="">
+    <img class="watermark" src="../Freibad Tanzt Logo Original.png" alt="">
+    <div class="neon-ring"></div>
+    <div class="content">
+      <p class="label">Gewinnspiel</p>
+      <h1 class="title" style="font-size: 74px;">Sei live dabei!</h1>
+      <div class="panel">
+        <p class="big-prize" style="font-size: 3rem;">2× 3 Freikarten<br>+ 3 Freibier</p>
+        <p class="sub">Bis 15.07., 21:00 Uhr mitmachen</p>
+      </div>
+      <div class="story-sticker-zone">
+        <div class="cta">Zum Gewinnspiel auf Instagram</div>
+        <p class="handle">@s_freibad_tanzt_festival</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="frame vertical" id="story-02">
+    <img class="logo" src="../Freibad Tanzt Logo Original.png" alt="">
+    <img class="watermark" src="../Freibad Tanzt Logo Original.png" alt="">
+    <div class="content">
+      <p class="label">So geht's</p>
+      <h2 class="title title--yellow">Mitmachen</h2>
+      <div class="panel">
+        <ul>
+          <li>Folgen · Liken · 2 Freunde markieren</li>
+          <li>Story teilen = Extra-Chance</li>
+          <li>Ziehung: 15.07. abends</li>
+        </ul>
+      </div>
+      <div class="story-sticker-zone">
+        <div class="cta">Link in Bio</div>
+        <p class="handle">@s_freibad_tanzt_festival</p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

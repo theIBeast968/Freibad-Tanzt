@@ -1,0 +1,76 @@
+{
+  "exports": [
+    {
+      "folder": "carousel",
+      "file": "exports/gewinnspiel/carousel/07-gewinnspiel-slide-01.png",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "folder": "carousel",
+      "file": "exports/gewinnspiel/carousel/07-gewinnspiel-slide-02.png",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "folder": "carousel",
+      "file": "exports/gewinnspiel/carousel/07-gewinnspiel-slide-03.png",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "folder": "carousel",
+      "file": "exports/gewinnspiel/carousel/07-gewinnspiel-slide-04.png",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "folder": "carousel",
+      "file": "exports/gewinnspiel/carousel/07-gewinnspiel-slide-05.png",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "folder": "carousel",
+      "file": "exports/gewinnspiel/carousel/07-gewinnspiel-slide-06.png",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "folder": "carousel",
+      "file": "exports/gewinnspiel/carousel/07-gewinnspiel-slide-07.png",
+      "width": 1080,
+      "height": 1350
+    },
+    {
+      "folder": "reel",
+      "file": "exports/gewinnspiel/reel/gewinnspiel-reel-01.png",
+      "width": 1080,
+      "height": 1920
+    },
+    {
+      "folder": "reel",
+      "file": "exports/gewinnspiel/reel/gewinnspiel-reel-02.png",
+      "width": 1080,
+      "height": 1920
+    },
+    {
+      "folder": "reel",
+      "file": "exports/gewinnspiel/reel/gewinnspiel-reel-03.png",
+      "width": 1080,
+      "height": 1920
+    },
+    {
+      "folder": "story",
+      "file": "exports/gewinnspiel/story/gewinnspiel-story-01.png",
+      "width": 1080,
+      "height": 1920
+    },
+    {
+      "folder": "story",
+      "file": "exports/gewinnspiel/story/gewinnspiel-story-02.png",
+      "width": 1080,
+      "height": 1920
+    }
+  ]
+}
