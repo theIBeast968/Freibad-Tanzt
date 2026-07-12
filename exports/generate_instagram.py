@@ -113,10 +113,19 @@ SECTIONS = [
         "slides": [
             [".ticket-poster-card", ".ticket-facts", ".ticket-qr-wrap"],
             [".ticket-info-body > .ticket-info-block:nth-of-type(1)"],
-            [
-                ".ticket-info-body > .ticket-info-block:nth-of-type(2)",
-                ".ticket-info-body > .ticket-info-block:nth-of-type(3)",
-            ],
+            {
+                "selectors": ["#ig-ticket-slide-03-wrap"],
+                "prepare": """
+                  document.body.classList.add('ig-ticket-slide-03');
+                  const body = document.querySelector('.ticket-info-body');
+                  const wrap = document.createElement('div');
+                  wrap.id = 'ig-ticket-slide-03-wrap';
+                  body.querySelectorAll('.ticket-info-block:nth-of-type(2), .ticket-info-block:nth-of-type(3)')
+                    .forEach((block) => wrap.appendChild(block));
+                  document.querySelector('#tickets')?.style.setProperty('display', 'none');
+                  document.body.appendChild(wrap);
+                """,
+            },
         ],
     },
     {
@@ -336,6 +345,48 @@ RENDER_STYLE = """
       background:
         linear-gradient(135deg, rgba(255, 183, 3, 0.06), rgba(255, 73, 70, 0.035)),
         rgba(10, 10, 10, 0.36) !important;
+    }
+
+    .ig-ticket-slide-03 #ig-ticket-slide-03-wrap {
+      width: 1000px !important;
+      max-width: 1000px !important;
+      display: grid !important;
+      gap: 1.1rem !important;
+    }
+
+    .ig-ticket-slide-03 .ticket-info-block {
+      width: 100% !important;
+      max-width: 100% !important;
+      margin: 0 !important;
+      padding: 1.75rem 2.1rem !important;
+      border-top: 1px solid rgba(255, 183, 3, 0.34) !important;
+    }
+
+    .ig-ticket-slide-03 .ticket-info-block h3 {
+      font-size: 1.05rem !important;
+    }
+
+    .ig-ticket-slide-03 .ticket-info-block--transparency h3 {
+      font-size: 1.75rem !important;
+      line-height: 1.12 !important;
+    }
+
+    .ig-ticket-slide-03 .ticket-price-label,
+    .ig-ticket-slide-03 .ticket-info-prices li,
+    .ig-ticket-slide-03 .ticket-price-free,
+    .ig-ticket-slide-03 .ticket-price-link {
+      font-size: 1.22rem !important;
+      line-height: 1.48 !important;
+    }
+
+    .ig-ticket-slide-03 .ticket-transparency-lead {
+      font-size: 1.28rem !important;
+      line-height: 1.45 !important;
+    }
+
+    .ig-ticket-slide-03 .ticket-info-block--transparency p {
+      font-size: 1.14rem !important;
+      line-height: 1.52 !important;
     }
 
     .family-flyer-card img,
