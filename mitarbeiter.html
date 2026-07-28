@@ -242,9 +242,55 @@
     }
 
     .card p {
-      margin: 0;
+      margin: 0 0 0.75rem;
       color: var(--muted);
       font-size: 0.95rem;
+    }
+
+    .card p:last-child { margin-bottom: 0; }
+
+    .card ul {
+      margin: 0;
+      padding-left: 1.15rem;
+      color: var(--muted);
+      display: grid;
+      gap: 0.45rem;
+    }
+
+    .card li strong { color: var(--text); }
+
+    select {
+      width: 100%;
+      padding: 0.75rem 0.9rem;
+      border-radius: 0.7rem;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(0, 0, 0, 0.35);
+      color: var(--text);
+      font: inherit;
+      font-size: 1rem;
+    }
+
+    .shift-list {
+      list-style: none;
+      margin: 1rem 0 0;
+      padding: 0;
+      display: grid;
+      gap: 0.65rem;
+    }
+
+    .shift-list li {
+      padding: 0.75rem 0.9rem;
+      border-radius: 0.75rem;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(0, 0, 0, 0.22);
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .shift-list strong {
+      color: var(--yellow);
+      display: block;
+      margin-bottom: 0.2rem;
     }
 
     .user-chip {
@@ -254,6 +300,23 @@
     }
 
     .user-chip strong { color: var(--yellow); }
+
+    .toc {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 1rem;
+    }
+
+    .toc a {
+      color: #1a0f00;
+      background: var(--yellow);
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 0.82rem;
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+    }
   </style>
 </head>
 <body>
@@ -320,27 +383,158 @@
         <h1 id="welcomeTitle">Hallo</h1>
         <p class="user-chip">Angemeldet als <strong id="userEmail"></strong></p>
         <p class="sub" style="margin-bottom: 0;">
-          Hier landet alles fürs Team – Schichtinfos, Unterlagen und Orga-Kram.
-          Inhalt kann schrittweise ergänzt werden.
+          Interner Team-Bereich für s'Freibad tanzt 2026.
+          Bitte nichts öffentlich teilen (Gästelisten, Codes, interne Nummern).
         </p>
+        <div class="toc">
+          <a href="#schicht-melden">Schicht melden</a>
+          <a href="#ablauf">Ablauf</a>
+          <a href="#bereiche">Bereiche</a>
+          <a href="#checklisten">Checklisten</a>
+          <a href="#kontakt">Kontakt</a>
+        </div>
         <div class="actions">
           <button type="button" class="button-secondary" id="logoutBtn">Abmelden</button>
         </div>
       </div>
 
+      <div class="panel card" id="schicht-melden">
+        <h3>Schicht melden</h3>
+        <p>Trag dich für Aufbau, Festtage oder Abbau ein. Orga sieht die Meldungen und teilt ein.</p>
+        <form id="shiftForm">
+          <label for="shiftDay">Tag</label>
+          <select id="shiftDay" required>
+            <option value="">Bitte wählen</option>
+            <option value="aufbau">Aufbau (vor Freitag)</option>
+            <option value="freitag">Freitag, 17.07. – Partynacht</option>
+            <option value="samstag">Samstag, 18.07. – Partynacht</option>
+            <option value="sonntag">Sonntag, 19.07. – Familientag</option>
+            <option value="abbau">Abbau (nach dem Fest)</option>
+          </select>
+
+          <label for="shiftArea">Bereich</label>
+          <select id="shiftArea" required>
+            <option value="">Bitte wählen</option>
+            <option value="einlass">Einlass / Tickets / Gästeliste</option>
+            <option value="bar">Bar / Schirmbar</option>
+            <option value="technik">Technik / Stage</option>
+            <option value="camping">Camping</option>
+            <option value="food">Food / Versorgung</option>
+            <option value="familientag">Familientag / Programm</option>
+            <option value="sonstiges">Sonstiges / Springer</option>
+          </select>
+
+          <label for="shiftPhone">Handynummer (optional)</label>
+          <input id="shiftPhone" type="tel" autocomplete="tel" placeholder="für Rückfragen vor Ort">
+
+          <label for="shiftNote">Notiz (optional)</label>
+          <input id="shiftNote" type="text" maxlength="500" placeholder="z. B. nur bis 22 Uhr, Erfahrung Bar …">
+
+          <div class="actions">
+            <button class="button-primary" type="submit">Schicht speichern</button>
+          </div>
+          <p id="shiftErr" class="err hidden"></p>
+          <p id="shiftOk" class="ok hidden"></p>
+        </form>
+        <ul class="shift-list" id="shiftList"></ul>
+      </div>
+
+      <div class="grid">
+        <article class="panel card" id="ablauf">
+          <h3>Ablauf Festtage</h3>
+          <ul>
+            <li><strong>Freitag &amp; Samstag:</strong> Open-Air-Stage ab 18:00, Ende ca. 02:00</li>
+            <li><strong>Einlass:</strong> ab 18:00 Uhr · Ticket / Gästeliste prüfen</li>
+            <li><strong>Camping-Anreise:</strong> Freitag ab 12:00 Uhr</li>
+            <li><strong>Camping-Abreise:</strong> Sonntag bis 12:00 Uhr</li>
+            <li><strong>Sonntag Familientag:</strong> Eintritt frei, Programm tagsüber</li>
+            <li><strong>Campingstage Jagstklang:</strong> Fr ab 14:00 · Sa ab 12:00</li>
+          </ul>
+        </article>
+
+        <article class="panel card" id="bereiche">
+          <h3>Bereiche kurz</h3>
+          <ul>
+            <li><strong>Einlass:</strong> Tickets scannen, Altersprüfung, Gästeliste, Stempel</li>
+            <li><strong>Bar / Schirmbar:</strong> Ausgabe, Jugendschutz, kein Glas nach draußen wo verboten</li>
+            <li><strong>Technik:</strong> nur eingewiesenes Team an Mischpult / Stage</li>
+            <li><strong>Camping:</strong> Anreise, Aufkleber, Wege frei, Getränkeautomat</li>
+            <li><strong>Food:</strong> Foodtrucks unterstützen, Müllstationen im Blick</li>
+            <li><strong>Familientag:</strong> Infopunkt, Wasserspiele 13 &amp; 16 Uhr, Hüpfburg</li>
+          </ul>
+        </article>
+      </div>
+
+      <div class="panel card" id="checklisten">
+        <h3>Checklisten</h3>
+        <div class="grid">
+          <div>
+            <p><strong>Vor Schichtbeginn</strong></p>
+            <ul>
+              <li>Handy geladen, Uhrzeit sync</li>
+              <li>Treffpunkt / Schichtleiter geklärt</li>
+              <li>Wasserflasche, wetterfeste Kleidung</li>
+              <li>Name auf Schichtliste / WhatsApp-Gruppe</li>
+            </ul>
+          </div>
+          <div>
+            <p><strong>Während der Schicht</strong></p>
+            <ul>
+              <li>Jugendschutz beachten (unter 16 / 16–17)</li>
+              <li>Keine privaten Fotos von Gästelisten</li>
+              <li>Probleme sofort an Schichtleitung</li>
+              <li>Rettungswege und Notausgänge freihalten</li>
+            </ul>
+          </div>
+          <div>
+            <p><strong>Nach der Schicht</strong></p>
+            <ul>
+              <li>Übergabe an nächste Schicht</li>
+              <li>Müll / Leergut am eigenen Posten</li>
+              <li>Auffälligkeiten kurz notieren / Orga sagen</li>
+              <li>Abmelden in der Team-Gruppe</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
       <div class="grid">
         <article class="panel card">
-          <h3>Schichten</h3>
-          <p>Platzhalter für Schichtpläne und Einteilungen.</p>
+          <h3>Camping-Infos fürs Team</h3>
+          <ul>
+            <li>10 € pro Zelt · 10 € pro Fahrzeug (ganzes Fest)</li>
+            <li>Zelt-Aufkleber sichtbar anbringen</li>
+            <li>Kein offenes Feuer, kein Grillen, kein Glas</li>
+            <li>Getränkeautomat: Bier, Wasser, Softdrinks</li>
+            <li>Ansprechpartner Camping vor Ort: <strong>Jannik</strong></li>
+          </ul>
         </article>
+
         <article class="panel card">
-          <h3>Unterlagen</h3>
-          <p>Platzhalter für PDFs, Briefings und Checklisten.</p>
+          <h3>Tickets / Preise (Stand)</h3>
+          <ul>
+            <li>Einzelticket Fr oder Sa: <strong>20 €</strong></li>
+            <li>Kombiticket Fr + Sa: <strong>35 €</strong></li>
+            <li>Unter 16: Eintritt frei (Jugendschutz!)</li>
+            <li>Sonntag Familientag: Eintritt frei</li>
+            <li>Online: Eventfrog · sonst Abendkasse</li>
+          </ul>
         </article>
-        <article class="panel card">
-          <h3>Kontakt Orga</h3>
-          <p>Platzhalter für Ansprechpartner und Notfallnummern.</p>
-        </article>
+      </div>
+
+      <div class="panel card" id="kontakt">
+        <h3>Kontakt Orga</h3>
+        <ul>
+          <li><strong>Festival-Mail:</strong> <a href="mailto:freibad-tanzt@gmx.de" style="color:#ffb703">freibad-tanzt@gmx.de</a></li>
+          <li><strong>Verein:</strong> Freibadfreunde Langenburg e. V. · Tel. 07905 9407030</li>
+          <li><strong>Vorstand:</strong> Philipp Höche · Stellv. Anette Sperber</li>
+          <li><strong>Durchführung:</strong> Tobias Rath &amp; Team</li>
+          <li><strong>Instagram:</strong> @s_freibad_tanzt_festival</li>
+        </ul>
+        <p style="margin-top:1rem;">
+          Notfall vor Ort: immer zuerst Schichtleitung / Security informieren.
+          Medizinische Notfälle: 112.
+        </p>
       </div>
     </div>
   </div>
@@ -394,11 +588,63 @@
         authView.classList.remove('hidden');
       }
 
+      function dayLabel(value) {
+        return ({
+          aufbau: 'Aufbau',
+          freitag: 'Freitag',
+          samstag: 'Samstag',
+          sonntag: 'Sonntag',
+          abbau: 'Abbau'
+        })[value] || value;
+      }
+
+      function areaLabel(value) {
+        return ({
+          einlass: 'Einlass',
+          bar: 'Bar / Schirmbar',
+          technik: 'Technik',
+          camping: 'Camping',
+          food: 'Food',
+          familientag: 'Familientag',
+          sonstiges: 'Sonstiges'
+        })[value] || value;
+      }
+
+      function renderShifts(shifts) {
+        var list = document.getElementById('shiftList');
+        list.innerHTML = '';
+        if (!shifts || !shifts.length) {
+          list.innerHTML = '<li>Noch keine Schicht gemeldet.</li>';
+          return;
+        }
+        shifts.slice().reverse().forEach(function (shift) {
+          var li = document.createElement('li');
+          li.innerHTML = '<strong>' + dayLabel(shift.day) + ' · ' + areaLabel(shift.area) + '</strong>' +
+            (shift.phone ? ('Tel: ' + shift.phone + '<br>') : '') +
+            (shift.note ? shift.note : 'ohne Notiz');
+          list.appendChild(li);
+        });
+      }
+
+      async function loadShifts() {
+        var t = token();
+        if (!t) return;
+        try {
+          var data = await api('staff-shifts', {
+            headers: { Authorization: 'Bearer ' + t }
+          });
+          renderShifts(data.shifts || []);
+        } catch (e) {
+          renderShifts([]);
+        }
+      }
+
       function showApp(user) {
         authView.classList.add('hidden');
         appView.classList.remove('hidden');
         document.getElementById('welcomeTitle').textContent = 'Hallo, ' + (user.name || 'Team');
         document.getElementById('userEmail').textContent = user.email || '';
+        loadShifts();
       }
 
       async function api(path, options) {
@@ -477,6 +723,35 @@
         clearToken();
         showAuth();
         setTab('login');
+      });
+
+      document.getElementById('shiftForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        var shiftErr = document.getElementById('shiftErr');
+        var shiftOk = document.getElementById('shiftOk');
+        showErr(shiftErr, '');
+        showErr(shiftOk, '');
+        try {
+          var data = await api('staff-shift', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: 'Bearer ' + token()
+            },
+            body: JSON.stringify({
+              day: document.getElementById('shiftDay').value,
+              area: document.getElementById('shiftArea').value,
+              phone: document.getElementById('shiftPhone').value,
+              note: document.getElementById('shiftNote').value
+            })
+          });
+          renderShifts(data.shifts || []);
+          document.getElementById('shiftForm').reset();
+          shiftOk.textContent = 'Schicht gespeichert.';
+          shiftOk.classList.remove('hidden');
+        } catch (e) {
+          showErr(shiftErr, e.message || 'Speichern fehlgeschlagen.');
+        }
       });
 
       loadMe();
