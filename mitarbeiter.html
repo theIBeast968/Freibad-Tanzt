@@ -317,6 +317,48 @@
       padding: 0.45rem 0.8rem;
       border-radius: 999px;
     }
+
+    .badge {
+      display: inline-block;
+      margin-left: 0.4rem;
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      background: rgba(255, 183, 3, 0.18);
+      color: var(--yellow);
+      border: 1px solid rgba(255, 183, 3, 0.35);
+    }
+
+    .table-wrap { overflow-x: auto; margin-top: 0.85rem; }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 0.55rem 0.45rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      vertical-align: top;
+    }
+
+    th {
+      color: var(--muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    .mini-btn {
+      padding: 0.35rem 0.7rem;
+      font-size: 0.78rem;
+      border-radius: 0.55rem;
+    }
   </style>
 </head>
 <body>
@@ -393,14 +435,127 @@
           Bitte nichts öffentlich teilen (Gästelisten, Codes, interne Nummern).
         </p>
         <div class="toc">
+          <a href="#meine-aufgaben">Meine Aufgaben</a>
           <a href="#schicht-melden">Schicht melden</a>
           <a href="#ablauf">Ablauf</a>
           <a href="#bereiche">Bereiche</a>
           <a href="#checklisten">Checklisten</a>
           <a href="#kontakt">Kontakt</a>
+          <a href="#admin" id="tocAdmin" class="hidden">Admin</a>
         </div>
         <div class="actions">
           <button type="button" class="button-secondary" id="logoutBtn">Abmelden</button>
+        </div>
+      </div>
+
+      <div class="panel card" id="meine-aufgaben">
+        <h3>Meine Aufgaben</h3>
+        <p>Vom Orga-Team zugewiesene Aufgaben.</p>
+        <ul class="shift-list" id="myTaskList"></ul>
+      </div>
+
+      <div id="adminView" class="hidden">
+        <div class="panel card" id="admin">
+          <h3>Admin · Übersicht <span class="badge">Chef</span></h3>
+          <p>Mitarbeiter, Schichten und Aufgaben verwalten.</p>
+          <div class="toc">
+            <a href="#admin-users">Mitarbeiter</a>
+            <a href="#admin-shifts">Schichtmeldungen</a>
+            <a href="#admin-tasks">Aufgaben vergeben</a>
+          </div>
+        </div>
+
+        <div class="panel card" id="admin-users">
+          <h3>Mitarbeiter</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Kontakt</th>
+                  <th>Rolle</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="adminUsersBody"></tbody>
+            </table>
+          </div>
+          <p id="adminUsersErr" class="err hidden"></p>
+        </div>
+
+        <div class="panel card" id="admin-shifts">
+          <h3>Alle Schichtmeldungen</h3>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Wer</th>
+                  <th>Tag</th>
+                  <th>Bereich</th>
+                  <th>Notiz</th>
+                </tr>
+              </thead>
+              <tbody id="adminShiftsBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel card" id="admin-tasks">
+          <h3>Aufgabe vergeben</h3>
+          <form id="adminTaskForm">
+            <label for="taskTitle">Titel</label>
+            <input id="taskTitle" type="text" required minlength="3" maxlength="120" placeholder="z. B. Einlass Freitag vorbereiten">
+
+            <label for="taskAssignee">Mitarbeiter</label>
+            <select id="taskAssignee" required>
+              <option value="">Bitte wählen</option>
+            </select>
+
+            <label for="taskDay">Tag (optional)</label>
+            <select id="taskDay">
+              <option value="">–</option>
+              <option value="aufbau">Aufbau</option>
+              <option value="freitag">Freitag</option>
+              <option value="samstag">Samstag</option>
+              <option value="sonntag">Sonntag</option>
+              <option value="abbau">Abbau</option>
+            </select>
+
+            <label for="taskArea">Bereich (optional)</label>
+            <select id="taskArea">
+              <option value="">–</option>
+              <option value="einlass">Einlass</option>
+              <option value="bar">Bar / Schirmbar</option>
+              <option value="technik">Technik</option>
+              <option value="camping">Camping</option>
+              <option value="food">Food</option>
+              <option value="familientag">Familientag</option>
+              <option value="sonstiges">Sonstiges</option>
+            </select>
+
+            <label for="taskDesc">Beschreibung (optional)</label>
+            <input id="taskDesc" type="text" maxlength="1000" placeholder="Details zur Aufgabe">
+
+            <div class="actions">
+              <button class="button-primary" type="submit">Aufgabe zuweisen</button>
+            </div>
+            <p id="adminTaskErr" class="err hidden"></p>
+            <p id="adminTaskOk" class="ok hidden"></p>
+          </form>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Aufgabe</th>
+                  <th>Zugewiesen</th>
+                  <th>Status</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="adminTasksBody"></tbody>
+            </table>
+          </div>
         </div>
       </div>
 
@@ -645,12 +800,194 @@
         }
       }
 
+      var currentUser = null;
+
+      function authHeaders(extra) {
+        var headers = Object.assign({ Authorization: 'Bearer ' + token() }, extra || {});
+        return headers;
+      }
+
+      function renderMyTasks(tasks) {
+        var list = document.getElementById('myTaskList');
+        list.innerHTML = '';
+        if (!tasks || !tasks.length) {
+          list.innerHTML = '<li>Aktuell keine Aufgaben zugewiesen.</li>';
+          return;
+        }
+        tasks.forEach(function (task) {
+          var li = document.createElement('li');
+          var meta = [];
+          if (task.dueDay) meta.push(dayLabel(task.dueDay));
+          if (task.area) meta.push(areaLabel(task.area));
+          li.innerHTML =
+            '<strong>' + task.title + (task.status === 'done' ? ' ✓' : '') + '</strong>' +
+            (meta.length ? meta.join(' · ') + '<br>' : '') +
+            (task.description || '') +
+            (task.status === 'open'
+              ? '<div class="actions"><button type="button" class="button-secondary mini-btn" data-done="' + task.id + '">Erledigt</button></div>'
+              : '');
+          list.appendChild(li);
+        });
+      }
+
+      async function loadTasks() {
+        try {
+          var data = await api('staff-tasks', { headers: authHeaders() });
+          renderMyTasks(data.tasks || []);
+          if (currentUser && currentUser.role === 'admin') {
+            renderAdminTasks(data.tasks || []);
+          }
+        } catch (e) {
+          renderMyTasks([]);
+        }
+      }
+
+      function renderAdminUsers(users) {
+        var body = document.getElementById('adminUsersBody');
+        var select = document.getElementById('taskAssignee');
+        body.innerHTML = '';
+        select.innerHTML = '<option value=\"\">Bitte wählen</option>';
+        (users || []).forEach(function (user) {
+          var tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td><strong>' + (user.name || '–') + '</strong></td>' +
+            '<td>' + (user.email || '') + (user.phone ? ('<br>' + user.phone) : '') + '</td>' +
+            '<td>' + (user.role === 'admin' ? 'Admin' : 'Mitarbeiter') + '</td>' +
+            '<td></td>';
+          if (user.role !== 'admin') {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'button-secondary mini-btn';
+            btn.textContent = 'Zum Admin';
+            btn.addEventListener('click', function () { setRole(user.email, 'admin'); });
+            tr.lastChild.appendChild(btn);
+          } else if (user.email !== (currentUser && currentUser.email)) {
+            var btn2 = document.createElement('button');
+            btn2.type = 'button';
+            btn2.className = 'button-secondary mini-btn';
+            btn2.textContent = 'Admin entziehen';
+            btn2.addEventListener('click', function () { setRole(user.email, 'staff'); });
+            tr.lastChild.appendChild(btn2);
+          }
+          body.appendChild(tr);
+
+          var opt = document.createElement('option');
+          opt.value = user.email;
+          opt.textContent = (user.name || user.email) + ' (' + user.email + ')';
+          select.appendChild(opt);
+        });
+      }
+
+      function renderAdminShifts(shifts) {
+        var body = document.getElementById('adminShiftsBody');
+        body.innerHTML = '';
+        if (!shifts || !shifts.length) {
+          body.innerHTML = '<tr><td colspan="4">Noch keine Schichtmeldungen.</td></tr>';
+          return;
+        }
+        shifts.forEach(function (shift) {
+          var tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td><strong>' + (shift.name || shift.email) + '</strong><br>' +
+            (shift.email || '') + (shift.phone ? ('<br>' + shift.phone) : '') + '</td>' +
+            '<td>' + dayLabel(shift.day) + '</td>' +
+            '<td>' + areaLabel(shift.area) + '</td>' +
+            '<td>' + (shift.note || '–') + '</td>';
+          body.appendChild(tr);
+        });
+      }
+
+      function renderAdminTasks(tasks) {
+        var body = document.getElementById('adminTasksBody');
+        body.innerHTML = '';
+        if (!tasks || !tasks.length) {
+          body.innerHTML = '<tr><td colspan="4">Noch keine Aufgaben.</td></tr>';
+          return;
+        }
+        tasks.forEach(function (task) {
+          var tr = document.createElement('tr');
+          tr.innerHTML =
+            '<td><strong>' + task.title + '</strong>' +
+            (task.description ? ('<br>' + task.description) : '') + '</td>' +
+            '<td>' + (task.assigneeName || task.assigneeEmail) + '</td>' +
+            '<td>' + (task.status === 'done' ? 'erledigt' : 'offen') + '</td>' +
+            '<td></td>';
+          if (task.status === 'open') {
+            var btn = document.createElement('button');
+            btn.type = 'button';
+            btn.className = 'button-secondary mini-btn';
+            btn.textContent = 'Erledigt';
+            btn.addEventListener('click', function () { updateTask(task.id, 'done'); });
+            tr.lastChild.appendChild(btn);
+          }
+          body.appendChild(tr);
+        });
+      }
+
+      async function setRole(email, role) {
+        showErr(document.getElementById('adminUsersErr'), '');
+        try {
+          await api('staff-admin-set-role', {
+            method: 'POST',
+            headers: authHeaders({ 'Content-Type': 'application/json' }),
+            body: JSON.stringify({ email: email, role: role })
+          });
+          await loadAdmin();
+        } catch (e) {
+          showErr(document.getElementById('adminUsersErr'), e.message || 'Rolle konnte nicht geändert werden.');
+        }
+      }
+
+      async function updateTask(id, status) {
+        try {
+          var data = await api('staff-tasks', {
+            method: 'POST',
+            headers: authHeaders({ 'Content-Type': 'application/json' }),
+            body: JSON.stringify({ action: 'update', id: id, status: status })
+          });
+          if (currentUser && currentUser.role === 'admin') {
+            renderAdminTasks(data.tasks || []);
+          }
+          await loadTasks();
+        } catch (e) {}
+      }
+
+      async function loadAdmin() {
+        if (!currentUser || currentUser.role !== 'admin') return;
+        try {
+          var usersData = await api('staff-admin-users', { headers: authHeaders() });
+          renderAdminUsers(usersData.users || []);
+        } catch (e) {
+          showErr(document.getElementById('adminUsersErr'), e.message || 'Mitarbeiter konnten nicht geladen werden.');
+        }
+        try {
+          var shiftsData = await api('staff-admin-shifts', { headers: authHeaders() });
+          renderAdminShifts(shiftsData.shifts || []);
+        } catch (e) {
+          renderAdminShifts([]);
+        }
+        await loadTasks();
+      }
+
       function showApp(user) {
+        currentUser = user;
         authView.classList.add('hidden');
         appView.classList.remove('hidden');
         document.getElementById('welcomeTitle').textContent = 'Hallo, ' + (user.firstName || user.name || 'Team');
         document.getElementById('userEmail').textContent =
-          (user.email || '') + (user.phone ? (' · ' + user.phone) : '');
+          (user.email || '') + (user.phone ? (' · ' + user.phone) : '') +
+          (user.role === 'admin' ? ' · Admin' : '');
+        var adminView = document.getElementById('adminView');
+        var tocAdmin = document.getElementById('tocAdmin');
+        if (user.role === 'admin') {
+          adminView.classList.remove('hidden');
+          tocAdmin.classList.remove('hidden');
+          loadAdmin();
+        } else {
+          adminView.classList.add('hidden');
+          tocAdmin.classList.add('hidden');
+          loadTasks();
+        }
         loadShifts();
       }
 
@@ -758,8 +1095,45 @@
           document.getElementById('shiftForm').reset();
           shiftOk.textContent = 'Schicht gespeichert.';
           shiftOk.classList.remove('hidden');
+          if (currentUser && currentUser.role === 'admin') {
+            loadAdmin();
+          }
         } catch (e) {
           showErr(shiftErr, e.message || 'Speichern fehlgeschlagen.');
+        }
+      });
+
+      document.getElementById('myTaskList').addEventListener('click', function (event) {
+        var btn = event.target.closest('[data-done]');
+        if (!btn) return;
+        updateTask(btn.getAttribute('data-done'), 'done');
+      });
+
+      document.getElementById('adminTaskForm').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        var err = document.getElementById('adminTaskErr');
+        var ok = document.getElementById('adminTaskOk');
+        showErr(err, '');
+        showErr(ok, '');
+        try {
+          var data = await api('staff-tasks', {
+            method: 'POST',
+            headers: authHeaders({ 'Content-Type': 'application/json' }),
+            body: JSON.stringify({
+              title: document.getElementById('taskTitle').value,
+              assigneeEmail: document.getElementById('taskAssignee').value,
+              dueDay: document.getElementById('taskDay').value,
+              area: document.getElementById('taskArea').value,
+              description: document.getElementById('taskDesc').value
+            })
+          });
+          renderAdminTasks(data.tasks || []);
+          document.getElementById('adminTaskForm').reset();
+          ok.textContent = 'Aufgabe zugewiesen.';
+          ok.classList.remove('hidden');
+          await loadTasks();
+        } catch (e) {
+          showErr(err, e.message || 'Aufgabe konnte nicht gespeichert werden.');
         }
       });
 

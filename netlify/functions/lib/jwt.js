@@ -56,8 +56,8 @@ export function verifyStatsToken(token, secret) {
   return verifyToken(token, secret, 'stats');
 }
 
-export function signStaffToken(secret, email, name) {
-  return signToken(secret, 'staff', { email, name });
+export function signStaffToken(secret, email, name, role = 'staff') {
+  return signToken(secret, 'staff', { email, name, role });
 }
 
 export function verifyStaffToken(token, secret) {

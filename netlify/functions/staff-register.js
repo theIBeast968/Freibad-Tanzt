@@ -5,6 +5,8 @@ import {
   isValidEmail,
   json,
   normalizeEmail,
+  publicUser,
+  resolveRole,
   saveUser,
   staffConfigOk,
 } from './lib/staff-auth.js';
@@ -67,21 +69,25 @@ export default async (request) => {
   }
 
   const name = `${firstName} ${lastName}`.trim();
-
-  await saveUser({
+  const draft = {
     firstName,
     lastName,
     name,
     phone,
     email,
+    role: 'staff',
     passwordHash: hashPassword(password),
     createdAt: new Date().toISOString(),
-  });
+  };
+  const role = resolveRole(draft);
+  draft.role = role;
 
-  const token = signStaffToken(process.env.STAFF_JWT_SECRET, email, name);
+  await saveUser(draft);
+
+  const token = signStaffToken(process.env.STAFF_JWT_SECRET, email, name, role);
   return json({
     token,
-    user: { name, firstName, lastName, phone, email },
+    user: publicUser(draft),
     expiresInSeconds: 8 * 3600,
   });
 };

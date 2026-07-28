@@ -70,6 +70,79 @@ export async function saveUser(user) {
   }
 }
 
+export async function listUsers() {
+  const store = staffStore();
+  const index = (await store.get('users-index', { type: 'json' })) || [];
+  const users = [];
+  for (const email of index) {
+    const user = await getUser(email);
+    if (user) {
+      users.push(publicUser(user));
+    }
+  }
+  users.sort((a, b) => String(a.name || '').localeCompare(String(b.name || ''), 'de'));
+  return users;
+}
+
+export function publicUser(user) {
+  return {
+    email: user.email,
+    name: user.name || `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+    firstName: user.firstName || null,
+    lastName: user.lastName || null,
+    phone: user.phone || null,
+    role: resolveRole(user),
+    createdAt: user.createdAt || null,
+  };
+}
+
+export function resolveRole(user) {
+  const admins = String(process.env.STAFF_ADMIN_EMAILS || '')
+    .split(',')
+    .map((entry) => normalizeEmail(entry))
+    .filter(Boolean);
+  if (admins.includes(normalizeEmail(user.email))) {
+    return 'admin';
+  }
+  return user.role === 'admin' ? 'admin' : 'staff';
+}
+
+export async function requireStaffUser(request) {
+  const secret = process.env.STAFF_JWT_SECRET;
+  if (!staffConfigOk() || !secret) {
+    return { error: json({ error: 'Server misconfigured' }, 503) };
+  }
+  const auth = request.headers.get('authorization') || '';
+  const token = auth.startsWith('Bearer ') ? auth.slice(7).trim() : '';
+  const { verifyStaffToken } = await import('./jwt.js');
+  const payload = verifyStaffToken(token, secret);
+  if (!payload || !payload.email) {
+    return { error: json({ error: 'Unauthorized' }, 401) };
+  }
+  const user = await getUser(payload.email);
+  if (!user) {
+    return { error: json({ error: 'Unauthorized' }, 401) };
+  }
+  const role = resolveRole(user);
+  return {
+    secret,
+    payload,
+    user: { ...user, role },
+    publicUser: publicUser({ ...user, role }),
+  };
+}
+
+export async function requireAdmin(request) {
+  const result = await requireStaffUser(request);
+  if (result.error) {
+    return result;
+  }
+  if (result.user.role !== 'admin') {
+    return { error: json({ error: 'Nur für Admins.' }, 403) };
+  }
+  return result;
+}
+
 export function staffConfigOk() {
   const secret = process.env.STAFF_JWT_SECRET;
   const invite = process.env.STAFF_INVITE_CODE;

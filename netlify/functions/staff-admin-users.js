@@ -1,14 +1,15 @@
-import { json, requireStaffUser } from './lib/staff-auth.js';
+import { json, listUsers, requireAdmin } from './lib/staff-auth.js';
 
 export default async (request) => {
   if (request.method !== 'GET') {
     return json({ error: 'Method not allowed' }, 405);
   }
 
-  const auth = await requireStaffUser(request);
+  const auth = await requireAdmin(request);
   if (auth.error) {
     return auth.error;
   }
 
-  return json({ user: auth.publicUser });
+  const users = await listUsers();
+  return json({ users });
 };

@@ -4,6 +4,9 @@ import {
   isValidEmail,
   json,
   normalizeEmail,
+  publicUser,
+  resolveRole,
+  saveUser,
   staffConfigOk,
   verifyPassword,
 } from './lib/staff-auth.js';
@@ -37,14 +40,20 @@ export default async (request) => {
     return json({ error: 'E-Mail oder Passwort falsch.' }, 401);
   }
 
+  const role = resolveRole(user);
+  if (user.role !== role) {
+    await saveUser({ ...user, role });
+  }
+
   const token = signStaffToken(
     process.env.STAFF_JWT_SECRET,
     user.email,
-    user.name
+    user.name || `${user.firstName || ''} ${user.lastName || ''}`.trim(),
+    role
   );
   return json({
     token,
-    user: { name: user.name, email: user.email },
+    user: publicUser({ ...user, role }),
     expiresInSeconds: 8 * 3600,
   });
 };
