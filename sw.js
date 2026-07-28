@@ -23,6 +23,10 @@ self.addEventListener('install', (event) => {
 
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return;
+  const url = event.request.url;
+  if (url.includes('/mitarbeiter') || url.includes('/.netlify/functions/')) {
+    return;
+  }
   event.respondWith(
     fetch(event.request).then((response) => {
       const clone = response.clone();

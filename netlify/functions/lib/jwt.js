@@ -2,14 +2,15 @@ import { createHmac, timingSafeEqual } from 'node:crypto';
 
 const b64url = (str) => Buffer.from(str, 'utf8').toString('base64url');
 
-export function signStatsToken(secret) {
+export function signToken(secret, scope, extra = {}, ttlSeconds = 8 * 3600) {
   const header = b64url(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
   const now = Math.floor(Date.now() / 1000);
   const payload = b64url(
     JSON.stringify({
-      scope: 'stats',
+      scope,
+      ...extra,
       iat: now,
-      exp: now + 8 * 3600
+      exp: now + ttlSeconds,
     })
   );
   const data = `${header}.${payload}`;
@@ -17,7 +18,7 @@ export function signStatsToken(secret) {
   return `${data}.${sig}`;
 }
 
-export function verifyStatsToken(token, secret) {
+export function verifyToken(token, secret, expectedScope) {
   if (!token || typeof token !== 'string') {
     return null;
   }
@@ -28,16 +29,14 @@ export function verifyStatsToken(token, secret) {
   const [h, p, s] = parts;
   const data = `${h}.${p}`;
   const expected = createHmac('sha256', secret).update(data).digest('base64url');
-  let sigBuf;
-  let expBuf;
-  sigBuf = Buffer.from(s, 'base64url');
-  expBuf = Buffer.from(expected, 'base64url');
+  const sigBuf = Buffer.from(s, 'base64url');
+  const expBuf = Buffer.from(expected, 'base64url');
   if (sigBuf.length !== expBuf.length || !timingSafeEqual(sigBuf, expBuf)) {
     return null;
   }
   try {
     const payload = JSON.parse(Buffer.from(p, 'base64url').toString('utf8'));
-    if (payload.scope !== 'stats') {
+    if (payload.scope !== expectedScope) {
       return null;
     }
     if (payload.exp < Math.floor(Date.now() / 1000)) {
@@ -47,6 +46,22 @@ export function verifyStatsToken(token, secret) {
   } catch {
     return null;
   }
+}
+
+export function signStatsToken(secret) {
+  return signToken(secret, 'stats');
+}
+
+export function verifyStatsToken(token, secret) {
+  return verifyToken(token, secret, 'stats');
+}
+
+export function signStaffToken(secret, email, name) {
+  return signToken(secret, 'staff', { email, name });
+}
+
+export function verifyStaffToken(token, secret) {
+  return verifyToken(token, secret, 'staff');
 }
 
 export function safePasswordEqual(a, b) {

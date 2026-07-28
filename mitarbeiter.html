@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="robots" content="noindex, nofollow">
+  <title>Mitarbeiter · S'Freibad Tanzt</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    @font-face {
+      font-family: "Gin Test";
+      src: url("GinTest-Regular.otf") format("opentype");
+      font-weight: 400;
+      font-style: normal;
+      font-display: swap;
+    }
+
+    :root {
+      --bg: #0a0505;
+      --card: rgba(18, 10, 10, 0.88);
+      --border: rgba(255, 183, 3, 0.28);
+      --yellow: #ffb703;
+      --text: rgba(255, 247, 234, 0.94);
+      --muted: rgba(255, 247, 234, 0.58);
+      --danger: #ff6b6b;
+      --font-display: "Gin Test", Impact, sans-serif;
+      --font-body: "Barlow", system-ui, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: var(--font-body);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 12% 0%, rgba(255, 183, 3, 0.16), transparent 40%),
+        radial-gradient(circle at 88% 100%, rgba(255, 73, 70, 0.14), transparent 42%),
+        linear-gradient(165deg, #1a0808 0%, #0a0505 55%, #070303 100%);
+      line-height: 1.5;
+    }
+
+    .wrap {
+      width: min(920px, calc(100% - 2rem));
+      margin: 0 auto;
+      padding: 1.5rem 0 3rem;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.85rem;
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .brand img {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 1px solid rgba(255, 183, 3, 0.35);
+    }
+
+    .brand strong {
+      display: block;
+      font-family: var(--font-display);
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      font-size: 1.05rem;
+    }
+
+    .brand span {
+      color: var(--muted);
+      font-size: 0.85rem;
+    }
+
+    .back-link {
+      color: var(--yellow);
+      font-weight: 700;
+      text-decoration: none;
+      font-size: 0.92rem;
+    }
+
+    .back-link:hover { text-decoration: underline; }
+
+    .panel {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 1.15rem;
+      padding: 1.4rem 1.5rem;
+      margin-bottom: 1.15rem;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.28);
+    }
+
+    .label {
+      margin: 0 0 0.35rem;
+      color: var(--yellow);
+      font-size: 0.78rem;
+      font-weight: 800;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+    }
+
+    h1 {
+      margin: 0 0 0.5rem;
+      font-family: var(--font-display);
+      font-size: clamp(1.8rem, 4vw, 2.4rem);
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .sub {
+      margin: 0 0 1.25rem;
+      color: var(--muted);
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.15rem;
+    }
+
+    .tab {
+      flex: 1;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(0, 0, 0, 0.25);
+      color: var(--text);
+      border-radius: 999px;
+      padding: 0.7rem 1rem;
+      font-family: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .tab.active {
+      background: var(--yellow);
+      color: #1a0f00;
+      border-color: var(--yellow);
+    }
+
+    label {
+      display: block;
+      margin: 0.85rem 0 0.35rem;
+      font-weight: 700;
+      font-size: 0.9rem;
+    }
+
+    input {
+      width: 100%;
+      padding: 0.75rem 0.9rem;
+      border-radius: 0.7rem;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(0, 0, 0, 0.35);
+      color: var(--text);
+      font: inherit;
+      font-size: 1rem;
+    }
+
+    input:focus {
+      outline: 2px solid rgba(255, 183, 3, 0.45);
+      outline-offset: 1px;
+    }
+
+    .hint {
+      margin: 0.35rem 0 0;
+      color: var(--muted);
+      font-size: 0.82rem;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-top: 1.15rem;
+    }
+
+    button,
+    .button {
+      appearance: none;
+      border: none;
+      border-radius: 0.7rem;
+      padding: 0.75rem 1.2rem;
+      font: inherit;
+      font-weight: 800;
+      cursor: pointer;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .button-primary {
+      background: var(--yellow);
+      color: #1a0f00;
+    }
+
+    .button-secondary {
+      background: transparent;
+      color: var(--muted);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .err {
+      margin-top: 0.85rem;
+      color: var(--danger);
+      font-size: 0.92rem;
+    }
+
+    .ok {
+      margin-top: 0.85rem;
+      color: #7dcea0;
+      font-size: 0.92rem;
+    }
+
+    .hidden { display: none !important; }
+
+    .grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+
+    .card h3 {
+      margin: 0 0 0.45rem;
+      font-family: var(--font-display);
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      font-size: 1.25rem;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .user-chip {
+      color: var(--muted);
+      font-size: 0.92rem;
+      margin-bottom: 1rem;
+    }
+
+    .user-chip strong { color: var(--yellow); }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="topbar">
+      <a class="brand" href="/">
+        <img src="Freibad%20Tanzt%20Logo%20Original.png" alt="">
+        <div>
+          <strong>S'Freibad Tanzt</strong>
+          <span>Mitarbeiter-Bereich</span>
+        </div>
+      </a>
+      <a class="back-link" href="/">← Zur Website</a>
+    </div>
+
+    <div id="authView" class="panel">
+      <p class="label">Team</p>
+      <h1>Mitarbeiter-Bereich</h1>
+      <p class="sub">Nur fürs Team. Registrierung mit Einladungscode, danach per Login zugreifen.</p>
+
+      <div class="tabs" role="tablist">
+        <button type="button" class="tab active" id="tabLogin" data-tab="login">Login</button>
+        <button type="button" class="tab" id="tabRegister" data-tab="register">Registrieren</button>
+      </div>
+
+      <form id="loginForm">
+        <label for="loginEmail">E-Mail</label>
+        <input id="loginEmail" type="email" autocomplete="username" required>
+
+        <label for="loginPassword">Passwort</label>
+        <input id="loginPassword" type="password" autocomplete="current-password" required>
+
+        <div class="actions">
+          <button class="button-primary" type="submit">Anmelden</button>
+        </div>
+        <p id="loginErr" class="err hidden"></p>
+      </form>
+
+      <form id="registerForm" class="hidden">
+        <label for="regName">Name</label>
+        <input id="regName" type="text" autocomplete="name" required minlength="2" maxlength="80">
+
+        <label for="regEmail">E-Mail</label>
+        <input id="regEmail" type="email" autocomplete="email" required>
+
+        <label for="regPassword">Passwort</label>
+        <input id="regPassword" type="password" autocomplete="new-password" required minlength="8">
+        <p class="hint">Mindestens 8 Zeichen.</p>
+
+        <label for="regInvite">Einladungscode</label>
+        <input id="regInvite" type="text" autocomplete="off" required>
+        <p class="hint">Den Code bekommst du vom Orga-Team.</p>
+
+        <div class="actions">
+          <button class="button-primary" type="submit">Konto anlegen</button>
+        </div>
+        <p id="registerErr" class="err hidden"></p>
+      </form>
+    </div>
+
+    <div id="appView" class="hidden">
+      <div class="panel">
+        <p class="label">Willkommen</p>
+        <h1 id="welcomeTitle">Hallo</h1>
+        <p class="user-chip">Angemeldet als <strong id="userEmail"></strong></p>
+        <p class="sub" style="margin-bottom: 0;">
+          Hier landet alles fürs Team – Schichtinfos, Unterlagen und Orga-Kram.
+          Inhalt kann schrittweise ergänzt werden.
+        </p>
+        <div class="actions">
+          <button type="button" class="button-secondary" id="logoutBtn">Abmelden</button>
+        </div>
+      </div>
+
+      <div class="grid">
+        <article class="panel card">
+          <h3>Schichten</h3>
+          <p>Platzhalter für Schichtpläne und Einteilungen.</p>
+        </article>
+        <article class="panel card">
+          <h3>Unterlagen</h3>
+          <p>Platzhalter für PDFs, Briefings und Checklisten.</p>
+        </article>
+        <article class="panel card">
+          <h3>Kontakt Orga</h3>
+          <p>Platzhalter für Ansprechpartner und Notfallnummern.</p>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var TOKEN_KEY = 'sfreibad_staff_jwt';
+      var authView = document.getElementById('authView');
+      var appView = document.getElementById('appView');
+      var loginForm = document.getElementById('loginForm');
+      var registerForm = document.getElementById('registerForm');
+      var loginErr = document.getElementById('loginErr');
+      var registerErr = document.getElementById('registerErr');
+      var tabLogin = document.getElementById('tabLogin');
+      var tabRegister = document.getElementById('tabRegister');
+
+      function token() {
+        try { return sessionStorage.getItem(TOKEN_KEY); } catch (e) { return null; }
+      }
+
+      function setToken(value) {
+        try { sessionStorage.setItem(TOKEN_KEY, value); } catch (e) {}
+      }
+
+      function clearToken() {
+        try { sessionStorage.removeItem(TOKEN_KEY); } catch (e) {}
+      }
+
+      function showErr(el, msg) {
+        if (!msg) {
+          el.classList.add('hidden');
+          el.textContent = '';
+          return;
+        }
+        el.textContent = msg;
+        el.classList.remove('hidden');
+      }
+
+      function setTab(which) {
+        var isLogin = which === 'login';
+        tabLogin.classList.toggle('active', isLogin);
+        tabRegister.classList.toggle('active', !isLogin);
+        loginForm.classList.toggle('hidden', !isLogin);
+        registerForm.classList.toggle('hidden', isLogin);
+        showErr(loginErr, '');
+        showErr(registerErr, '');
+      }
+
+      function showAuth() {
+        appView.classList.add('hidden');
+        authView.classList.remove('hidden');
+      }
+
+      function showApp(user) {
+        authView.classList.add('hidden');
+        appView.classList.remove('hidden');
+        document.getElementById('welcomeTitle').textContent = 'Hallo, ' + (user.name || 'Team');
+        document.getElementById('userEmail').textContent = user.email || '';
+      }
+
+      async function api(path, options) {
+        var res = await fetch('/.netlify/functions/' + path, options);
+        var data = {};
+        try { data = await res.json(); } catch (e) {}
+        if (!res.ok) {
+          var err = new Error((data && data.error) || 'Request failed');
+          err.status = res.status;
+          throw err;
+        }
+        return data;
+      }
+
+      async function loadMe() {
+        var t = token();
+        if (!t) {
+          showAuth();
+          return;
+        }
+        try {
+          var data = await api('staff-me', {
+            headers: { Authorization: 'Bearer ' + t }
+          });
+          showApp(data.user);
+        } catch (e) {
+          clearToken();
+          showAuth();
+        }
+      }
+
+      tabLogin.addEventListener('click', function () { setTab('login'); });
+      tabRegister.addEventListener('click', function () { setTab('register'); });
+
+      loginForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        showErr(loginErr, '');
+        try {
+          var data = await api('staff-login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              email: document.getElementById('loginEmail').value,
+              password: document.getElementById('loginPassword').value
+            })
+          });
+          setToken(data.token);
+          showApp(data.user);
+        } catch (e) {
+          showErr(loginErr, e.message || 'Login fehlgeschlagen.');
+        }
+      });
+
+      registerForm.addEventListener('submit', async function (event) {
+        event.preventDefault();
+        showErr(registerErr, '');
+        try {
+          var data = await api('staff-register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: document.getElementById('regName').value,
+              email: document.getElementById('regEmail').value,
+              password: document.getElementById('regPassword').value,
+              inviteCode: document.getElementById('regInvite').value
+            })
+          });
+          setToken(data.token);
+          showApp(data.user);
+        } catch (e) {
+          showErr(registerErr, e.message || 'Registrierung fehlgeschlagen.');
+        }
+      });
+
+      document.getElementById('logoutBtn').addEventListener('click', function () {
+        clearToken();
+        showAuth();
+        setTab('login');
+      });
+
+      loadMe();
+    })();
+  </script>
+</body>
+</html>
