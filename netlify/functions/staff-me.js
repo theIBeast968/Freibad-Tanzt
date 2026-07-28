@@ -26,6 +26,9 @@ export default async (request) => {
   return json({
     user: {
       name: user.name,
+      firstName: user.firstName || null,
+      lastName: user.lastName || null,
+      phone: user.phone || null,
       email: user.email,
       createdAt: user.createdAt || null,
     },

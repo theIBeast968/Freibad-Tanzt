@@ -356,8 +356,14 @@
       </form>
 
       <form id="registerForm" class="hidden">
-        <label for="regName">Name</label>
-        <input id="regName" type="text" autocomplete="name" required minlength="2" maxlength="80">
+        <label for="regFirstName">Vorname</label>
+        <input id="regFirstName" type="text" autocomplete="given-name" required minlength="2" maxlength="60">
+
+        <label for="regLastName">Nachname</label>
+        <input id="regLastName" type="text" autocomplete="family-name" required minlength="2" maxlength="60">
+
+        <label for="regPhone">Telefonnummer</label>
+        <input id="regPhone" type="tel" autocomplete="tel" required minlength="6" maxlength="40" placeholder="z. B. 0176 …">
 
         <label for="regEmail">E-Mail</label>
         <input id="regEmail" type="email" autocomplete="email" required>
@@ -642,8 +648,9 @@
       function showApp(user) {
         authView.classList.add('hidden');
         appView.classList.remove('hidden');
-        document.getElementById('welcomeTitle').textContent = 'Hallo, ' + (user.name || 'Team');
-        document.getElementById('userEmail').textContent = user.email || '';
+        document.getElementById('welcomeTitle').textContent = 'Hallo, ' + (user.firstName || user.name || 'Team');
+        document.getElementById('userEmail').textContent =
+          (user.email || '') + (user.phone ? (' · ' + user.phone) : '');
         loadShifts();
       }
 
@@ -706,7 +713,9 @@
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-              name: document.getElementById('regName').value,
+              firstName: document.getElementById('regFirstName').value,
+              lastName: document.getElementById('regLastName').value,
+              phone: document.getElementById('regPhone').value,
               email: document.getElementById('regEmail').value,
               password: document.getElementById('regPassword').value,
               inviteCode: document.getElementById('regInvite').value
