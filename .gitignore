@@ -2,3 +2,8 @@ node_modules/
 .netlify/
 .venv-screenshot/
 exports/__pycache__/
+
+# Lokale Secrets – niemals committen
+.env
+.env.*
+!.env.example
