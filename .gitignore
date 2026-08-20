@@ -2,6 +2,7 @@ node_modules/
 .netlify/
 .venv-screenshot/
 exports/__pycache__/
+deno.lock
 
 # Lokale Secrets – niemals committen
 .env

@@ -25,6 +25,11 @@ Bei Umbauten an Login, Auth oder Datenstruktur besser über Branch plus Pull Req
 
 Daten liegen in **Netlify Blobs**, es gibt keine klassische Datenbank.
 
+Key-Konvention beim Ausbau des Helferbereichs:
+- Einzel-Entität: `<typ>-<id>` (z. B. `area-<id>`, `user-<email>`)
+- Index/Liste: `<typ>s-index` (z. B. `areas-index`, `users-index`)
+- Gecappte globale Aggregate: `<typ>-all` mit `.slice(-N)` (etabliert bei `shifts-all`)
+
 ## Lokal starten
 
 ```
