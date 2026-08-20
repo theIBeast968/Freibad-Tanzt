@@ -28,6 +28,10 @@
   box-sizing: border-box;
 }
 
+[hidden] {
+  display: none !important;
+}
+
 /* ---- Skip-Link ---- */
 .skip-link {
   position: absolute;
@@ -618,6 +622,84 @@ details p,
 .section-light {
   background: linear-gradient(180deg, rgba(246, 220, 123, 0.88), rgba(255, 183, 3, 0.82));
   color: #2d1700;
+}
+
+/* ---- Off-Season Banner ("Ready for 2027") ---- */
+.season-banner {
+  background: linear-gradient(90deg, var(--yellow) 0%, #ff9a00 100%);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+.season-banner-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.25rem;
+  padding: 0.85rem 0;
+}
+
+.season-banner-badge {
+  flex-shrink: 0;
+  padding: 0.4rem 0.9rem;
+  border-radius: 999px;
+  background: #1a1100;
+  color: var(--yellow);
+  font-family: var(--font-display);
+  font-size: 0.95rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.season-banner-inner p {
+  margin: 0;
+  color: #1a1100;
+  font-weight: 700;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.season-banner-inner a {
+  text-decoration: underline;
+}
+
+/* ---- Off-Season Platzhalter für ausgeblendete Inhalte ---- */
+.season-placeholder,
+.season-placeholder-wrap > .season-placeholder {
+  display: grid;
+  gap: 1rem;
+  padding: 1.5rem;
+  border: 1px dashed rgba(255, 183, 3, 0.4);
+  border-radius: 1rem;
+  background: rgba(255, 183, 3, 0.06);
+}
+
+.season-placeholder p {
+  margin: 0;
+  color: rgba(255, 247, 234, 0.92);
+  line-height: 1.6;
+}
+
+.season-placeholder--inline {
+  margin-top: 1.25rem;
+  max-width: 40rem;
+}
+
+.season-placeholder-wrap {
+  margin-bottom: 2rem;
+}
+
+.season-note {
+  display: inline-block;
+  margin-left: 0.6rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--cream);
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: middle;
 }
 
 .section-grid,
