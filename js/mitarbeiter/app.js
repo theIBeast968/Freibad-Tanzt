@@ -1,10 +1,11 @@
 import { api, authHeaders, token, clearToken } from './api.js';
 import { setCurrentUser } from './state.js';
-import { loadShifts } from './views/shifts.js';
-import { loadTasks } from './views/tasks.js';
 import { loadAdmin } from './views/admin.js';
 import { loadAreasAdmin } from './views/areas.js';
 import { loadMyAreas } from './views/area-members.js';
+import { loadWorkAreas } from './views/area-workspace.js';
+import { loadGlobalDashboard } from './views/dashboard-global.js';
+import { loadMyTasks } from './views/my-tasks.js';
 
 var authView = document.getElementById('authView');
 var appView = document.getElementById('appView');
@@ -49,7 +50,6 @@ export async function showApp(user) {
   } else {
     adminView.classList.add('hidden');
     tocAdmin.classList.add('hidden');
-    loadTasks();
   }
 
   var pendingNotice = document.getElementById('pendingNotice');
@@ -58,8 +58,10 @@ export async function showApp(user) {
   var hasPendingOnly = memberships.length > 0 && !hasActiveArea;
   pendingNotice.classList.toggle('hidden', user.role === 'admin' || !hasPendingOnly);
 
+  loadGlobalDashboard();
+  loadMyTasks();
   loadMyAreas();
-  loadShifts();
+  loadWorkAreas();
 }
 
 export async function loadMe() {

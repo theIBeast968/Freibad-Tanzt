@@ -1,21 +1,15 @@
+export var PHASE_LABELS = {
+  aufbau: 'Aufbau',
+  freitag: 'Freitag',
+  samstag: 'Samstag',
+  sonntag: 'Sonntag',
+  abbau: 'Abbau'
+};
+
 export function dayLabel(value) {
-  return ({
-    aufbau: 'Aufbau',
-    freitag: 'Freitag',
-    samstag: 'Samstag',
-    sonntag: 'Sonntag',
-    abbau: 'Abbau'
-  })[value] || value;
+  return PHASE_LABELS[value] || value;
 }
 
-export function areaLabel(value) {
-  return ({
-    einlass: 'Einlass',
-    bar: 'Bar / Schirmbar',
-    technik: 'Technik',
-    camping: 'Camping',
-    food: 'Food',
-    familientag: 'Familientag',
-    sonstiges: 'Sonstiges'
-  })[value] || value;
+export function phaseLabel(value) {
+  return PHASE_LABELS[value] || value;
 }

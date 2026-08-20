@@ -93,6 +93,7 @@ export function publicUser(user) {
     phone: user.phone || null,
     role: resolveRole(user),
     areaMemberships: Array.isArray(user.areaMemberships) ? user.areaMemberships : [],
+    canPostGlobal: Boolean(user.canPostGlobal),
     createdAt: user.createdAt || null,
   };
 }

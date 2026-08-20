@@ -478,8 +478,9 @@
           Bitte nichts öffentlich teilen (Gästelisten, Codes, interne Nummern).
         </p>
         <div class="toc">
+          <a href="#dashboard-global">Ankündigungen</a>
           <a href="#meine-aufgaben">Meine Aufgaben</a>
-          <a href="#schicht-melden">Schicht melden</a>
+          <a href="#mein-bereich" id="tocMeinBereich" class="hidden">Mein Bereich</a>
           <a href="#ablauf">Ablauf</a>
           <a href="#bereiche">Bereiche</a>
           <a href="#checklisten">Checklisten</a>
@@ -497,6 +498,39 @@
         <p id="pendingNoticeText">Deine Anmeldung wartet auf Freischaltung durch die Bereichsleitung.</p>
       </div>
 
+      <div class="panel card" id="dashboard-global">
+        <h3>Ankündigungen</h3>
+        <p>Neuigkeiten und Umfragen für alle.</p>
+        <div id="globalPostForm" class="hidden">
+          <form id="globalDashboardForm">
+            <label for="globalPostType">Art</label>
+            <select id="globalPostType">
+              <option value="announcement">Ankündigung</option>
+              <option value="poll">Umfrage</option>
+            </select>
+
+            <label for="globalPostTitle">Titel</label>
+            <input id="globalPostTitle" type="text" required minlength="3" maxlength="160">
+
+            <label for="globalPostBody">Text</label>
+            <input id="globalPostBody" type="text" maxlength="4000" placeholder="Details (optional)">
+
+            <div id="globalPollOptionsWrap" class="hidden">
+              <label for="globalPollOptions">Umfrage-Optionen</label>
+              <input id="globalPollOptions" type="text" placeholder="Option A, Option B, Option C">
+              <p class="hint">Mit Komma getrennt, mindestens 2.</p>
+            </div>
+
+            <div class="actions">
+              <button class="button-primary" type="submit">Veröffentlichen</button>
+            </div>
+            <p id="globalPostErr" class="err hidden"></p>
+            <p id="globalPostOk" class="ok hidden"></p>
+          </form>
+        </div>
+        <div id="globalPostList"></div>
+      </div>
+
       <div class="panel card hidden" id="meine-helfer">
         <h3>Meine Helfer</h3>
         <p>Freischaltungsanfragen und aktive Helfer deiner Bereiche.</p>
@@ -505,7 +539,7 @@
 
       <div class="panel card" id="meine-aufgaben">
         <h3>Meine Aufgaben</h3>
-        <p>Vom Orga-Team zugewiesene Aufgaben.</p>
+        <p>Dir in deinen Bereichen zugewiesene Aufgaben.</p>
         <ul class="shift-list" id="myTaskList"></ul>
       </div>
 
@@ -517,8 +551,7 @@
             <a href="#admin-areas">Bereiche</a>
             <a href="#admin-area-leaders">Bereichsleiter</a>
             <a href="#admin-users">Mitarbeiter</a>
-            <a href="#admin-shifts">Schichtmeldungen</a>
-            <a href="#admin-tasks">Aufgaben vergeben</a>
+            <a href="#admin-shifts">Schichten</a>
           </div>
         </div>
 
@@ -608,6 +641,7 @@
                   <th>Name</th>
                   <th>Kontakt</th>
                   <th>Rolle</th>
+                  <th>Presse</th>
                   <th></th>
                 </tr>
               </thead>
@@ -618,120 +652,132 @@
         </div>
 
         <div class="panel card" id="admin-shifts">
-          <h3>Alle Schichtmeldungen</h3>
+          <h3>Schichten – Gesamtübersicht</h3>
+          <p>Alle Schichten über alle Bereiche und Phasen.</p>
+          <label for="adminShiftsAreaFilter">Bereich</label>
+          <select id="adminShiftsAreaFilter">
+            <option value="">Alle Bereiche</option>
+          </select>
+          <label for="adminShiftsPhaseFilter">Phase</label>
+          <select id="adminShiftsPhaseFilter">
+            <option value="">Alle Phasen</option>
+            <option value="aufbau">Aufbau</option>
+            <option value="freitag">Freitag</option>
+            <option value="samstag">Samstag</option>
+            <option value="sonntag">Sonntag</option>
+            <option value="abbau">Abbau</option>
+          </select>
           <div class="table-wrap">
             <table>
               <thead>
                 <tr>
-                  <th>Wer</th>
-                  <th>Tag</th>
                   <th>Bereich</th>
-                  <th>Notiz</th>
+                  <th>Phase</th>
+                  <th>Datum/Zeit</th>
+                  <th>Station</th>
+                  <th>Besetzt</th>
+                  <th>Zugewiesen</th>
                 </tr>
               </thead>
               <tbody id="adminShiftsBody"></tbody>
             </table>
           </div>
         </div>
-
-        <div class="panel card" id="admin-tasks">
-          <h3>Aufgabe vergeben</h3>
-          <form id="adminTaskForm">
-            <label for="taskTitle">Titel</label>
-            <input id="taskTitle" type="text" required minlength="3" maxlength="120" placeholder="z. B. Einlass Freitag vorbereiten">
-
-            <label for="taskAssignee">Mitarbeiter</label>
-            <select id="taskAssignee" required>
-              <option value="">Bitte wählen</option>
-            </select>
-
-            <label for="taskDay">Tag (optional)</label>
-            <select id="taskDay">
-              <option value="">–</option>
-              <option value="aufbau">Aufbau</option>
-              <option value="freitag">Freitag</option>
-              <option value="samstag">Samstag</option>
-              <option value="sonntag">Sonntag</option>
-              <option value="abbau">Abbau</option>
-            </select>
-
-            <label for="taskArea">Bereich (optional)</label>
-            <select id="taskArea">
-              <option value="">–</option>
-              <option value="einlass">Einlass</option>
-              <option value="bar">Bar / Schirmbar</option>
-              <option value="technik">Technik</option>
-              <option value="camping">Camping</option>
-              <option value="food">Food</option>
-              <option value="familientag">Familientag</option>
-              <option value="sonstiges">Sonstiges</option>
-            </select>
-
-            <label for="taskDesc">Beschreibung (optional)</label>
-            <input id="taskDesc" type="text" maxlength="1000" placeholder="Details zur Aufgabe">
-
-            <div class="actions">
-              <button class="button-primary" type="submit">Aufgabe zuweisen</button>
-            </div>
-            <p id="adminTaskErr" class="err hidden"></p>
-            <p id="adminTaskOk" class="ok hidden"></p>
-          </form>
-
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Aufgabe</th>
-                  <th>Zugewiesen</th>
-                  <th>Status</th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody id="adminTasksBody"></tbody>
-            </table>
-          </div>
-        </div>
       </div>
 
-      <div class="panel card" id="schicht-melden">
-        <h3>Schicht melden</h3>
-        <p>Trag dich für Aufbau, Festtage oder Abbau ein. Orga sieht die Meldungen und teilt ein.</p>
-        <form id="shiftForm">
-          <label for="shiftDay">Tag</label>
-          <select id="shiftDay" required>
-            <option value="">Bitte wählen</option>
-            <option value="aufbau">Aufbau (vor Freitag)</option>
-            <option value="freitag">Freitag, 17.07. – Partynacht</option>
-            <option value="samstag">Samstag, 18.07. – Partynacht</option>
-            <option value="sonntag">Sonntag, 19.07. – Familientag</option>
-            <option value="abbau">Abbau (nach dem Fest)</option>
-          </select>
+      <div class="panel card hidden" id="mein-bereich">
+        <h3>Mein Bereich</h3>
+        <p>Dashboard und Schichtplan deiner Bereiche.</p>
 
-          <label for="shiftArea">Bereich</label>
-          <select id="shiftArea" required>
-            <option value="">Bitte wählen</option>
-            <option value="einlass">Einlass / Tickets / Gästeliste</option>
-            <option value="bar">Bar / Schirmbar</option>
-            <option value="technik">Technik / Stage</option>
-            <option value="camping">Camping</option>
-            <option value="food">Food / Versorgung</option>
-            <option value="familientag">Familientag / Programm</option>
-            <option value="sonstiges">Sonstiges / Springer</option>
-          </select>
+        <label for="workAreaSelect">Bereich</label>
+        <select id="workAreaSelect">
+          <option value="">Bitte wählen</option>
+        </select>
 
-          <label for="shiftPhone">Handynummer (optional)</label>
-          <input id="shiftPhone" type="tel" autocomplete="tel" placeholder="für Rückfragen vor Ort">
+        <div class="tabs" id="workSubTabs" role="tablist">
+          <button type="button" class="tab active" id="workTabDashboard" data-subtab="dashboard">Dashboard</button>
+          <button type="button" class="tab" id="workTabShifts" data-subtab="shifts">Schichtplan</button>
+        </div>
 
-          <label for="shiftNote">Notiz (optional)</label>
-          <input id="shiftNote" type="text" maxlength="500" placeholder="z. B. nur bis 22 Uhr, Erfahrung Bar …">
+        <div id="workDashboardSection">
+          <div id="areaPostForm" class="hidden">
+            <form id="areaDashboardForm">
+              <label for="areaPostType">Art</label>
+              <select id="areaPostType">
+                <option value="announcement">Ankündigung</option>
+                <option value="poll">Umfrage</option>
+                <option value="task">Aufgabe</option>
+                <option value="checklist">Checkliste</option>
+              </select>
 
-          <div class="actions">
-            <button class="button-primary" type="submit">Schicht speichern</button>
+              <label for="areaPostTitle">Titel</label>
+              <input id="areaPostTitle" type="text" required minlength="3" maxlength="160">
+
+              <label for="areaPostBody">Text</label>
+              <input id="areaPostBody" type="text" maxlength="4000" placeholder="Details (optional)">
+
+              <div id="areaPollOptionsWrap" class="hidden">
+                <label for="areaPollOptions">Umfrage-Optionen</label>
+                <input id="areaPollOptions" type="text" placeholder="Option A, Option B, Option C">
+                <p class="hint">Mit Komma getrennt, mindestens 2.</p>
+              </div>
+
+              <div id="areaTaskAssigneeWrap" class="hidden">
+                <label for="areaTaskAssignee">Zuweisen an</label>
+                <select id="areaTaskAssignee">
+                  <option value="">Bitte wählen</option>
+                </select>
+              </div>
+
+              <div id="areaChecklistItemsWrap" class="hidden">
+                <label for="areaChecklistItems">Checklisten-Punkte</label>
+                <input id="areaChecklistItems" type="text" placeholder="Punkt A, Punkt B, Punkt C">
+                <p class="hint">Mit Komma getrennt.</p>
+              </div>
+
+              <div class="actions">
+                <button class="button-primary" type="submit">Veröffentlichen</button>
+              </div>
+              <p id="areaPostErr" class="err hidden"></p>
+              <p id="areaPostOk" class="ok hidden"></p>
+            </form>
           </div>
-          <p id="shiftErr" class="err hidden"></p>
-          <p id="shiftOk" class="ok hidden"></p>
-        </form>
-        <ul class="shift-list" id="shiftList"></ul>
+          <div id="areaPostList"></div>
+        </div>
+
+        <div id="workShiftsSection" class="hidden">
+          <div class="tabs" id="shiftPhaseTabs" role="tablist"></div>
+
+          <div id="shiftLeaderForm" class="hidden">
+            <form id="shiftSlotForm">
+              <input type="hidden" id="slotId" value="">
+              <label for="slotDate">Datum</label>
+              <input id="slotDate" type="date">
+
+              <label for="slotTimeFrom">Von</label>
+              <input id="slotTimeFrom" type="time">
+
+              <label for="slotTimeTo">Bis</label>
+              <input id="slotTimeTo" type="time">
+
+              <label for="slotStation">Station/Aufgabe</label>
+              <input id="slotStation" type="text" maxlength="120" placeholder="z. B. Zapfhahn 1" required>
+
+              <label for="slotNeeded">Benötigte Helfer</label>
+              <input id="slotNeeded" type="number" min="1" max="50" value="1">
+
+              <div class="actions">
+                <button class="button-primary" type="submit" id="slotSubmitBtn">Schicht anlegen</button>
+                <button class="button-secondary" type="button" id="slotCancelEdit" hidden>Abbrechen</button>
+              </div>
+              <p id="slotErr" class="err hidden"></p>
+              <p id="slotOk" class="ok hidden"></p>
+            </form>
+          </div>
+
+          <ul class="shift-list" id="shiftSlotList"></ul>
+        </div>
+        <p id="workAreaErr" class="err hidden"></p>
       </div>
 
       <div class="grid">
