@@ -10,5 +10,5 @@ export default async (request) => {
     .map((area) => ({ id: area.id, name: area.name }));
   const origins = await ensureOriginsSeeded();
 
-  return json({ areas, origins });
+  return json({ areas, origins, vapidPublicKey: process.env.VAPID_PUBLIC_KEY || null });
 };

@@ -1033,6 +1033,7 @@
   <script src="js/dj-videos.js" defer></script>
   <script src="js/dj-preview.js" defer></script>
   <script src="js/flyer-modal.js" defer></script>
+  <script src="js/chatbot-widget.js" defer></script>
   <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('sw.js').catch(function () {});
@@ -1434,5 +1435,25 @@
       window.addEventListener('hashchange', openSponsoren);
     })();
   </script>
+
+  <div id="chatbotWidget" class="chatbot-widget">
+    <button type="button" id="chatbotToggle" class="chatbot-toggle" aria-expanded="false" aria-controls="chatbotPanel">
+      Fragen?
+    </button>
+    <div id="chatbotPanel" class="chatbot-panel hidden" role="dialog" aria-label="Fragen zum Festival">
+      <div class="chatbot-panel-head">
+        <strong>Fragen zum Festival</strong>
+        <button type="button" id="chatbotClose" aria-label="Schließen">×</button>
+      </div>
+      <div id="chatbotMessages" class="chatbot-messages">
+        <p class="chatbot-msg chatbot-msg--bot">Hallo! Frag mich zu Terminen, Tickets, Camping oder dem Familientag.</p>
+      </div>
+      <form id="chatbotForm" class="chatbot-form">
+        <input id="chatbotInput" type="text" maxlength="500" placeholder="Deine Frage …" autocomplete="off" required>
+        <button type="submit">Senden</button>
+      </form>
+    </div>
+  </div>
+
 </body>
 </html>

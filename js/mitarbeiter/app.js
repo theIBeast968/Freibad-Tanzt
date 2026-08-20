@@ -3,9 +3,12 @@ import { setCurrentUser } from './state.js';
 import { loadAdmin } from './views/admin.js';
 import { loadAreasAdmin } from './views/areas.js';
 import { loadMyAreas } from './views/area-members.js';
-import { loadWorkAreas } from './views/area-workspace.js';
+import { loadWorkAreas, stopWorkspacePolling } from './views/area-workspace.js';
+import { loadAdminChat, startAdminChatPolling, stopAdminChatPolling } from './views/admin-chat.js';
+import { loadOriginReport } from './views/privacy-ops.js';
 import { loadGlobalDashboard } from './views/dashboard-global.js';
 import { loadMyTasks } from './views/my-tasks.js';
+import { loadPushSettings } from './views/push.js';
 
 var authView = document.getElementById('authView');
 var appView = document.getElementById('appView');
@@ -13,6 +16,8 @@ var appView = document.getElementById('appView');
 export function showAuth() {
   appView.classList.add('hidden');
   authView.classList.remove('hidden');
+  stopWorkspacePolling();
+  stopAdminChatPolling();
 }
 
 async function roleLabel(user) {
@@ -47,6 +52,9 @@ export async function showApp(user) {
     tocAdmin.classList.remove('hidden');
     loadAdmin();
     loadAreasAdmin();
+    loadAdminChat();
+    startAdminChatPolling();
+    loadOriginReport();
   } else {
     adminView.classList.add('hidden');
     tocAdmin.classList.add('hidden');
@@ -62,6 +70,7 @@ export async function showApp(user) {
   loadMyTasks();
   loadMyAreas();
   loadWorkAreas();
+  loadPushSettings();
 }
 
 export async function loadMe() {

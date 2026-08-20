@@ -7,6 +7,7 @@ import {
   requireAreaMember,
 } from './lib/staff-auth.js';
 import { addComment, newPost, readPosts, toggleVote, writePosts } from './lib/dashboard.js';
+import { notifyChannel } from './lib/push-send.js';
 
 const CAP = 200;
 
@@ -116,6 +117,11 @@ export default async (request) => {
     const posts = await readPosts(keyFor(areaId));
     posts.push(post);
     await writePosts(keyFor(areaId), posts, CAP);
+    await notifyChannel(
+      { area: areaId },
+      { title: 'Neuer Beitrag in deinem Bereich', body: post.title, url: '/mitarbeiter.html#mein-bereich' },
+      auth.user.email
+    );
     return json({ ok: true, posts: posts.slice().reverse() });
   }
 

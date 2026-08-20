@@ -479,12 +479,14 @@
         </p>
         <div class="toc">
           <a href="#dashboard-global">Ankündigungen</a>
+          <a href="#push-settings">Benachrichtigungen</a>
           <a href="#meine-aufgaben">Meine Aufgaben</a>
           <a href="#mein-bereich" id="tocMeinBereich" class="hidden">Mein Bereich</a>
           <a href="#ablauf">Ablauf</a>
           <a href="#bereiche">Bereiche</a>
           <a href="#checklisten">Checklisten</a>
           <a href="#kontakt">Kontakt</a>
+          <a href="#fragen">Fragen?</a>
           <a href="#meine-helfer" id="tocMeineHelfer" class="hidden">Meine Helfer</a>
           <a href="#admin" id="tocAdmin" class="hidden">Admin</a>
         </div>
@@ -531,6 +533,22 @@
         <div id="globalPostList"></div>
       </div>
 
+      <div class="panel card" id="push-settings">
+        <h3>Benachrichtigungen</h3>
+        <p id="pushStatusText" class="sub">Push-Benachrichtigungen sind noch nicht aktiviert.</p>
+        <div class="actions">
+          <button type="button" class="button-primary" id="pushEnableBtn">Push aktivieren</button>
+          <button type="button" class="button-secondary hidden" id="pushDisableBtn">Push deaktivieren</button>
+        </div>
+        <div id="pushChannels" class="hidden" style="margin-top:1rem;">
+          <div class="check-list">
+            <label><input type="checkbox" id="pushGlobal" checked> Große Ankündigungen</label>
+          </div>
+          <div id="pushAreaChannels" class="check-list" style="margin-top:0.5rem;"></div>
+        </div>
+        <p id="pushErr" class="err hidden"></p>
+      </div>
+
       <div class="panel card hidden" id="meine-helfer">
         <h3>Meine Helfer</h3>
         <p>Freischaltungsanfragen und aktive Helfer deiner Bereiche.</p>
@@ -552,7 +570,46 @@
             <a href="#admin-area-leaders">Bereichsleiter</a>
             <a href="#admin-users">Mitarbeiter</a>
             <a href="#admin-shifts">Schichten</a>
+            <a href="#admin-chat">Admin-Chat</a>
+            <a href="#admin-datenschutz">Datenschutz</a>
           </div>
+        </div>
+
+        <div class="panel card" id="admin-chat">
+          <h3>Admin-Chat <span class="badge">Nur Tobias, Fritz, Sven</span></h3>
+          <ul class="shift-list" id="adminChatMessageList"></ul>
+          <form id="adminChatForm">
+            <label for="adminChatBody">Nachricht</label>
+            <input id="adminChatBody" type="text" maxlength="1000" placeholder="Nachricht an die Admin-Runde …" required>
+            <div class="actions">
+              <button class="button-primary" type="submit">Senden</button>
+            </div>
+            <p id="adminChatErr" class="err hidden"></p>
+          </form>
+        </div>
+
+        <div class="panel card" id="admin-datenschutz">
+          <h3>Datenschutz &amp; Saisonabschluss</h3>
+          <p>Herkunft-Auswertung und Saison-Reset (Daten werden archiviert, nicht sofort geloescht).</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Herkunft</th><th>Anzahl</th></tr>
+              </thead>
+              <tbody id="originReportBody"></tbody>
+            </table>
+          </div>
+
+          <form id="seasonResetForm" style="margin-top: 1.25rem;">
+            <label for="seasonResetConfirm">Zum Bestätigen eingeben: <strong>SAISON ZURUECKSETZEN</strong></label>
+            <input id="seasonResetConfirm" type="text" autocomplete="off" placeholder="SAISON ZURUECKSETZEN">
+            <p class="hint">Archiviert alle Nutzerdaten, leert Bereichs-Chats/Dashboards/Schichten. Bereiche selbst bleiben als Struktur erhalten.</p>
+            <div class="actions">
+              <button class="button-secondary" type="submit">Saison zurücksetzen</button>
+            </div>
+            <p id="seasonResetErr" class="err hidden"></p>
+            <p id="seasonResetOk" class="ok hidden"></p>
+          </form>
         </div>
 
         <div class="panel card" id="admin-areas">
@@ -697,9 +754,24 @@
         <div class="tabs" id="workSubTabs" role="tablist">
           <button type="button" class="tab active" id="workTabDashboard" data-subtab="dashboard">Dashboard</button>
           <button type="button" class="tab" id="workTabShifts" data-subtab="shifts">Schichtplan</button>
+          <button type="button" class="tab" id="workTabChat" data-subtab="chat">Chat</button>
         </div>
 
         <div id="workDashboardSection">
+          <div id="planningAreaTools" class="hidden">
+            <p class="label">Planungsbereich</p>
+            <div id="spinoffChildList" class="sub"></div>
+            <form id="spinoffForm">
+              <label for="spinoffName">Neuer Bereich (Programmpunkt)</label>
+              <input id="spinoffName" type="text" minlength="2" maxlength="80" placeholder="z. B. Kirche/Programm" required>
+              <div class="actions">
+                <button class="button-primary mini-btn" type="submit">Als eigenen Bereich ausgliedern</button>
+              </div>
+              <p id="spinoffErr" class="err hidden"></p>
+              <p id="spinoffOk" class="ok hidden"></p>
+            </form>
+          </div>
+
           <div id="areaPostForm" class="hidden">
             <form id="areaDashboardForm">
               <label for="areaPostType">Art</label>
@@ -776,6 +848,18 @@
           </div>
 
           <ul class="shift-list" id="shiftSlotList"></ul>
+        </div>
+
+        <div id="workChatSection" class="hidden">
+          <ul class="shift-list" id="chatMessageList"></ul>
+          <form id="chatForm">
+            <label for="chatBody">Nachricht</label>
+            <input id="chatBody" type="text" maxlength="1000" placeholder="Nachricht an deinen Bereich …" required>
+            <div class="actions">
+              <button class="button-primary" type="submit">Senden</button>
+            </div>
+            <p id="chatErr" class="err hidden"></p>
+          </form>
         </div>
         <p id="workAreaErr" class="err hidden"></p>
       </div>
@@ -861,6 +945,20 @@
             <li>Online: Eventfrog · sonst Abendkasse</li>
           </ul>
         </article>
+      </div>
+
+      <div class="panel card" id="fragen">
+        <h3>Fragen?</h3>
+        <p>Fragen zu Schichtplan, Bereichsanweisungen, Ansprechpartnern oder Anfahrt/Parken fürs Team.</p>
+        <div id="internalChatMessages" class="shift-list" style="max-height: 260px; overflow-y: auto;">
+          <p class="sub">Stell einfach deine Frage.</p>
+        </div>
+        <form id="internalChatForm">
+          <input id="internalChatInput" type="text" maxlength="500" placeholder="Deine Frage …" autocomplete="off" required>
+          <div class="actions">
+            <button class="button-primary" type="submit">Senden</button>
+          </div>
+        </form>
       </div>
 
       <div class="panel card" id="kontakt">

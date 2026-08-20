@@ -1,5 +1,6 @@
 import { json, requireStaffUser } from './lib/staff-auth.js';
 import { addComment, newPost, readPosts, toggleVote, writePosts } from './lib/dashboard.js';
+import { notifyChannel } from './lib/push-send.js';
 
 const KEY = 'dashboard-global';
 const CAP = 200;
@@ -65,6 +66,11 @@ export default async (request) => {
     });
     posts.push(post);
     await writePosts(KEY, posts, CAP);
+    await notifyChannel(
+      'global',
+      { title: 'Neue Ankündigung', body: post.title, url: '/mitarbeiter.html#dashboard-global' },
+      auth.user.email
+    );
     return json({ ok: true, posts: posts.slice().reverse() });
   }
 

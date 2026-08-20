@@ -9,8 +9,11 @@ var tocLink = document.getElementById('tocMeinBereich');
 var areaSelect = document.getElementById('workAreaSelect');
 var tabDashboard = document.getElementById('workTabDashboard');
 var tabShifts = document.getElementById('workTabShifts');
+var tabChat = document.getElementById('workTabChat');
 var dashboardSection = document.getElementById('workDashboardSection');
 var shiftsSection = document.getElementById('workShiftsSection');
+var chatSection = document.getElementById('workChatSection');
+var chatForm = document.getElementById('chatForm');
 var phaseTabsWrap = document.getElementById('shiftPhaseTabs');
 var leaderFormWrap = document.getElementById('shiftLeaderForm');
 var slotForm = document.getElementById('shiftSlotForm');
@@ -25,22 +28,145 @@ var taskAssigneeWrap = document.getElementById('areaTaskAssigneeWrap');
 var checklistItemsWrap = document.getElementById('areaChecklistItemsWrap');
 
 var myAreas = [];
+var allAreasCache = [];
 var currentAreaId = '';
 var currentPhase = '';
+
+var planningToolsWrap = document.getElementById('planningAreaTools');
+var spinoffForm = document.getElementById('spinoffForm');
+var spinoffChildList = document.getElementById('spinoffChildList');
+
+function renderPlanningTools() {
+  var area = currentArea();
+  var currentUser = getCurrentUser();
+  var isPlanning = Boolean(area && area.type === 'planning');
+  var canSpinoff = isPlanning && currentUser && currentUser.role === 'admin';
+  planningToolsWrap.classList.toggle('hidden', !isPlanning);
+  spinoffForm.classList.toggle('hidden', !canSpinoff);
+
+  if (!isPlanning) return;
+
+  var children = allAreasCache.filter(function (a) { return a.parentPlanningAreaId === currentAreaId; });
+  spinoffChildList.textContent = children.length
+    ? 'Bereits ausgegliedert: ' + children.map(function (a) { return a.name; }).join(', ')
+    : 'Noch keine Bereiche ausgegliedert.';
+}
+
+spinoffForm.addEventListener('submit', async function (event) {
+  event.preventDefault();
+  var err = document.getElementById('spinoffErr');
+  var ok = document.getElementById('spinoffOk');
+  showErr(err, '');
+  showErr(ok, '');
+  try {
+    await api('staff-admin-spinoff-area', {
+      method: 'POST',
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ planningAreaId: currentAreaId, name: document.getElementById('spinoffName').value })
+    });
+    ok.textContent = 'Bereich ausgegliedert.';
+    ok.classList.remove('hidden');
+    spinoffForm.reset();
+    await loadWorkAreas();
+  } catch (e) {
+    showErr(err, e.message || 'Konnte nicht ausgegliedert werden.');
+  }
+});
 
 function currentArea() {
   return myAreas.find(function (a) { return a.id === currentAreaId; }) || null;
 }
 
+var chatPollTimer = null;
+var chatSince = '';
+
+function stopChatPolling() {
+  if (chatPollTimer) {
+    clearInterval(chatPollTimer);
+    chatPollTimer = null;
+  }
+}
+
+function startChatPolling() {
+  stopChatPolling();
+  chatPollTimer = setInterval(pollChat, 6000);
+}
+
 function setSubTab(which) {
   tabDashboard.classList.toggle('active', which === 'dashboard');
   tabShifts.classList.toggle('active', which === 'shifts');
+  tabChat.classList.toggle('active', which === 'chat');
   dashboardSection.classList.toggle('hidden', which !== 'dashboard');
   shiftsSection.classList.toggle('hidden', which !== 'shifts');
+  chatSection.classList.toggle('hidden', which !== 'chat');
+  if (which === 'chat') {
+    loadChat();
+    startChatPolling();
+  } else {
+    stopChatPolling();
+  }
 }
 
 tabDashboard.addEventListener('click', function () { setSubTab('dashboard'); });
 tabShifts.addEventListener('click', function () { setSubTab('shifts'); });
+tabChat.addEventListener('click', function () { setSubTab('chat'); });
+
+function appendChatMessages(messages) {
+  var list = document.getElementById('chatMessageList');
+  var placeholder = list.querySelector('[data-placeholder]');
+  if (placeholder) placeholder.remove();
+  messages.forEach(function (message) {
+    var li = document.createElement('li');
+    li.innerHTML =
+      '<strong>' + (message.authorName || message.authorEmail) + '</strong>' +
+      new Date(message.createdAt).toLocaleTimeString('de-DE', { hour: '2-digit', minute: '2-digit' }) +
+      '<br>' + message.body;
+    list.appendChild(li);
+    chatSince = message.id;
+  });
+}
+
+async function loadChat() {
+  if (!currentAreaId) return;
+  chatSince = '';
+  var list = document.getElementById('chatMessageList');
+  list.innerHTML = '<li data-placeholder="1">Noch keine Nachrichten. Schreib die erste!</li>';
+  try {
+    var data = await api('staff-chat?areaId=' + encodeURIComponent(currentAreaId), { headers: authHeaders() });
+    appendChatMessages(data.messages || []);
+  } catch (e) {}
+}
+
+async function pollChat() {
+  if (!currentAreaId || chatSection.classList.contains('hidden')) return;
+  try {
+    var data = await api(
+      'staff-chat?areaId=' + encodeURIComponent(currentAreaId) + '&since=' + encodeURIComponent(chatSince),
+      { headers: authHeaders() }
+    );
+    appendChatMessages(data.messages || []);
+  } catch (e) {}
+}
+
+chatForm.addEventListener('submit', async function (event) {
+  event.preventDefault();
+  var err = document.getElementById('chatErr');
+  showErr(err, '');
+  var input = document.getElementById('chatBody');
+  var text = input.value.trim();
+  if (!text) return;
+  try {
+    await api('staff-chat', {
+      method: 'POST',
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ areaId: currentAreaId, body: text })
+    });
+    input.value = '';
+    await pollChat();
+  } catch (e) {
+    showErr(err, e.message || 'Nachricht konnte nicht gesendet werden.');
+  }
+});
 
 postTypeSelect.addEventListener('change', function () {
   var type = postTypeSelect.value;
@@ -371,12 +497,22 @@ postForm.addEventListener('submit', async function (event) {
 });
 
 function switchArea(areaId) {
+  stopChatPolling();
   currentAreaId = areaId;
   currentPhase = '';
   var area = currentArea();
   renderPhaseTabs(area);
+  renderPlanningTools();
   loadAreaDashboard();
   loadAreaShifts();
+  if (!chatSection.classList.contains('hidden')) {
+    loadChat();
+    startChatPolling();
+  }
+}
+
+export function stopWorkspacePolling() {
+  stopChatPolling();
 }
 
 areaSelect.addEventListener('change', function () {
@@ -390,6 +526,7 @@ export async function loadWorkAreas() {
   try {
     var areasData = await api('staff-admin-areas', { headers: authHeaders() });
     var allAreas = areasData.areas || [];
+    allAreasCache = allAreas;
 
     if (currentUser.role === 'admin') {
       myAreas = allAreas.map(function (a) { return Object.assign({}, a, { isLeiter: true }); });

@@ -180,6 +180,28 @@ export async function saveAreasIndex(index) {
   await staffStore().setJSON('areas-index', index);
 }
 
+export function slugify(name) {
+  return String(name || '')
+    .trim()
+    .toLowerCase()
+    .replace(/ä/g, 'ae')
+    .replace(/ö/g, 'oe')
+    .replace(/ü/g, 'ue')
+    .replace(/ß/g, 'ss')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)/g, '');
+}
+
+export async function uniqueAreaSlug(name, index) {
+  const base = slugify(name) || 'bereich';
+  let slug = base;
+  let n = 2;
+  while (index.some((area) => area.slug === slug)) {
+    slug = `${base}-${n++}`;
+  }
+  return slug;
+}
+
 export function areaSummary(area) {
   return {
     id: area.id,
