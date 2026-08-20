@@ -4,6 +4,7 @@ import { loadShifts } from './views/shifts.js';
 import { loadTasks } from './views/tasks.js';
 import { loadAdmin } from './views/admin.js';
 import { loadAreasAdmin } from './views/areas.js';
+import { loadMyAreas } from './views/area-members.js';
 
 var authView = document.getElementById('authView');
 var appView = document.getElementById('appView');
@@ -50,6 +51,14 @@ export async function showApp(user) {
     tocAdmin.classList.add('hidden');
     loadTasks();
   }
+
+  var pendingNotice = document.getElementById('pendingNotice');
+  var memberships = user.areaMemberships || [];
+  var hasActiveArea = memberships.some(function (m) { return m.status === 'active'; });
+  var hasPendingOnly = memberships.length > 0 && !hasActiveArea;
+  pendingNotice.classList.toggle('hidden', user.role === 'admin' || !hasPendingOnly);
+
+  loadMyAreas();
   loadShifts();
 }
 

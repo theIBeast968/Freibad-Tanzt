@@ -22,6 +22,35 @@ function setTab(which) {
 tabLogin.addEventListener('click', function () { setTab('login'); });
 tabRegister.addEventListener('click', function () { setTab('register'); });
 
+(async function loadRegisterOptions() {
+  try {
+    var res = await fetch('/.netlify/functions/staff-public-options');
+    var data = await res.json();
+    var areaSelect = document.getElementById('regArea');
+    var areaSecondarySelect = document.getElementById('regAreaSecondary');
+    var originSelect = document.getElementById('regOrigin');
+
+    (data.areas || []).forEach(function (area) {
+      var opt1 = document.createElement('option');
+      opt1.value = area.id;
+      opt1.textContent = area.name;
+      areaSelect.appendChild(opt1);
+
+      var opt2 = document.createElement('option');
+      opt2.value = area.id;
+      opt2.textContent = area.name;
+      areaSecondarySelect.appendChild(opt2);
+    });
+
+    (data.origins || []).forEach(function (origin) {
+      var opt = document.createElement('option');
+      opt.value = origin;
+      opt.textContent = origin;
+      originSelect.appendChild(opt);
+    });
+  } catch (e) {}
+})();
+
 loginForm.addEventListener('submit', async function (event) {
   event.preventDefault();
   showErr(loginErr, '');
@@ -54,6 +83,10 @@ registerForm.addEventListener('submit', async function (event) {
         phone: document.getElementById('regPhone').value,
         email: document.getElementById('regEmail').value,
         password: document.getElementById('regPassword').value,
+        areaId: document.getElementById('regArea').value,
+        areaIdSecondary: document.getElementById('regAreaSecondary').value,
+        origin: document.getElementById('regOrigin').value,
+        consentAccepted: document.getElementById('regConsent').checked,
         inviteCode: document.getElementById('regInvite').value
       })
     });

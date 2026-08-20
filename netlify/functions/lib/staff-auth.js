@@ -226,3 +226,26 @@ export async function requireAreaMember(request, areaId) {
   }
   return result;
 }
+
+// --- Herkunft (Origins) ---
+
+export const DEFAULT_ORIGINS = [
+  'Freiwilliger Helfer',
+  'Freibadfreunde',
+  'Orga Team',
+  'Bauwagen',
+  'FC Langenburg',
+  'TC Langenburg',
+  'TSV Langenburg',
+  'Volleyball',
+];
+
+export async function ensureOriginsSeeded() {
+  const store = staffStore();
+  const existing = await store.get('origins-index', { type: 'json' });
+  if (existing && existing.length) {
+    return existing;
+  }
+  await store.setJSON('origins-index', DEFAULT_ORIGINS);
+  return DEFAULT_ORIGINS;
+}

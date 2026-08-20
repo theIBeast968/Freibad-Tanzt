@@ -435,9 +435,31 @@
         <input id="regPassword" type="password" autocomplete="new-password" required minlength="8">
         <p class="hint">Mindestens 8 Zeichen.</p>
 
+        <label for="regArea">Bereich</label>
+        <select id="regArea" required>
+          <option value="">Bitte wählen</option>
+        </select>
+
+        <label for="regAreaSecondary">Zweitwunsch (optional)</label>
+        <select id="regAreaSecondary">
+          <option value="">–</option>
+        </select>
+
+        <label for="regOrigin">Herkunft</label>
+        <select id="regOrigin" required>
+          <option value="">Bitte wählen</option>
+        </select>
+
         <label for="regInvite">Einladungscode</label>
         <input id="regInvite" type="text" autocomplete="off" required>
         <p class="hint">Den Code bekommst du vom Orga-Team.</p>
+
+        <div class="check-list">
+          <label>
+            <input type="checkbox" id="regConsent" required>
+            Ich bin einverstanden, dass meine Angaben (inkl. ggf. geteilter Fotos/Videos) zum Zweck der Festivalorganisation gespeichert und von Admins/Bereichsleitung eingesehen werden können.
+          </label>
+        </div>
 
         <div class="actions">
           <button class="button-primary" type="submit">Konto anlegen</button>
@@ -462,11 +484,23 @@
           <a href="#bereiche">Bereiche</a>
           <a href="#checklisten">Checklisten</a>
           <a href="#kontakt">Kontakt</a>
+          <a href="#meine-helfer" id="tocMeineHelfer" class="hidden">Meine Helfer</a>
           <a href="#admin" id="tocAdmin" class="hidden">Admin</a>
         </div>
         <div class="actions">
           <button type="button" class="button-secondary" id="logoutBtn">Abmelden</button>
         </div>
+      </div>
+
+      <div class="panel card hidden" id="pendingNotice">
+        <h3>Anmeldung in Bearbeitung</h3>
+        <p id="pendingNoticeText">Deine Anmeldung wartet auf Freischaltung durch die Bereichsleitung.</p>
+      </div>
+
+      <div class="panel card hidden" id="meine-helfer">
+        <h3>Meine Helfer</h3>
+        <p>Freischaltungsanfragen und aktive Helfer deiner Bereiche.</p>
+        <div id="meineHelferContainer"></div>
       </div>
 
       <div class="panel card" id="meine-aufgaben">
