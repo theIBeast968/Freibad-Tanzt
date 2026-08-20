@@ -435,16 +435,6 @@
         <input id="regPassword" type="password" autocomplete="new-password" required minlength="8">
         <p class="hint">Mindestens 8 Zeichen.</p>
 
-        <label for="regArea">Bereich</label>
-        <select id="regArea" required>
-          <option value="">Bitte wählen</option>
-        </select>
-
-        <label for="regAreaSecondary">Zweitwunsch (optional)</label>
-        <select id="regAreaSecondary">
-          <option value="">–</option>
-        </select>
-
         <label for="regOrigin">Herkunft</label>
         <select id="regOrigin" required>
           <option value="">Bitte wählen</option>
@@ -465,6 +455,7 @@
           <button class="button-primary" type="submit">Konto anlegen</button>
         </div>
         <p id="registerErr" class="err hidden"></p>
+        <p id="registerOk" class="ok hidden"></p>
       </form>
     </div>
 
@@ -482,6 +473,7 @@
           <a href="#push-settings">Benachrichtigungen</a>
           <a href="#meine-aufgaben">Meine Aufgaben</a>
           <a href="#mein-bereich" id="tocMeinBereich" class="hidden">Mein Bereich</a>
+          <a href="#bereich-aktionen">Weiterer Bereich</a>
           <a href="#ablauf">Ablauf</a>
           <a href="#bereiche">Bereiche</a>
           <a href="#checklisten">Checklisten</a>
@@ -566,6 +558,8 @@
           <h3>Admin · Übersicht <span class="badge">Chef</span></h3>
           <p>Mitarbeiter, Schichten und Aufgaben verwalten.</p>
           <div class="toc">
+            <a href="#admin-registrations">Registrierungen</a>
+            <a href="#admin-leader-applications">Leiter-Bewerbungen</a>
             <a href="#admin-areas">Bereiche</a>
             <a href="#admin-area-leaders">Bereichsleiter</a>
             <a href="#admin-users">Mitarbeiter</a>
@@ -573,6 +567,34 @@
             <a href="#admin-chat">Admin-Chat</a>
             <a href="#admin-datenschutz">Datenschutz</a>
           </div>
+        </div>
+
+        <div class="panel card" id="admin-registrations">
+          <h3>Neue Registrierungen</h3>
+          <p>Wartet auf Freischaltung, bevor sich die Person einloggen kann.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Name</th><th>Kontakt</th><th>Herkunft</th><th></th></tr>
+              </thead>
+              <tbody id="adminRegistrationsBody"></tbody>
+            </table>
+          </div>
+          <p id="adminRegistrationsErr" class="err hidden"></p>
+        </div>
+
+        <div class="panel card" id="admin-leader-applications">
+          <h3>Bereichsleiter-Bewerbungen</h3>
+          <p>Bewerbungen, teils mit konkretem Wunschbereich, teils unspezifisch.</p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr><th>Name</th><th>Wunschbereich</th><th></th></tr>
+              </thead>
+              <tbody id="adminLeaderApplicationsBody"></tbody>
+            </table>
+          </div>
+          <p id="adminLeaderApplicationsErr" class="err hidden"></p>
         </div>
 
         <div class="panel card" id="admin-chat">
@@ -862,6 +884,36 @@
           </form>
         </div>
         <p id="workAreaErr" class="err hidden"></p>
+      </div>
+
+      <div class="panel card" id="bereich-aktionen">
+        <h3>Weiterer Bereich</h3>
+        <p>Einem zusätzlichen Bereich beitreten oder dich als Bereichsleiter bewerben.</p>
+
+        <form id="areaJoinForm">
+          <label for="joinAreaSelect">Bereich beitreten</label>
+          <select id="joinAreaSelect" required>
+            <option value="">Bitte wählen</option>
+          </select>
+          <p class="hint">Bereichsleiter muss die Anfrage noch bestätigen (max. 5 Bereiche insgesamt).</p>
+          <div class="actions">
+            <button class="button-secondary" type="submit">Beitreten</button>
+          </div>
+          <p id="areaJoinErr" class="err hidden"></p>
+          <p id="areaJoinOk" class="ok hidden"></p>
+        </form>
+
+        <form id="leaderApplyForm" style="margin-top: 1.5rem;">
+          <label for="leaderApplyAreaSelect">Bereichsleiter werden für</label>
+          <select id="leaderApplyAreaSelect">
+            <option value="">Egal, weiß nicht welcher Bereich</option>
+          </select>
+          <div class="actions">
+            <button class="button-secondary" type="submit">Als Bereichsleiter bewerben</button>
+          </div>
+          <p id="leaderApplyErr" class="err hidden"></p>
+          <p id="leaderApplyOk" class="ok hidden"></p>
+        </form>
       </div>
 
       <div class="grid">

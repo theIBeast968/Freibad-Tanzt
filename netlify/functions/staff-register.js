@@ -1,17 +1,16 @@
-import { signStaffToken, safePasswordEqual } from './lib/jwt.js';
+import { safePasswordEqual } from './lib/jwt.js';
 import {
   ensureOriginsSeeded,
   getUser,
   hashPassword,
   isValidEmail,
   json,
-  listAreas,
   normalizeEmail,
-  publicUser,
   resolveRole,
   saveUser,
   staffConfigOk,
 } from './lib/staff-auth.js';
+import { notifyAdmins } from './lib/push-send.js';
 
 function cleanNamePart(value) {
   return typeof value === 'string' ? value.trim() : '';
@@ -45,9 +44,6 @@ export default async (request) => {
   const password = body && typeof body.password === 'string' ? body.password : '';
   const inviteCode =
     body && typeof body.inviteCode === 'string' ? body.inviteCode.trim() : '';
-  const areaId = body && typeof body.areaId === 'string' ? body.areaId.trim() : '';
-  const areaIdSecondary =
-    body && typeof body.areaIdSecondary === 'string' ? body.areaIdSecondary.trim() : '';
   const origin = body && typeof body.origin === 'string' ? body.origin.trim() : '';
   const consentAccepted = Boolean(body && body.consentAccepted === true);
 
@@ -73,21 +69,6 @@ export default async (request) => {
     return json({ error: 'Bitte der Datenspeicherung zustimmen.' }, 400);
   }
 
-  const areas = await listAreas();
-  const area = areas.find((entry) => entry.id === areaId && entry.active && entry.type === 'operational');
-  if (!area) {
-    return json({ error: 'Bitte einen gültigen Bereich wählen.' }, 400);
-  }
-  let areaSecondary = null;
-  if (areaIdSecondary) {
-    areaSecondary = areas.find(
-      (entry) => entry.id === areaIdSecondary && entry.active && entry.type === 'operational' && entry.id !== areaId
-    );
-    if (!areaSecondary) {
-      return json({ error: 'Ungültiger Zweitwunsch.' }, 400);
-    }
-  }
-
   const origins = await ensureOriginsSeeded();
   if (!origins.includes(origin)) {
     return json({ error: 'Bitte eine gültige Herkunft wählen.' }, 400);
@@ -99,14 +80,13 @@ export default async (request) => {
   }
 
   const now = new Date().toISOString();
-  const areaMemberships = [
-    { areaId: area.id, status: 'pending', isLeiter: false, requestedAt: now },
-  ];
-  if (areaSecondary) {
-    areaMemberships.push({ areaId: areaSecondary.id, status: 'pending', isLeiter: false, requestedAt: now });
-  }
-
   const name = `${firstName} ${lastName}`.trim();
+
+  // Admins (STAFF_ADMIN_EMAILS) schalten sich selbst frei, sonst koennte der allererste
+  // Admin von niemandem freigeschaltet werden. Alle anderen starten als 'pending' und
+  // brauchen eine explizite Admin-Bestaetigung, bevor ein Login moeglich ist.
+  const isAdmin = resolveRole({ email, role: 'staff' }) === 'admin';
+
   const draft = {
     firstName,
     lastName,
@@ -116,20 +96,23 @@ export default async (request) => {
     origin,
     consentAcceptedAt: now,
     consentVersion: '1',
-    areaMemberships,
+    areaMemberships: [],
+    accountStatus: isAdmin ? 'approved' : 'pending',
     role: 'staff',
     passwordHash: hashPassword(password),
     createdAt: now,
   };
-  const role = resolveRole(draft);
-  draft.role = role;
+  draft.role = resolveRole(draft);
 
   await saveUser(draft);
 
-  const token = signStaffToken(process.env.STAFF_JWT_SECRET, email, name, role);
-  return json({
-    token,
-    user: publicUser(draft),
-    expiresInSeconds: 8 * 3600,
-  });
+  if (!isAdmin) {
+    await notifyAdmins({
+      title: 'Neue Registrierung',
+      body: `${name} wartet auf Freischaltung.`,
+      url: '/mitarbeiter.html#admin-registrations',
+    });
+  }
+
+  return json({ ok: true, pending: !isAdmin });
 };

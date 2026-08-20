@@ -221,6 +221,135 @@ export function activeMembership(user, areaId) {
   );
 }
 
+export const MAX_LED_AREAS = 3;
+export const MAX_MEMBER_AREAS = 5;
+
+/**
+ * Setzt/entfernt die Bereichsleiter-Rolle einer Person fuer einen Bereich (inkl. Cap-Pruefung
+ * und aktiver Mitgliedschaft). Gemeinsam genutzt von staff-admin-set-area-leader.js (direkte
+ * Admin-Zuweisung) und staff-admin-leader-applications.js (Freigabe einer Selbstbewerbung),
+ * damit die 3-Bereiche-Grenze an genau einer Stelle geprueft wird.
+ */
+export async function grantAreaLeader(areaId, email, isLeiter, decidedBy) {
+  const area = await getArea(areaId);
+  if (!area) {
+    return { error: 'Bereich nicht gefunden.' };
+  }
+  const user = await getUser(email);
+  if (!user) {
+    return { error: 'Mitarbeiter nicht gefunden.' };
+  }
+
+  if (isLeiter) {
+    const ledElsewhere = (user.areaMemberships || []).filter(
+      (membership) => membership.isLeiter && membership.status === 'active' && membership.areaId !== areaId
+    ).length;
+    if (ledElsewhere >= MAX_LED_AREAS) {
+      return { error: `Diese Person leitet bereits ${MAX_LED_AREAS} Bereiche, das Maximum.` };
+    }
+  }
+
+  const now = new Date().toISOString();
+  const memberships = Array.isArray(user.areaMemberships) ? user.areaMemberships.slice() : [];
+  const idx = memberships.findIndex((membership) => membership.areaId === areaId);
+  if (idx >= 0) {
+    memberships[idx] = {
+      ...memberships[idx],
+      isLeiter,
+      status: 'active',
+      approvedAt: memberships[idx].approvedAt || now,
+      approvedBy: decidedBy,
+    };
+  } else {
+    memberships.push({
+      areaId,
+      status: 'active',
+      isLeiter,
+      requestedAt: now,
+      approvedAt: now,
+      approvedBy: decidedBy,
+    });
+  }
+  await saveUser({ ...user, areaMemberships: memberships });
+
+  const leaderEmails = new Set(area.leaderEmails || []);
+  if (isLeiter) {
+    leaderEmails.add(normalizeEmail(email));
+  } else {
+    leaderEmails.delete(normalizeEmail(email));
+  }
+  const updatedArea = { ...area, leaderEmails: [...leaderEmails], updatedAt: now };
+  await saveArea(updatedArea);
+
+  const index = await listAreas();
+  const indexIdx = index.findIndex((entry) => entry.id === areaId);
+  if (indexIdx >= 0) {
+    index[indexIdx] = areaSummary(updatedArea);
+    await saveAreasIndex(index);
+  }
+
+  return { area: updatedArea };
+}
+
+// Startliste aus dem Konzept (Kapitel 3), angelehnt an die bewaehrten Bereiche aus 2026.
+// Erweiterbar durch Admins ueber staff-admin-areas.js, das hier ist nur der Startzustand.
+export const DEFAULT_AREAS = [
+  { name: 'Getränke/Ausschank', phases: ['freitag', 'samstag'] },
+  { name: 'Essensstände', phases: ['freitag', 'samstag'] },
+  { name: 'Kuchenteam', phases: ['sonntag'] },
+  { name: 'Bühne/Technik/Sound', phases: ['aufbau', 'freitag', 'samstag', 'abbau'] },
+  { name: 'Security-Koordination', phases: ['freitag', 'samstag'] },
+  { name: 'Aufbau/Logistik', phases: ['aufbau', 'abbau'] },
+  { name: 'Camping', phases: ['freitag', 'samstag', 'sonntag'] },
+  { name: 'Kasse/Ticketing', phases: ['freitag', 'samstag'] },
+  { name: 'Sanitär/Reinigung', phases: ['freitag', 'samstag', 'sonntag', 'abbau'] },
+  { name: 'Presse/Social Media', phases: ['freitag', 'samstag', 'sonntag'] },
+  { name: 'Kinderprogramm', phases: ['sonntag'] },
+];
+
+const DEFAULT_PLANNING_AREA = { name: 'Sonntag – 50 Jahre Freibad', type: 'planning' };
+
+/**
+ * Ergaenzt fehlende Startlisten-Bereiche (per Namensabgleich), ohne bestehende
+ * Bereiche zu duplizieren oder zu veraendern. Idempotent, laeuft bei jedem Listing mit.
+ */
+export async function ensureAreasSeeded() {
+  const index = await listAreas();
+  const existingNames = new Set(index.map((area) => area.name));
+  const toCreate = DEFAULT_AREAS.filter((def) => !existingNames.has(def.name));
+  if (!existingNames.has(DEFAULT_PLANNING_AREA.name)) {
+    toCreate.push(DEFAULT_PLANNING_AREA);
+  }
+  if (!toCreate.length) {
+    return index;
+  }
+
+  let nextIndex = index;
+  for (const def of toCreate) {
+    const slug = await uniqueAreaSlug(def.name, nextIndex);
+    const now = new Date().toISOString();
+    const area = {
+      id: `${Date.now()}-${randomBytes(3).toString('hex')}`,
+      name: def.name,
+      slug,
+      active: true,
+      type: def.type || 'operational',
+      phases: def.type === 'planning' ? [] : def.phases || [],
+      parentPlanningAreaId: null,
+      leaderEmails: [],
+      description: '',
+      knowledgeBase: '',
+      extraFieldDefs: [],
+      createdAt: now,
+      updatedAt: now,
+    };
+    await saveArea(area);
+    nextIndex = [...nextIndex, areaSummary(area)];
+  }
+  await saveAreasIndex(nextIndex);
+  return nextIndex;
+}
+
 export async function requireAreaLeiter(request, areaId) {
   const result = await requireStaffUser(request);
   if (result.error) {

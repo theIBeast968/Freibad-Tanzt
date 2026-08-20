@@ -1,5 +1,5 @@
 import webpush from 'web-push';
-import { staffStore } from './staff-auth.js';
+import { normalizeEmail, staffStore } from './staff-auth.js';
 
 let configured = false;
 
@@ -67,6 +67,54 @@ export async function notifyChannel(channel, payload, excludeEmail) {
       }
       return false;
     });
+    await Promise.all(targets.map((sub) => sendToSubscription(sub, payload)));
+  } catch (err) {
+    // Push ist ein Zusatzfeature, darf den eigentlichen Request nie kippen.
+  }
+}
+
+function adminEmailSet() {
+  return new Set(
+    String(process.env.STAFF_ADMIN_EMAILS || '')
+      .split(',')
+      .map((entry) => normalizeEmail(entry))
+      .filter(Boolean)
+  );
+}
+
+/**
+ * Direkte Benachrichtigung an alle drei Admins, unabhaengig von Kanal-Praeferenzen
+ * (kein Opt-in-Kanal, Admins sollen neue Registrierungen/Bewerbungen immer mitbekommen).
+ */
+export async function notifyAdmins(payload) {
+  if (!ensureConfigured()) {
+    return;
+  }
+  try {
+    const admins = adminEmailSet();
+    if (!admins.size) {
+      return;
+    }
+    const subs = await readSubscriptions();
+    const targets = subs.filter((sub) => admins.has(normalizeEmail(sub.email)));
+    await Promise.all(targets.map((sub) => sendToSubscription(sub, payload)));
+  } catch (err) {
+    // Push ist ein Zusatzfeature, darf den eigentlichen Request nie kippen.
+  }
+}
+
+/**
+ * Direkte Benachrichtigung an genau eine Person (z. B. Ergebnis einer Freischaltung
+ * oder Warteliste-Entscheidung), unabhaengig von Kanal-Praeferenzen.
+ */
+export async function notifyUser(email, payload) {
+  if (!ensureConfigured()) {
+    return;
+  }
+  try {
+    const target = normalizeEmail(email);
+    const subs = await readSubscriptions();
+    const targets = subs.filter((sub) => normalizeEmail(sub.email) === target);
     await Promise.all(targets.map((sub) => sendToSubscription(sub, payload)));
   } catch (err) {
     // Push ist ein Zusatzfeature, darf den eigentlichen Request nie kippen.

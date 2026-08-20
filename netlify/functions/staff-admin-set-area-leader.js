@@ -1,16 +1,5 @@
-import {
-  areaSummary,
-  getArea,
-  getUser,
-  isValidEmail,
-  json,
-  listAreas,
-  normalizeEmail,
-  requireAdmin,
-  saveArea,
-  saveAreasIndex,
-  saveUser,
-} from './lib/staff-auth.js';
+import { grantAreaLeader, isValidEmail, json, normalizeEmail, requireAdmin } from './lib/staff-auth.js';
+import { notifyUser } from './lib/push-send.js';
 
 export default async (request) => {
   if (request.method !== 'POST') {
@@ -37,53 +26,18 @@ export default async (request) => {
     return json({ error: 'Bereich und E-Mail erforderlich.' }, 400);
   }
 
-  const area = await getArea(areaId);
-  if (!area) {
-    return json({ error: 'Bereich nicht gefunden.' }, 404);
-  }
-  const user = await getUser(email);
-  if (!user) {
-    return json({ error: 'Mitarbeiter nicht gefunden.' }, 404);
+  const result = await grantAreaLeader(areaId, email, isLeiter, auth.user.email);
+  if (result.error) {
+    return json({ error: result.error }, result.error.includes('nicht gefunden') ? 404 : 400);
   }
 
-  const now = new Date().toISOString();
-  const memberships = Array.isArray(user.areaMemberships) ? user.areaMemberships.slice() : [];
-  const idx = memberships.findIndex((membership) => membership.areaId === areaId);
-  if (idx >= 0) {
-    memberships[idx] = {
-      ...memberships[idx],
-      isLeiter,
-      status: 'active',
-      approvedAt: memberships[idx].approvedAt || now,
-      approvedBy: auth.user.email,
-    };
-  } else {
-    memberships.push({
-      areaId,
-      status: 'active',
-      isLeiter,
-      requestedAt: now,
-      approvedAt: now,
-      approvedBy: auth.user.email,
+  if (isLeiter) {
+    await notifyUser(email, {
+      title: 'Bereichsleiter-Freigabe',
+      body: `Du bist jetzt Bereichsleiter für ${result.area.name}.`,
+      url: '/mitarbeiter.html#mein-bereich',
     });
   }
-  await saveUser({ ...user, areaMemberships: memberships });
 
-  const leaderEmails = new Set(area.leaderEmails || []);
-  if (isLeiter) {
-    leaderEmails.add(email);
-  } else {
-    leaderEmails.delete(email);
-  }
-  const updatedArea = { ...area, leaderEmails: [...leaderEmails], updatedAt: now };
-  await saveArea(updatedArea);
-
-  const index = await listAreas();
-  const indexIdx = index.findIndex((entry) => entry.id === areaId);
-  if (indexIdx >= 0) {
-    index[indexIdx] = areaSummary(updatedArea);
-    await saveAreasIndex(index);
-  }
-
-  return json({ ok: true, area: updatedArea, email, isLeiter });
+  return json({ ok: true, area: result.area, email, isLeiter });
 };

@@ -9,6 +9,8 @@ import { loadOriginReport } from './views/privacy-ops.js';
 import { loadGlobalDashboard } from './views/dashboard-global.js';
 import { loadMyTasks } from './views/my-tasks.js';
 import { loadPushSettings } from './views/push.js';
+import { loadLeaderApplications, loadRegistrations } from './views/admin-registrations.js';
+import { loadAreaActionOptions } from './views/area-actions.js';
 
 var authView = document.getElementById('authView');
 var appView = document.getElementById('appView');
@@ -55,6 +57,8 @@ export async function showApp(user) {
     loadAdminChat();
     startAdminChatPolling();
     loadOriginReport();
+    loadRegistrations();
+    loadLeaderApplications();
   } else {
     adminView.classList.add('hidden');
     tocAdmin.classList.add('hidden');
@@ -71,6 +75,7 @@ export async function showApp(user) {
   loadMyAreas();
   loadWorkAreas();
   loadPushSettings();
+  loadAreaActionOptions();
 }
 
 export async function loadMe() {

@@ -1,5 +1,17 @@
 import { randomBytes } from 'node:crypto';
-import { json, normalizeEmail, requireAreaLeiter, requireAreaMember, staffStore } from './lib/staff-auth.js';
+import {
+  MAX_MEMBER_AREAS,
+  activeMembership,
+  getUser,
+  json,
+  normalizeEmail,
+  requireAreaLeiter,
+  requireAreaMember,
+  requireStaffUser,
+  saveUser,
+  staffStore,
+} from './lib/staff-auth.js';
+import { notifyUser } from './lib/push-send.js';
 
 const ALLOWED_PHASES = new Set(['aufbau', 'freitag', 'samstag', 'sonntag', 'abbau']);
 
@@ -45,6 +57,25 @@ function sanitizeExtraFields(raw) {
   return extraFields;
 }
 
+async function grantMembershipIfNeeded(user, areaId) {
+  if (activeMembership(user, areaId)) {
+    return { ok: true };
+  }
+  const memberships = Array.isArray(user.areaMemberships) ? user.areaMemberships.slice() : [];
+  if (memberships.length >= MAX_MEMBER_AREAS) {
+    return { error: `Du kannst maximal ${MAX_MEMBER_AREAS} Bereichen zugeordnet sein.` };
+  }
+  const now = new Date().toISOString();
+  const idx = memberships.findIndex((membership) => membership.areaId === areaId);
+  if (idx >= 0) {
+    memberships[idx] = { ...memberships[idx], status: 'active', approvedAt: now, approvedBy: 'auto' };
+  } else {
+    memberships.push({ areaId, status: 'active', isLeiter: false, requestedAt: now, approvedAt: now, approvedBy: 'auto' });
+  }
+  await saveUser({ ...user, areaMemberships: memberships });
+  return { ok: true };
+}
+
 export default async (request) => {
   if (request.method !== 'POST') {
     return json({ error: 'Method not allowed' }, 405);
@@ -64,8 +95,32 @@ export default async (request) => {
     return json({ error: 'Bereich fehlt.' }, 400);
   }
 
-  if (action === 'signup' || action === 'cancel') {
+  if (action === 'cancel') {
     const auth = await requireAreaMember(request, areaId);
+    if (auth.error) {
+      return auth.error;
+    }
+    const shiftId = body && typeof body.id === 'string' ? body.id : '';
+    const shifts = await readAreaShifts(areaId);
+    const idx = shifts.findIndex((shift) => shift.id === shiftId);
+    if (idx < 0) {
+      return json({ error: 'Schicht nicht gefunden.' }, 404);
+    }
+    const email = normalizeEmail(auth.user.email);
+    const shift = shifts[idx];
+    shift.assignments = (shift.assignments || []).filter((assignment) => normalizeEmail(assignment.email) !== email);
+    shift.waitlist = (shift.waitlist || []).filter((entry) => normalizeEmail(entry.email) !== email);
+    shift.updatedAt = new Date().toISOString();
+    shifts[idx] = shift;
+    await writeAreaShifts(areaId, shifts);
+    return json({ ok: true, shift, shifts });
+  }
+
+  if (action === 'signup') {
+    // Bewusst requireStaffUser statt requireAreaMember: eine Schicht-Bewerbung ist jetzt
+    // auch fuer Bereiche moeglich, in denen man noch kein Mitglied ist (Mitgliedschaft
+    // entsteht als Nebenwirkung einer erfolgreichen Zusage, siehe Phase 10 im Plan).
+    const auth = await requireStaffUser(request);
     if (auth.error) {
       return auth.error;
     }
@@ -79,37 +134,92 @@ export default async (request) => {
     const shift = shifts[idx];
     const email = normalizeEmail(auth.user.email);
 
-    if (action === 'cancel') {
-      shift.assignments = (shift.assignments || []).filter(
-        (assignment) => normalizeEmail(assignment.email) !== email
-      );
-    } else {
-      const already = (shift.assignments || []).some(
-        (assignment) => normalizeEmail(assignment.email) === email
-      );
-      if (already) {
-        return json({ error: 'Du bist bereits eingetragen.' }, 400);
-      }
-      if ((shift.assignments || []).length >= shift.neededCount) {
-        return json({ error: 'Schicht ist bereits voll.' }, 400);
-      }
-      const note = body && typeof body.note === 'string' ? body.note.trim().slice(0, 300) : '';
-      const phone =
-        body && typeof body.phone === 'string' ? body.phone.trim().slice(0, 40) : auth.user.phone || '';
+    if ((shift.assignments || []).some((assignment) => normalizeEmail(assignment.email) === email)) {
+      return json({ error: 'Du bist bereits eingetragen.' }, 400);
+    }
+    if ((shift.waitlist || []).some((entry) => normalizeEmail(entry.email) === email)) {
+      return json({ error: 'Deine Anfrage für diese Schicht ist bereits gestellt.' }, 400);
+    }
+
+    const hasMembership = Boolean(activeMembership(auth.user, areaId));
+    if (!hasMembership && (auth.user.areaMemberships || []).length >= MAX_MEMBER_AREAS) {
+      return json({ error: `Du kannst maximal ${MAX_MEMBER_AREAS} Bereichen zugeordnet sein.` }, 400);
+    }
+
+    const note = body && typeof body.note === 'string' ? body.note.trim().slice(0, 300) : '';
+    const phone =
+      body && typeof body.phone === 'string' ? body.phone.trim().slice(0, 40) : auth.user.phone || '';
+    const now = new Date().toISOString();
+    const hasRoom = (shift.assignments || []).length < shift.neededCount;
+
+    if (hasRoom) {
       shift.assignments = [
         ...(shift.assignments || []),
-        {
-          email,
-          name: auth.user.name || email,
-          phone,
-          note,
-          assignedAt: new Date().toISOString(),
-        },
+        { email, name: auth.user.name || email, phone, note, assignedAt: now },
+      ];
+      if (!hasMembership) {
+        await grantMembershipIfNeeded(auth.user, areaId);
+      }
+    } else {
+      shift.waitlist = [
+        ...(shift.waitlist || []),
+        { email, name: auth.user.name || email, phone, note, requestedAt: now },
+      ].slice(-100);
+    }
+    shift.updatedAt = now;
+    shifts[idx] = shift;
+    await writeAreaShifts(areaId, shifts);
+    return json({ ok: true, waitlisted: !hasRoom, shift, shifts });
+  }
+
+  if (action === 'approve-waitlist' || action === 'reject-waitlist') {
+    const auth = await requireAreaLeiter(request, areaId);
+    if (auth.error) {
+      return auth.error;
+    }
+    const shiftId = body && typeof body.id === 'string' ? body.id : '';
+    const targetEmail = normalizeEmail(body && body.email);
+    const shifts = await readAreaShifts(areaId);
+    const idx = shifts.findIndex((shift) => shift.id === shiftId);
+    if (idx < 0) {
+      return json({ error: 'Schicht nicht gefunden.' }, 404);
+    }
+    const shift = shifts[idx];
+    const wIdx = (shift.waitlist || []).findIndex((entry) => normalizeEmail(entry.email) === targetEmail);
+    if (wIdx < 0) {
+      return json({ error: 'Anfrage nicht gefunden.' }, 404);
+    }
+    const entry = shift.waitlist[wIdx];
+
+    if (action === 'approve-waitlist') {
+      const targetUser = await getUser(targetEmail);
+      if (!targetUser) {
+        return json({ error: 'Mitarbeiter nicht gefunden.' }, 404);
+      }
+      const membershipResult = await grantMembershipIfNeeded(targetUser, areaId);
+      if (membershipResult.error) {
+        return json({ error: membershipResult.error }, 400);
+      }
+      shift.assignments = [
+        ...(shift.assignments || []),
+        { email: entry.email, name: entry.name, phone: entry.phone, note: entry.note, assignedAt: new Date().toISOString() },
       ];
     }
+
+    shift.waitlist = (shift.waitlist || []).filter((_, i) => i !== wIdx);
     shift.updatedAt = new Date().toISOString();
     shifts[idx] = shift;
     await writeAreaShifts(areaId, shifts);
+
+    await notifyUser(targetEmail, {
+      title: action === 'approve-waitlist' ? 'Schicht bestätigt' : 'Schicht-Anfrage abgelehnt',
+      body:
+        action === 'approve-waitlist'
+          ? `Du bist jetzt für "${shift.station}" eingetragen.`
+          : `Deine Anfrage für "${shift.station}" wurde abgelehnt.`,
+      url: '/mitarbeiter.html#mein-bereich',
+    });
+
     return json({ ok: true, shift, shifts });
   }
 
@@ -171,6 +281,7 @@ export default async (request) => {
       station,
       neededCount,
       assignments: [],
+      waitlist: [],
       extraFields,
       createdAt: now,
       updatedAt: now,

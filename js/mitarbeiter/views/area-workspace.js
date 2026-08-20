@@ -99,9 +99,16 @@ function setSubTab(which) {
   dashboardSection.classList.toggle('hidden', which !== 'dashboard');
   shiftsSection.classList.toggle('hidden', which !== 'shifts');
   chatSection.classList.toggle('hidden', which !== 'chat');
+  var area = currentArea();
   if (which === 'chat') {
-    loadChat();
-    startChatPolling();
+    if (area && area.isMember) {
+      loadChat();
+      startChatPolling();
+    } else {
+      stopChatPolling();
+      document.getElementById('chatMessageList').innerHTML =
+        '<li>Chat erst nach Beitritt bzw. Schicht-Zusage in diesem Bereich sichtbar.</li>';
+    }
   } else {
     stopChatPolling();
   }
@@ -246,17 +253,39 @@ function renderShiftSlots(shifts) {
     var actions = document.createElement('div');
     actions.className = 'actions';
 
-    var alreadyIn = currentUser && (shift.assignments || []).some(function (a) { return a.email === currentUser.email; });
+    var myAssignment = currentUser && (shift.assignments || []).find(function (a) { return a.email === currentUser.email; });
+    var myWaitlistEntry = currentUser && (shift.waitlist || []).find(function (w) { return w.email === currentUser.email; });
     var isLeiter = Boolean(area && area.isLeiter);
 
     if (!isLeiter) {
-      var btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = alreadyIn ? 'button-secondary mini-btn' : 'button-primary mini-btn';
-      btn.textContent = alreadyIn ? 'Austragen' : 'Eintragen';
-      btn.disabled = !alreadyIn && (shift.assignments || []).length >= shift.neededCount;
-      btn.addEventListener('click', function () { signupOrCancel(shift, alreadyIn ? 'cancel' : 'signup'); });
-      actions.appendChild(btn);
+      if (myAssignment) {
+        var cancelBtn = document.createElement('button');
+        cancelBtn.type = 'button';
+        cancelBtn.className = 'button-secondary mini-btn';
+        cancelBtn.textContent = 'Austragen';
+        cancelBtn.addEventListener('click', function () { signupOrCancel(shift, 'cancel'); });
+        actions.appendChild(cancelBtn);
+      } else if (myWaitlistEntry) {
+        var pendingNote = document.createElement('span');
+        pendingNote.className = 'sub';
+        pendingNote.style.margin = '0';
+        pendingNote.textContent = 'Anfrage wartet auf Bereichsleitung.';
+        actions.appendChild(pendingNote);
+
+        var withdrawBtn = document.createElement('button');
+        withdrawBtn.type = 'button';
+        withdrawBtn.className = 'button-secondary mini-btn';
+        withdrawBtn.textContent = 'Zurückziehen';
+        withdrawBtn.addEventListener('click', function () { signupOrCancel(shift, 'cancel'); });
+        actions.appendChild(withdrawBtn);
+      } else {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'button-primary mini-btn';
+        btn.textContent = 'Eintragen';
+        btn.addEventListener('click', function () { signupOrCancel(shift, 'signup'); });
+        actions.appendChild(btn);
+      }
     } else {
       var editBtn = document.createElement('button');
       editBtn.type = 'button';
@@ -274,6 +303,46 @@ function renderShiftSlots(shifts) {
     }
 
     li.appendChild(actions);
+
+    if (isLeiter && (shift.waitlist || []).length) {
+      var waitlistWrap = document.createElement('div');
+      waitlistWrap.style.marginTop = '0.5rem';
+      waitlistWrap.style.paddingTop = '0.5rem';
+      waitlistWrap.style.borderTop = '1px solid rgba(255,255,255,0.08)';
+      var waitlistTitle = document.createElement('p');
+      waitlistTitle.className = 'sub';
+      waitlistTitle.style.margin = '0 0 0.35rem';
+      waitlistTitle.textContent = 'Warteliste (' + shift.waitlist.length + '):';
+      waitlistWrap.appendChild(waitlistTitle);
+
+      shift.waitlist.forEach(function (entry) {
+        var row = document.createElement('div');
+        row.className = 'actions';
+        row.style.marginTop = '0.3rem';
+        var label = document.createElement('span');
+        label.textContent = entry.name + (entry.phone ? (' · ' + entry.phone) : '');
+        row.appendChild(label);
+
+        var approveBtn = document.createElement('button');
+        approveBtn.type = 'button';
+        approveBtn.className = 'button-primary mini-btn';
+        approveBtn.textContent = 'Annehmen';
+        approveBtn.addEventListener('click', function () { decideWaitlist(shift, entry.email, 'approve-waitlist'); });
+        row.appendChild(approveBtn);
+
+        var rejectBtn = document.createElement('button');
+        rejectBtn.type = 'button';
+        rejectBtn.className = 'button-secondary mini-btn';
+        rejectBtn.textContent = 'Ablehnen';
+        rejectBtn.addEventListener('click', function () { decideWaitlist(shift, entry.email, 'reject-waitlist'); });
+        row.appendChild(rejectBtn);
+
+        waitlistWrap.appendChild(row);
+      });
+
+      li.appendChild(waitlistWrap);
+    }
+
     list.appendChild(li);
   });
 }
@@ -298,15 +367,41 @@ async function loadAreaShifts() {
 }
 
 async function signupOrCancel(shift, action) {
+  var err = document.getElementById('workAreaErr');
+  showErr(err, '');
   try {
-    await api('staff-shift', {
+    var data = await api('staff-shift', {
       method: 'POST',
       headers: authHeaders({ 'Content-Type': 'application/json' }),
       body: JSON.stringify({ areaId: currentAreaId, id: shift.id, action: action })
     });
+    if (action === 'signup' && data.waitlisted) {
+      err.classList.remove('err');
+      err.classList.add('ok');
+      err.textContent = 'Schicht ist voll — Anfrage an die Bereichsleitung gesendet.';
+      err.classList.remove('hidden');
+    }
+    await loadAreaShifts();
+    await loadWorkAreas();
+  } catch (e) {
+    err.classList.remove('ok');
+    err.classList.add('err');
+    showErr(err, e.message || 'Aktion fehlgeschlagen.');
+  }
+}
+
+async function decideWaitlist(shift, email, action) {
+  var err = document.getElementById('workAreaErr');
+  showErr(err, '');
+  try {
+    await api('staff-shift', {
+      method: 'POST',
+      headers: authHeaders({ 'Content-Type': 'application/json' }),
+      body: JSON.stringify({ areaId: currentAreaId, id: shift.id, email: email, action: action })
+    });
     await loadAreaShifts();
   } catch (e) {
-    showErr(document.getElementById('workAreaErr'), e.message || 'Aktion fehlgeschlagen.');
+    showErr(err, e.message || 'Aktion fehlgeschlagen.');
   }
 }
 
@@ -445,6 +540,11 @@ async function loadAreaDashboard() {
   if (!currentAreaId) return;
   var area = currentArea();
   postFormWrap.classList.toggle('hidden', !(area && area.isLeiter));
+  if (!area || !area.isMember) {
+    document.getElementById('areaPostList').innerHTML =
+      '<p class="sub">Dashboard erst nach Beitritt bzw. Schicht-Zusage in diesem Bereich sichtbar. Wechsle zum Schichtplan, um dich einzutragen.</p>';
+    return;
+  }
   try {
     var data = await api('staff-dashboard-area?areaId=' + encodeURIComponent(currentAreaId), { headers: authHeaders() });
     renderAreaPosts(data.posts || []);
@@ -506,8 +606,13 @@ function switchArea(areaId) {
   loadAreaDashboard();
   loadAreaShifts();
   if (!chatSection.classList.contains('hidden')) {
-    loadChat();
-    startChatPolling();
+    if (area && area.isMember) {
+      loadChat();
+      startChatPolling();
+    } else {
+      document.getElementById('chatMessageList').innerHTML =
+        '<li>Chat erst nach Beitritt bzw. Schicht-Zusage in diesem Bereich sichtbar.</li>';
+    }
   }
 }
 
@@ -525,19 +630,23 @@ export async function loadWorkAreas() {
 
   try {
     var areasData = await api('staff-admin-areas', { headers: authHeaders() });
-    var allAreas = areasData.areas || [];
+    var allAreas = (areasData.areas || []).filter(function (a) { return a.active; });
     allAreasCache = allAreas;
 
+    // Alle aktiven Bereiche sind grundsaetzlich sichtbar/waehlbar (Schichtplan-Browsing
+    // auch ohne bestehende Mitgliedschaft, siehe Phase 10). isMember/isLeiter steuern nur,
+    // ob Dashboard/Chat und die Leiter-Werkzeuge freigeschaltet sind.
     if (currentUser.role === 'admin') {
-      myAreas = allAreas.map(function (a) { return Object.assign({}, a, { isLeiter: true }); });
+      myAreas = allAreas.map(function (a) { return Object.assign({}, a, { isLeiter: true, isMember: true }); });
     } else {
-      var memberships = (currentUser.areaMemberships || []).filter(function (m) { return m.status === 'active'; });
-      myAreas = memberships
-        .map(function (m) {
-          var area = allAreas.find(function (a) { return a.id === m.areaId; });
-          return area ? Object.assign({}, area, { isLeiter: Boolean(m.isLeiter) }) : null;
-        })
-        .filter(Boolean);
+      var memberships = currentUser.areaMemberships || [];
+      myAreas = allAreas.map(function (a) {
+        var membership = memberships.find(function (m) { return m.areaId === a.id && m.status === 'active'; });
+        return Object.assign({}, a, {
+          isLeiter: Boolean(membership && membership.isLeiter),
+          isMember: Boolean(membership)
+        });
+      });
     }
 
     if (!myAreas.length) {
@@ -554,7 +663,7 @@ export async function loadWorkAreas() {
     myAreas.forEach(function (area) {
       var opt = document.createElement('option');
       opt.value = area.id;
-      opt.textContent = area.name + (area.isLeiter ? ' (Leitung)' : '');
+      opt.textContent = area.name + (area.isLeiter ? ' (Leitung)' : area.isMember ? ' (Mitglied)' : '');
       areaSelect.appendChild(opt);
     });
     var toSelect = myAreas.some(function (a) { return a.id === selected; }) ? selected : myAreas[0].id;

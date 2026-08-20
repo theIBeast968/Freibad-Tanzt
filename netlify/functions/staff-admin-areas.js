@@ -1,6 +1,7 @@
 import { randomBytes } from 'node:crypto';
 import {
   areaSummary,
+  ensureAreasSeeded,
   json,
   listAreas,
   requireAdmin,
@@ -18,7 +19,7 @@ export default async (request) => {
     if (auth.error) {
       return auth.error;
     }
-    return json({ areas: await listAreas() });
+    return json({ areas: await ensureAreasSeeded() });
   }
 
   if (request.method !== 'POST') {
