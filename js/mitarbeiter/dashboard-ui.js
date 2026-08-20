@@ -26,6 +26,7 @@ export function renderPostCard(post, currentUserEmail, handlers) {
   if (post.body) {
     var bodyP = document.createElement('p');
     bodyP.style.margin = '0 0 0.5rem';
+    bodyP.style.whiteSpace = 'pre-wrap';
     bodyP.textContent = post.body;
     li.appendChild(bodyP);
   }

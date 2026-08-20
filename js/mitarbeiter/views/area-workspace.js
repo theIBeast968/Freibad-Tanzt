@@ -554,8 +554,17 @@ async function loadAreaDashboard() {
   }
 }
 
+var areaPostSubmitBtn = postForm.querySelector('button[type="submit"]');
+var areaPostSubmitting = false;
+
 postForm.addEventListener('submit', async function (event) {
   event.preventDefault();
+  if (areaPostSubmitting) return;
+  areaPostSubmitting = true;
+  areaPostSubmitBtn.disabled = true;
+  var originalPostLabel = areaPostSubmitBtn.textContent;
+  areaPostSubmitBtn.textContent = 'Wird veröffentlicht …';
+
   var err = document.getElementById('areaPostErr');
   var ok = document.getElementById('areaPostOk');
   showErr(err, '');
@@ -598,6 +607,10 @@ postForm.addEventListener('submit', async function (event) {
     await loadAreaDashboard();
   } catch (e) {
     showErr(err, e.message || 'Konnte nicht veröffentlicht werden.');
+  } finally {
+    areaPostSubmitting = false;
+    areaPostSubmitBtn.disabled = false;
+    areaPostSubmitBtn.textContent = originalPostLabel;
   }
 });
 

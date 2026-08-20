@@ -169,6 +169,19 @@
       font-size: 1rem;
     }
 
+    textarea {
+      width: 100%;
+      padding: 0.75rem 0.9rem;
+      border-radius: 0.7rem;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+      background: rgba(0, 0, 0, 0.35);
+      color: var(--text);
+      font: inherit;
+      font-size: 1rem;
+      resize: vertical;
+      min-height: 4.5rem;
+    }
+
     input:focus {
       outline: 2px solid rgba(255, 183, 3, 0.45);
       outline-offset: 1px;
@@ -507,7 +520,7 @@
             <input id="globalPostTitle" type="text" required minlength="3" maxlength="160">
 
             <label for="globalPostBody">Text</label>
-            <input id="globalPostBody" type="text" maxlength="4000" placeholder="Details (optional)">
+            <textarea id="globalPostBody" maxlength="4000" rows="4" placeholder="Details (optional)"></textarea>
 
             <div id="globalPollOptionsWrap" class="hidden">
               <label for="globalPollOptions">Umfrage-Optionen</label>
@@ -812,7 +825,7 @@
               <input id="areaPostTitle" type="text" required minlength="3" maxlength="160">
 
               <label for="areaPostBody">Text</label>
-              <input id="areaPostBody" type="text" maxlength="4000" placeholder="Details (optional)">
+              <textarea id="areaPostBody" maxlength="4000" rows="4" placeholder="Details (optional)"></textarea>
 
               <div id="areaPollOptionsWrap" class="hidden">
                 <label for="areaPollOptions">Umfrage-Optionen</label>

@@ -68,8 +68,17 @@ export async function loadGlobalDashboard() {
   }
 }
 
+var globalSubmitBtn = form.querySelector('button[type="submit"]');
+var globalSubmitting = false;
+
 form.addEventListener('submit', async function (event) {
   event.preventDefault();
+  if (globalSubmitting) return;
+  globalSubmitting = true;
+  globalSubmitBtn.disabled = true;
+  var originalLabel = globalSubmitBtn.textContent;
+  globalSubmitBtn.textContent = 'Wird veröffentlicht …';
+
   var err = document.getElementById('globalPostErr');
   var ok = document.getElementById('globalPostOk');
   showErr(err, '');
@@ -104,5 +113,9 @@ form.addEventListener('submit', async function (event) {
     await loadGlobalDashboard();
   } catch (e) {
     showErr(err, e.message || 'Konnte nicht veröffentlicht werden.');
+  } finally {
+    globalSubmitting = false;
+    globalSubmitBtn.disabled = false;
+    globalSubmitBtn.textContent = originalLabel;
   }
 });
