@@ -359,6 +359,27 @@
       font-size: 0.78rem;
       border-radius: 0.55rem;
     }
+
+    input[type="checkbox"] {
+      width: auto;
+      padding: 0;
+    }
+
+    .check-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      margin: 0.5rem 0 0;
+    }
+
+    .check-list label {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      margin: 0;
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
   </style>
 </head>
 <body>
@@ -459,10 +480,89 @@
           <h3>Admin · Übersicht <span class="badge">Chef</span></h3>
           <p>Mitarbeiter, Schichten und Aufgaben verwalten.</p>
           <div class="toc">
+            <a href="#admin-areas">Bereiche</a>
+            <a href="#admin-area-leaders">Bereichsleiter</a>
             <a href="#admin-users">Mitarbeiter</a>
             <a href="#admin-shifts">Schichtmeldungen</a>
             <a href="#admin-tasks">Aufgaben vergeben</a>
           </div>
+        </div>
+
+        <div class="panel card" id="admin-areas">
+          <h3>Bereiche</h3>
+          <p>Bereiche für die dezentrale Organisation anlegen und pflegen.</p>
+          <form id="areaForm">
+            <input type="hidden" id="areaId" value="">
+            <label for="areaName">Name</label>
+            <input id="areaName" type="text" required minlength="2" maxlength="80" placeholder="z. B. Getränke/Ausschank">
+
+            <label for="areaType">Typ</label>
+            <select id="areaType">
+              <option value="operational">Operativer Bereich</option>
+              <option value="planning">Planungsbereich (z. B. Sonntag – 50 Jahre)</option>
+            </select>
+
+            <label>Phasen</label>
+            <div class="check-list" id="areaPhases">
+              <label><input type="checkbox" value="aufbau"> Aufbau</label>
+              <label><input type="checkbox" value="freitag"> Freitag</label>
+              <label><input type="checkbox" value="samstag"> Samstag</label>
+              <label><input type="checkbox" value="sonntag"> Sonntag</label>
+              <label><input type="checkbox" value="abbau"> Abbau</label>
+            </div>
+
+            <label for="areaDescription">Beschreibung (optional)</label>
+            <input id="areaDescription" type="text" maxlength="2000" placeholder="Kurzbeschreibung für den Bereich">
+
+            <div class="actions">
+              <button class="button-primary" type="submit" id="areaSubmitBtn">Bereich anlegen</button>
+              <button class="button-secondary" type="button" id="areaCancelEdit" hidden>Abbrechen</button>
+            </div>
+            <p id="areaErr" class="err hidden"></p>
+            <p id="areaOk" class="ok hidden"></p>
+          </form>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Typ</th>
+                  <th>Phasen</th>
+                  <th>Status</th>
+                  <th>Leiter</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="adminAreasBody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="panel card" id="admin-area-leaders">
+          <h3>Bereichsleiter zuweisen</h3>
+          <p>Legt fest, wer welchen Bereich eigenständig leiten darf.</p>
+          <form id="areaLeaderForm">
+            <label for="leaderArea">Bereich</label>
+            <select id="leaderArea" required>
+              <option value="">Bitte wählen</option>
+            </select>
+
+            <label for="leaderEmail">Mitarbeiter</label>
+            <select id="leaderEmail" required>
+              <option value="">Bitte wählen</option>
+            </select>
+
+            <div class="check-list">
+              <label><input type="checkbox" id="leaderIsLeiter" checked> Als Bereichsleiter setzen (abwählen zum Entziehen)</label>
+            </div>
+
+            <div class="actions">
+              <button class="button-primary" type="submit">Zuweisen</button>
+            </div>
+            <p id="areaLeaderErr" class="err hidden"></p>
+            <p id="areaLeaderOk" class="ok hidden"></p>
+          </form>
         </div>
 
         <div class="panel card" id="admin-users">

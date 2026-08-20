@@ -1,8 +1,9 @@
-import { api, token, clearToken } from './api.js';
+import { api, authHeaders, token, clearToken } from './api.js';
 import { setCurrentUser } from './state.js';
 import { loadShifts } from './views/shifts.js';
 import { loadTasks } from './views/tasks.js';
 import { loadAdmin } from './views/admin.js';
+import { loadAreasAdmin } from './views/areas.js';
 
 var authView = document.getElementById('authView');
 var appView = document.getElementById('appView');
@@ -12,20 +13,38 @@ export function showAuth() {
   authView.classList.remove('hidden');
 }
 
-export function showApp(user) {
+async function roleLabel(user) {
+  if (user.role === 'admin') return 'Admin';
+  var leaderMemberships = (user.areaMemberships || []).filter(function (m) {
+    return m.isLeiter && m.status === 'active';
+  });
+  if (!leaderMemberships.length) return 'Helfer';
+  try {
+    var data = await api('staff-admin-areas', { headers: authHeaders() });
+    var byId = {};
+    (data.areas || []).forEach(function (a) { byId[a.id] = a.name; });
+    var names = leaderMemberships.map(function (m) { return byId[m.areaId] || m.areaId; });
+    return 'Bereichsleiter (' + names.join(', ') + ')';
+  } catch (e) {
+    return 'Bereichsleiter';
+  }
+}
+
+export async function showApp(user) {
   setCurrentUser(user);
   authView.classList.add('hidden');
   appView.classList.remove('hidden');
   document.getElementById('welcomeTitle').textContent = 'Hallo, ' + (user.firstName || user.name || 'Team');
+  var label = await roleLabel(user);
   document.getElementById('userEmail').textContent =
-    (user.email || '') + (user.phone ? (' · ' + user.phone) : '') +
-    (user.role === 'admin' ? ' · Admin' : '');
+    (user.email || '') + (user.phone ? (' · ' + user.phone) : '') + ' · ' + label;
   var adminView = document.getElementById('adminView');
   var tocAdmin = document.getElementById('tocAdmin');
   if (user.role === 'admin') {
     adminView.classList.remove('hidden');
     tocAdmin.classList.remove('hidden');
     loadAdmin();
+    loadAreasAdmin();
   } else {
     adminView.classList.add('hidden');
     tocAdmin.classList.add('hidden');

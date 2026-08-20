@@ -92,6 +92,7 @@ export function publicUser(user) {
     lastName: user.lastName || null,
     phone: user.phone || null,
     role: resolveRole(user),
+    areaMemberships: Array.isArray(user.areaMemberships) ? user.areaMemberships : [],
     createdAt: user.createdAt || null,
   };
 }
@@ -152,4 +153,76 @@ export function staffConfigOk() {
       invite &&
       invite.length >= 6
   );
+}
+
+// --- Bereiche (Areas) ---
+// Key-Konvention: areaKey(id) = Vollobjekt, 'areas-index' = Array von Kurzobjekten (siehe CLAUDE.md).
+
+export function areaKey(id) {
+  return `area-${id}`;
+}
+
+export async function getArea(id) {
+  if (!id) return null;
+  return staffStore().get(areaKey(id), { type: 'json' });
+}
+
+export async function saveArea(area) {
+  await staffStore().setJSON(areaKey(area.id), area);
+}
+
+export async function listAreas() {
+  return (await staffStore().get('areas-index', { type: 'json' })) || [];
+}
+
+export async function saveAreasIndex(index) {
+  await staffStore().setJSON('areas-index', index);
+}
+
+export function areaSummary(area) {
+  return {
+    id: area.id,
+    name: area.name,
+    slug: area.slug,
+    active: area.active,
+    type: area.type,
+    phases: area.phases || [],
+    parentPlanningAreaId: area.parentPlanningAreaId || null,
+    leaderEmails: area.leaderEmails || [],
+  };
+}
+
+export function activeMembership(user, areaId) {
+  return (user.areaMemberships || []).find(
+    (membership) => membership.areaId === areaId && membership.status === 'active'
+  );
+}
+
+export async function requireAreaLeiter(request, areaId) {
+  const result = await requireStaffUser(request);
+  if (result.error) {
+    return result;
+  }
+  if (result.user.role === 'admin') {
+    return result;
+  }
+  const membership = activeMembership(result.user, areaId);
+  if (!membership || !membership.isLeiter) {
+    return { error: json({ error: 'Nur für die Bereichsleitung.' }, 403) };
+  }
+  return result;
+}
+
+export async function requireAreaMember(request, areaId) {
+  const result = await requireStaffUser(request);
+  if (result.error) {
+    return result;
+  }
+  if (result.user.role === 'admin') {
+    return result;
+  }
+  if (!activeMembership(result.user, areaId)) {
+    return { error: json({ error: 'Kein Zugriff auf diesen Bereich.' }, 403) };
+  }
+  return result;
 }
