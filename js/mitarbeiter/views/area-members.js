@@ -2,7 +2,8 @@ import { api, authHeaders } from '../api.js';
 
 function renderAreaBlock(area, members) {
   var pending = members.filter(function (m) { return m.status === 'pending'; });
-  var active = members.filter(function (m) { return m.status === 'active'; });
+  var flagged = members.filter(function (m) { return m.status === 'active' && m.flaggedInactiveAt; });
+  var active = members.filter(function (m) { return m.status === 'active' && !m.flaggedInactiveAt; });
 
   var wrap = document.createElement('div');
   wrap.style.marginTop = '1.25rem';
@@ -36,6 +37,29 @@ function renderAreaBlock(area, members) {
       list.appendChild(li);
     });
     wrap.appendChild(list);
+  }
+
+  if (flagged.length) {
+    var flaggedTitle = document.createElement('p');
+    flaggedTitle.className = 'sub';
+    flaggedTitle.style.marginTop = '0.75rem';
+    flaggedTitle.textContent = 'Als inaktiv gemeldet (kein Schicht-Eintrag):';
+    wrap.appendChild(flaggedTitle);
+
+    var flaggedList = document.createElement('ul');
+    flaggedList.className = 'shift-list';
+    flagged.forEach(function (member) {
+      var li = document.createElement('li');
+      li.innerHTML =
+        '<strong>' + (member.name || member.email) + '</strong>' +
+        member.email + (member.phone ? (' · ' + member.phone) : '') +
+        '<div class="actions">' +
+        '<button type="button" class="button-primary mini-btn" data-keep="' + member.email + '" data-area="' + area.id + '">Bleibt</button>' +
+        '<button type="button" class="button-secondary mini-btn" data-remove="' + member.email + '" data-area="' + area.id + '">Fliegt</button>' +
+        '</div>';
+      flaggedList.appendChild(li);
+    });
+    wrap.appendChild(flaggedList);
   }
 
   var activeP = document.createElement('p');
@@ -93,15 +117,30 @@ export async function loadMyAreas() {
 document.getElementById('meineHelferContainer').addEventListener('click', async function (event) {
   var approveBtn = event.target.closest('[data-approve]');
   var rejectBtn = event.target.closest('[data-reject]');
-  var btn = approveBtn || rejectBtn;
+  var keepBtn = event.target.closest('[data-keep]');
+  var removeBtn = event.target.closest('[data-remove]');
+  var btn = approveBtn || rejectBtn || keepBtn || removeBtn;
   if (!btn) return;
   var areaId = btn.getAttribute('data-area');
-  var email = approveBtn ? approveBtn.getAttribute('data-approve') : rejectBtn.getAttribute('data-reject');
+  var email =
+    (approveBtn && approveBtn.getAttribute('data-approve')) ||
+    (rejectBtn && rejectBtn.getAttribute('data-reject')) ||
+    (keepBtn && keepBtn.getAttribute('data-keep')) ||
+    (removeBtn && removeBtn.getAttribute('data-remove'));
+
+  var payload = { areaId: areaId, email: email };
+  if (approveBtn) payload.action = 'approve';
+  else if (rejectBtn) payload.action = 'reject';
+  else {
+    payload.action = 'resolve-inactivity';
+    payload.decision = keepBtn ? 'keep' : 'remove';
+  }
+
   try {
     await api('staff-area-members', {
       method: 'POST',
       headers: authHeaders({ 'Content-Type': 'application/json' }),
-      body: JSON.stringify({ areaId: areaId, email: email, action: approveBtn ? 'approve' : 'reject' })
+      body: JSON.stringify(payload)
     });
     await loadMyAreas();
   } catch (e) {}

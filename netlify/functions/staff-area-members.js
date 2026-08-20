@@ -45,6 +45,7 @@ export default async (request) => {
         status: membership.status,
         isLeiter: Boolean(membership.isLeiter),
         requestedAt: membership.requestedAt || null,
+        flaggedInactiveAt: membership.flaggedInactiveAt || null,
       });
     });
     return json({ members });
@@ -68,7 +69,7 @@ export default async (request) => {
   }
 
   const email = normalizeEmail(body && body.email);
-  const action = body && body.action === 'reject' ? 'reject' : 'approve';
+  const action = ['reject', 'resolve-inactivity'].includes(body && body.action) ? body.action : 'approve';
 
   const user = await getUser(email);
   if (!user) {
@@ -83,6 +84,14 @@ export default async (request) => {
 
   if (action === 'reject') {
     memberships.splice(idx, 1);
+  } else if (action === 'resolve-inactivity') {
+    const decision = body && body.decision === 'remove' ? 'remove' : 'keep';
+    if (decision === 'remove') {
+      memberships.splice(idx, 1);
+    } else {
+      const { flaggedInactiveAt, inactivityNudgeSentAt, ...rest } = memberships[idx];
+      memberships[idx] = rest;
+    }
   } else {
     memberships[idx] = {
       ...memberships[idx],
