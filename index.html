@@ -1351,10 +1351,15 @@
         var albumBtn = document.getElementById('galleryAlbumBtn');
         if (!tabsWrap || !slideshow) return;
 
-        /* PHOTO-2026-03-11-*.jpg (Zeltparty im März) bewusst nicht gelistet – anderes Event, nicht das Festival. */
+        /* Dateien liegen pro Jahr in gallery/<jahr>/. PHOTO-2026-03-11-*.jpg (Zeltparty im März,
+           liegt weiterhin lose in gallery/) bewusst nicht gelistet – anderes Event, nicht das Festival. */
+        function photoPath(year, filename) {
+          return 'gallery/' + year + '/' + filename;
+        }
+
         var galleryByYear = {
           '2026': [
-            /* Fotos vom Festival 2026 hier eintragen, sobald sie in gallery/ liegen */
+            'IMG_4164.JPG'
           ],
           '2025': [
             '20250815-sFreibadTanzt-14.JPG',
@@ -1456,7 +1461,7 @@
           var imgA = document.createElement('img');
           imgA.className = 'gallery-slideshow-img gallery-slideshow-img--active';
           imgA.alt = 'S\'Freibad Tanzt Festivalfoto';
-          imgA.src = 'gallery/' + files[order[0]];
+          imgA.src = photoPath(year, files[order[0]]);
           slideshow.appendChild(imgA);
 
           if (files.length < 2 || reduceMotion) {
@@ -1475,7 +1480,7 @@
           slideTimer = setInterval(function () {
             slideIdx = (slideIdx + 1) % order.length;
             var next = layers[1 - front];
-            next.src = 'gallery/' + files[order[slideIdx]];
+            next.src = photoPath(year, files[order[slideIdx]]);
             layers[front].classList.remove('gallery-slideshow-img--active');
             next.classList.add('gallery-slideshow-img--active');
             front = 1 - front;
@@ -1508,19 +1513,21 @@
         var albumPrev = document.getElementById('albumPrev');
         var albumNext = document.getElementById('albumNext');
         var albumFiles = [];
+        var albumYear = null;
         var albumViewIdx = 0;
         var albumTrigger = null;
 
         function showAlbumImage(idx) {
           if (!albumFiles.length) return;
           albumViewIdx = (idx + albumFiles.length) % albumFiles.length;
-          albumViewerImg.src = 'gallery/' + albumFiles[albumViewIdx];
+          albumViewerImg.src = photoPath(albumYear, albumFiles[albumViewIdx]);
           albumViewerImg.alt = 'S\'Freibad Tanzt Festivalfoto ' + (albumViewIdx + 1) + ' von ' + albumFiles.length;
         }
 
         function openAlbum(year, trigger) {
           if (!albumModal) return;
           albumTrigger = trigger || null;
+          albumYear = year;
           albumFiles = galleryByYear[year] || [];
           albumTitle.textContent = 'Rückblick ' + year;
           albumGrid.innerHTML = '';
@@ -1539,7 +1546,7 @@
               thumb.className = 'gallery-item photo-album-thumb';
               var img = document.createElement('img');
               img.loading = 'lazy';
-              img.src = 'gallery/' + filename;
+              img.src = photoPath(year, filename);
               img.alt = 'S\'Freibad Tanzt Festivalfoto ' + (idx + 1);
               thumb.appendChild(img);
               thumb.addEventListener('click', function () {
