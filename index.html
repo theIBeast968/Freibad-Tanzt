@@ -706,12 +706,22 @@
         </div>
         <div class="text-stack">
           <p>
-            Eindrücke von 2026 – die Galerie wächst mit euren
+            Eindrücke aus 2025 und 2026 – die Galerie wächst mit euren
             Lieblingsmomenten. Weitere Fotos folgen nach und nach.
           </p>
         </div>
       </div>
-      <div class="container gallery-grid" id="galleryGrid" aria-label="Festival-Fotogalerie"></div>
+
+      <div class="container gallery-tabs" role="tablist" aria-label="Rückblick nach Jahr">
+        <button type="button" class="gallery-tab" data-year="2026" role="tab" aria-selected="false">Rückblick 2026</button>
+        <button type="button" class="gallery-tab" data-year="2025" role="tab" aria-selected="false">Rückblick 2025</button>
+      </div>
+
+      <div class="container gallery-slideshow" id="gallerySlideshow" aria-live="off"></div>
+
+      <div class="container gallery-album-cta">
+        <button type="button" class="button button-secondary" id="galleryAlbumBtn">Ganzes Album ansehen</button>
+      </div>
     </section>
 
     <section id="faq" class="section section-dark">
@@ -1038,6 +1048,20 @@
     </div>
   </div>
 
+  <div class="flyer-modal photo-album-modal" id="photoAlbumModal" hidden role="dialog" aria-modal="true" aria-labelledby="photoAlbumTitle">
+    <button class="flyer-modal-backdrop" type="button" data-album-close aria-label="Album schließen"></button>
+    <div class="flyer-modal-panel photo-album-panel">
+      <button class="flyer-modal-close" type="button" data-album-close aria-label="Schließen">×</button>
+      <h2 class="flyer-modal-title" id="photoAlbumTitle"></h2>
+      <div class="photo-album-viewer">
+        <button type="button" class="photo-album-nav photo-album-nav--prev" id="albumPrev" aria-label="Vorheriges Foto">‹</button>
+        <img id="albumViewerImg" alt="">
+        <button type="button" class="photo-album-nav photo-album-nav--next" id="albumNext" aria-label="Nächstes Foto">›</button>
+      </div>
+      <div class="gallery-grid photo-album-grid" id="photoAlbumGrid"></div>
+    </div>
+  </div>
+
   <footer class="site-footer">
     <div class="container footer-wrap">
       <div>
@@ -1320,48 +1344,57 @@
         updateVisibility();
       })();
 
-      /* ---- Galerie: 9 Vorschau (3×3 bei 3 Spalten), täglich andere Auswahl ---- */
+      /* ---- Fotos: Jahres-Tabs, Zufalls-Slideshow, komplettes Album ---- */
       (function () {
-        var grid = document.getElementById('galleryGrid');
-        if (!grid) return;
+        var tabsWrap = document.querySelector('.gallery-tabs');
+        var slideshow = document.getElementById('gallerySlideshow');
+        var albumBtn = document.getElementById('galleryAlbumBtn');
+        if (!tabsWrap || !slideshow) return;
 
-        var galleryFiles = [
-          '20250815-sFreibadTanzt-14.JPG',
-          '20250815-sFreibadTanzt-15.JPG',
-          '20250815-sFreibadTanzt-19.JPG',
-          '20250815-sFreibadTanzt-25.JPG',
-          '20250815-sFreibadTanzt-31.JPG',
-          '20250815-sFreibadTanzt-36.JPG',
-          '20250815-sFreibadTanzt-37.JPG',
-          '20250815-sFreibadTanzt-44.JPG',
-          '20250815-sFreibadTanzt-48.JPG',
-          '20250815-sFreibadTanzt-66.JPG',
-          '20250815-sFreibadTanzt-67.JPG',
-          '20250815-sFreibadTanzt-69.JPG',
-          '20250815-sFreibadTanzt-75.JPG',
-          '20250815-sFreibadTanzt-81.JPG',
-          '20250815-sFreibadTanzt-82.JPG',
-          '20250815-sFreibadTanzt-86.JPG',
-          '20250815-sFreibadTanzt-87.JPG',
-          '20250815-sFreibadTanzt-93.JPG',
-          '20250815-sFreibadTanzt-100.JPG',
-          '20250815-sFreibadTanzt-105.JPG',
-          '20250815-sFreibadTanzt-109.JPG',
-          '20250815-sFreibadTanzt-113.JPG',
-          '20250815-sFreibadTanzt-116.JPG',
-          '20250815-sFreibadTanzt-144.JPG',
-          '20250815-sFreibadTanzt-146.JPG',
-          '20250815-sFreibadTanzt-150.JPG',
-          '20250815-sFreibadTanzt-151.JPG',
-          '20250815-sFreibadTanzt-160.JPG',
-          '20250815-sFreibadTanzt-165.JPG',
-          'DJI_0992.JPG',
-          'DJI_0999.JPG',
-          'PHOTO-2026-03-11-21-36-36.jpg',
-          'PHOTO-2026-03-11-21-36-36(1).jpg'
-        ];
+        /* PHOTO-2026-03-11-*.jpg (Zeltparty im März) bewusst nicht gelistet – anderes Event, nicht das Festival. */
+        var galleryByYear = {
+          '2026': [
+            /* Fotos vom Festival 2026 hier eintragen, sobald sie in gallery/ liegen */
+          ],
+          '2025': [
+            '20250815-sFreibadTanzt-14.JPG',
+            '20250815-sFreibadTanzt-15.JPG',
+            '20250815-sFreibadTanzt-19.JPG',
+            '20250815-sFreibadTanzt-25.JPG',
+            '20250815-sFreibadTanzt-31.JPG',
+            '20250815-sFreibadTanzt-36.JPG',
+            '20250815-sFreibadTanzt-37.JPG',
+            '20250815-sFreibadTanzt-44.JPG',
+            '20250815-sFreibadTanzt-48.JPG',
+            '20250815-sFreibadTanzt-66.JPG',
+            '20250815-sFreibadTanzt-67.JPG',
+            '20250815-sFreibadTanzt-69.JPG',
+            '20250815-sFreibadTanzt-75.JPG',
+            '20250815-sFreibadTanzt-81.JPG',
+            '20250815-sFreibadTanzt-82.JPG',
+            '20250815-sFreibadTanzt-86.JPG',
+            '20250815-sFreibadTanzt-87.JPG',
+            '20250815-sFreibadTanzt-93.JPG',
+            '20250815-sFreibadTanzt-100.JPG',
+            '20250815-sFreibadTanzt-105.JPG',
+            '20250815-sFreibadTanzt-109.JPG',
+            '20250815-sFreibadTanzt-113.JPG',
+            '20250815-sFreibadTanzt-116.JPG',
+            '20250815-sFreibadTanzt-144.JPG',
+            '20250815-sFreibadTanzt-146.JPG',
+            '20250815-sFreibadTanzt-150.JPG',
+            '20250815-sFreibadTanzt-151.JPG',
+            '20250815-sFreibadTanzt-160.JPG',
+            '20250815-sFreibadTanzt-165.JPG',
+            'DJI_0992.JPG',
+            'DJI_0999.JPG'
+          ]
+        };
 
-        var PREVIEW = 9;
+        var SLIDE_INTERVAL_MS = 4000;
+        var activeYear = '2026';
+        var slideTimer = null;
+        var reduceMotion = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
         function hashString(str) {
           var h = 2166136261;
@@ -1397,52 +1430,157 @@
           return arr;
         }
 
-        var now = new Date();
-        var dayKey =
-          now.getFullYear() +
-          '-' +
-          String(now.getMonth() + 1).padStart(2, '0') +
-          '-' +
-          String(now.getDate()).padStart(2, '0');
-        var shuffleSeed = hashString('sfreibad-gallery-v1-' + dayKey);
-        var order = shuffleIndices(galleryFiles.length, shuffleSeed);
-        var previewCount = Math.min(PREVIEW, galleryFiles.length);
-        var visibleIdx = order.slice(0, previewCount);
-        var hiddenIdx = order.slice(previewCount);
-
-        function appendFigure(fileIndex, hidden) {
-          var filename = galleryFiles[fileIndex];
-          var wrapper = document.createElement('figure');
-          wrapper.className = 'gallery-item' + (hidden ? ' gallery-item--hidden' : '');
-
-          var img = document.createElement('img');
-          img.loading = hidden ? 'lazy' : 'eager';
-          img.alt = 'S\'Freibad Tanzt Festivalfoto';
-          img.src = 'gallery/' + filename;
-
-          wrapper.appendChild(img);
-          grid.appendChild(wrapper);
+        function renderEmptySlideshow(year) {
+          slideshow.innerHTML = '';
+          var empty = document.createElement('p');
+          empty.className = 'gallery-slideshow-empty';
+          empty.textContent = 'Fotos vom Festival ' + year + ' folgen in Kürze.';
+          slideshow.appendChild(empty);
         }
 
-        visibleIdx.forEach(function (fileIndex) {
-          appendFigure(fileIndex, false);
-        });
-        hiddenIdx.forEach(function (fileIndex) {
-          appendFigure(fileIndex, true);
-        });
+        function startSlideshow(year) {
+          if (slideTimer) {
+            clearInterval(slideTimer);
+            slideTimer = null;
+          }
+          slideshow.innerHTML = '';
 
-        if (galleryFiles.length > previewCount) {
-          var showBtn = document.createElement('button');
-          showBtn.className = 'button button-outline gallery-show-more';
-          showBtn.textContent = 'Mehr Fotos anzeigen';
-          showBtn.addEventListener('click', function () {
-            grid.querySelectorAll('.gallery-item--hidden').forEach(function (el) {
-              el.classList.remove('gallery-item--hidden');
-            });
-            showBtn.parentNode.removeChild(showBtn);
+          var files = galleryByYear[year] || [];
+          if (!files.length) {
+            renderEmptySlideshow(year);
+            return;
+          }
+
+          var order = shuffleIndices(files.length, hashString('sfreibad-slideshow-' + year + '-' + Math.random()));
+
+          var imgA = document.createElement('img');
+          imgA.className = 'gallery-slideshow-img gallery-slideshow-img--active';
+          imgA.alt = 'S\'Freibad Tanzt Festivalfoto';
+          imgA.src = 'gallery/' + files[order[0]];
+          slideshow.appendChild(imgA);
+
+          if (files.length < 2 || reduceMotion) {
+            return;
+          }
+
+          var imgB = document.createElement('img');
+          imgB.className = 'gallery-slideshow-img';
+          imgB.alt = 'S\'Freibad Tanzt Festivalfoto';
+          slideshow.appendChild(imgB);
+
+          var layers = [imgA, imgB];
+          var front = 0;
+          var slideIdx = 0;
+
+          slideTimer = setInterval(function () {
+            slideIdx = (slideIdx + 1) % order.length;
+            var next = layers[1 - front];
+            next.src = 'gallery/' + files[order[slideIdx]];
+            layers[front].classList.remove('gallery-slideshow-img--active');
+            next.classList.add('gallery-slideshow-img--active');
+            front = 1 - front;
+          }, SLIDE_INTERVAL_MS);
+        }
+
+        function setActiveTab(year) {
+          activeYear = year;
+          tabsWrap.querySelectorAll('.gallery-tab').forEach(function (btn) {
+            var isActive = btn.getAttribute('data-year') === year;
+            btn.classList.toggle('gallery-tab--active', isActive);
+            btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
           });
-          grid.insertAdjacentElement('afterend', showBtn);
+          startSlideshow(year);
         }
+
+        tabsWrap.querySelectorAll('.gallery-tab').forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            setActiveTab(btn.getAttribute('data-year'));
+          });
+        });
+
+        setActiveTab(activeYear);
+
+        /* ---- Ganzes Album (Modal mit Grid + Groß-Ansicht) ---- */
+        var albumModal = document.getElementById('photoAlbumModal');
+        var albumTitle = document.getElementById('photoAlbumTitle');
+        var albumGrid = document.getElementById('photoAlbumGrid');
+        var albumViewerImg = document.getElementById('albumViewerImg');
+        var albumPrev = document.getElementById('albumPrev');
+        var albumNext = document.getElementById('albumNext');
+        var albumFiles = [];
+        var albumViewIdx = 0;
+        var albumTrigger = null;
+
+        function showAlbumImage(idx) {
+          if (!albumFiles.length) return;
+          albumViewIdx = (idx + albumFiles.length) % albumFiles.length;
+          albumViewerImg.src = 'gallery/' + albumFiles[albumViewIdx];
+          albumViewerImg.alt = 'S\'Freibad Tanzt Festivalfoto ' + (albumViewIdx + 1) + ' von ' + albumFiles.length;
+        }
+
+        function openAlbum(year, trigger) {
+          if (!albumModal) return;
+          albumTrigger = trigger || null;
+          albumFiles = galleryByYear[year] || [];
+          albumTitle.textContent = 'Rückblick ' + year;
+          albumGrid.innerHTML = '';
+
+          if (!albumFiles.length) {
+            var empty = document.createElement('p');
+            empty.className = 'gallery-slideshow-empty';
+            empty.textContent = 'Fotos vom Festival ' + year + ' folgen in Kürze.';
+            albumGrid.appendChild(empty);
+            albumViewerImg.removeAttribute('src');
+            albumViewerImg.alt = '';
+          } else {
+            albumFiles.forEach(function (filename, idx) {
+              var thumb = document.createElement('button');
+              thumb.type = 'button';
+              thumb.className = 'gallery-item photo-album-thumb';
+              var img = document.createElement('img');
+              img.loading = 'lazy';
+              img.src = 'gallery/' + filename;
+              img.alt = 'S\'Freibad Tanzt Festivalfoto ' + (idx + 1);
+              thumb.appendChild(img);
+              thumb.addEventListener('click', function () {
+                showAlbumImage(idx);
+              });
+              albumGrid.appendChild(thumb);
+            });
+            showAlbumImage(0);
+          }
+
+          albumModal.hidden = false;
+          document.body.classList.add('flyer-modal-open');
+          albumModal.querySelector('.flyer-modal-close').focus();
+        }
+
+        function closeAlbum() {
+          if (!albumModal) return;
+          albumModal.hidden = true;
+          albumViewerImg.removeAttribute('src');
+          document.body.classList.remove('flyer-modal-open');
+          if (albumTrigger) albumTrigger.focus();
+        }
+
+        if (albumBtn) {
+          albumBtn.addEventListener('click', function (event) {
+            openAlbum(activeYear, event.currentTarget);
+          });
+        }
+        if (albumPrev) albumPrev.addEventListener('click', function () { showAlbumImage(albumViewIdx - 1); });
+        if (albumNext) albumNext.addEventListener('click', function () { showAlbumImage(albumViewIdx + 1); });
+        if (albumModal) {
+          albumModal.querySelectorAll('[data-album-close]').forEach(function (el) {
+            el.addEventListener('click', closeAlbum);
+          });
+        }
+        document.addEventListener('keydown', function (event) {
+          if (!albumModal || albumModal.hidden) return;
+          if (event.key === 'Escape') closeAlbum();
+          if (event.key === 'ArrowLeft') showAlbumImage(albumViewIdx - 1);
+          if (event.key === 'ArrowRight') showAlbumImage(albumViewIdx + 1);
+        });
       })();
     })();
   </script>
