@@ -3,6 +3,7 @@ import { showErr } from '../dom.js';
 import { getCurrentUser } from '../state.js';
 import { phaseLabel } from '../format.js';
 import { renderPostCard } from '../dashboard-ui.js';
+import { uploadFiles } from '../media.js';
 
 var panel = document.getElementById('mein-bereich');
 var tocLink = document.getElementById('tocMeinBereich');
@@ -579,6 +580,10 @@ postForm.addEventListener('submit', async function (event) {
       .split(',').map(function (s) { return s.trim(); }).filter(Boolean);
   }
   try {
+    var files = document.getElementById('areaPostMedia').files;
+    if (files && files.length) {
+      payload.media = await uploadFiles(files, currentAreaId);
+    }
     await api('staff-dashboard-area', {
       method: 'POST',
       headers: authHeaders({ 'Content-Type': 'application/json' }),

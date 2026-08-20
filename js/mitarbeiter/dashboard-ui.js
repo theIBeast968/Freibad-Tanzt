@@ -1,3 +1,5 @@
+import { mediaUrl } from './media.js';
+
 var TYPE_LABELS = {
   announcement: 'Ankündigung',
   poll: 'Umfrage',
@@ -26,6 +28,36 @@ export function renderPostCard(post, currentUserEmail, handlers) {
     bodyP.style.margin = '0 0 0.5rem';
     bodyP.textContent = post.body;
     li.appendChild(bodyP);
+  }
+
+  if (post.media && post.media.length) {
+    var mediaWrap = document.createElement('div');
+    mediaWrap.style.display = 'flex';
+    mediaWrap.style.flexWrap = 'wrap';
+    mediaWrap.style.gap = '0.5rem';
+    mediaWrap.style.margin = '0 0 0.5rem';
+    post.media.forEach(function (item) {
+      var src = mediaUrl(item);
+      var el;
+      if (item.contentType && item.contentType.indexOf('video/') === 0) {
+        el = document.createElement('video');
+        el.src = src;
+        el.controls = true;
+      } else {
+        el = document.createElement('img');
+        el.src = src;
+        el.alt = item.filename || '';
+        el.style.objectFit = 'cover';
+        el.style.cursor = 'pointer';
+        el.addEventListener('click', function () { window.open(src, '_blank'); });
+      }
+      el.style.maxWidth = '160px';
+      el.style.maxHeight = '160px';
+      el.style.borderRadius = '0.6rem';
+      el.style.border = '1px solid rgba(255,255,255,0.12)';
+      mediaWrap.appendChild(el);
+    });
+    li.appendChild(mediaWrap);
   }
 
   if (post.type === 'poll') {

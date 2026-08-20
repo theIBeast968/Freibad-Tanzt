@@ -2,6 +2,7 @@ import { api, authHeaders } from '../api.js';
 import { showErr } from '../dom.js';
 import { getCurrentUser } from '../state.js';
 import { renderPostCard } from '../dashboard-ui.js';
+import { uploadFiles } from '../media.js';
 
 var form = document.getElementById('globalDashboardForm');
 var formWrap = document.getElementById('globalPostForm');
@@ -87,6 +88,10 @@ form.addEventListener('submit', async function (event) {
       .filter(Boolean);
   }
   try {
+    var files = document.getElementById('globalPostMedia').files;
+    if (files && files.length) {
+      payload.media = await uploadFiles(files, null);
+    }
     await api('staff-dashboard-global', {
       method: 'POST',
       headers: authHeaders({ 'Content-Type': 'application/json' }),

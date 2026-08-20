@@ -113,6 +113,7 @@ export default async (request) => {
       assigneeName,
       dueDate: body.dueDate,
       items,
+      media: body.media,
     });
     const posts = await readPosts(keyFor(areaId));
     posts.push(post);

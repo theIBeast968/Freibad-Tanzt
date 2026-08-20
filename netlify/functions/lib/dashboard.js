@@ -1,6 +1,22 @@
 import { randomBytes } from 'node:crypto';
 import { staffStore } from './staff-auth.js';
 
+export const MAX_MEDIA_PER_POST = 6;
+
+export function sanitizeMedia(rawMedia) {
+  if (!Array.isArray(rawMedia)) {
+    return [];
+  }
+  return rawMedia
+    .filter((item) => item && typeof item.id === 'string' && item.id)
+    .slice(0, MAX_MEDIA_PER_POST)
+    .map((item) => ({
+      id: item.id,
+      contentType: typeof item.contentType === 'string' ? item.contentType.slice(0, 60) : '',
+      filename: typeof item.filename === 'string' ? item.filename.slice(0, 120) : '',
+    }));
+}
+
 export function newPost({
   type,
   authorEmail,
@@ -12,6 +28,7 @@ export function newPost({
   assigneeName,
   dueDate,
   items,
+  media,
 }) {
   const now = new Date().toISOString();
   const post = {
@@ -21,6 +38,7 @@ export function newPost({
     authorName,
     title,
     body,
+    media: sanitizeMedia(media),
     comments: [],
     createdAt: now,
     updatedAt: now,

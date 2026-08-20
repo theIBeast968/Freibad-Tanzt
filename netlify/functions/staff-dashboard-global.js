@@ -63,6 +63,7 @@ export default async (request) => {
       title,
       body: text,
       pollOptions,
+      media: body.media,
     });
     posts.push(post);
     await writePosts(KEY, posts, CAP);
