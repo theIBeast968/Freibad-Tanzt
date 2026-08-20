@@ -37,17 +37,21 @@ export function renderPostCard(post, currentUserEmail, handlers) {
     mediaWrap.style.flexWrap = 'wrap';
     mediaWrap.style.gap = '0.5rem';
     mediaWrap.style.margin = '0 0 0.5rem';
-    post.media.forEach(function (item) {
+    post.media.forEach(function (item, index) {
       var src = mediaUrl(item);
       var el;
+      var altText = post.title
+        ? 'Bild ' + (index + 1) + ' von ' + post.media.length + ' zu „' + post.title + '“'
+        : (item.filename || 'Bild ' + (index + 1) + ' von ' + post.media.length);
       if (item.contentType && item.contentType.indexOf('video/') === 0) {
         el = document.createElement('video');
         el.src = src;
         el.controls = true;
+        el.setAttribute('aria-label', altText);
       } else {
         el = document.createElement('img');
         el.src = src;
-        el.alt = item.filename || '';
+        el.alt = altText;
         el.style.objectFit = 'cover';
         el.style.cursor = 'pointer';
         el.addEventListener('click', function () { window.open(src, '_blank'); });
