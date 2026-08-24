@@ -1,15 +1,16 @@
-import { signStaffToken, safePasswordEqual } from './lib/jwt.js';
+import { safePasswordEqual } from './lib/jwt.js';
 import {
+  ensureOriginsSeeded,
   getUser,
   hashPassword,
   isValidEmail,
   json,
   normalizeEmail,
-  publicUser,
   resolveRole,
   saveUser,
   staffConfigOk,
 } from './lib/staff-auth.js';
+import { notifyAdmins } from './lib/push-send.js';
 
 function cleanNamePart(value) {
   return typeof value === 'string' ? value.trim() : '';
@@ -43,6 +44,8 @@ export default async (request) => {
   const password = body && typeof body.password === 'string' ? body.password : '';
   const inviteCode =
     body && typeof body.inviteCode === 'string' ? body.inviteCode.trim() : '';
+  const origin = body && typeof body.origin === 'string' ? body.origin.trim() : '';
+  const consentAccepted = Boolean(body && body.consentAccepted === true);
 
   if (firstName.length < 2 || firstName.length > 60) {
     return json({ error: 'Bitte einen gültigen Vornamen angeben.' }, 400);
@@ -62,32 +65,54 @@ export default async (request) => {
   if (!safePasswordEqual(inviteCode, process.env.STAFF_INVITE_CODE)) {
     return json({ error: 'Einladungscode ungültig.' }, 403);
   }
+  if (!consentAccepted) {
+    return json({ error: 'Bitte der Datenspeicherung zustimmen.' }, 400);
+  }
+
+  const origins = await ensureOriginsSeeded();
+  if (!origins.includes(origin)) {
+    return json({ error: 'Bitte eine gültige Herkunft wählen.' }, 400);
+  }
 
   const existing = await getUser(email);
   if (existing) {
     return json({ error: 'Für diese E-Mail existiert bereits ein Konto.' }, 409);
   }
 
+  const now = new Date().toISOString();
   const name = `${firstName} ${lastName}`.trim();
+
+  // Admins (STAFF_ADMIN_EMAILS) schalten sich selbst frei, sonst koennte der allererste
+  // Admin von niemandem freigeschaltet werden. Alle anderen starten als 'pending' und
+  // brauchen eine explizite Admin-Bestaetigung, bevor ein Login moeglich ist.
+  const isAdmin = resolveRole({ email, role: 'staff' }) === 'admin';
+
   const draft = {
     firstName,
     lastName,
     name,
     phone,
     email,
+    origin,
+    consentAcceptedAt: now,
+    consentVersion: '1',
+    areaMemberships: [],
+    accountStatus: isAdmin ? 'approved' : 'pending',
     role: 'staff',
     passwordHash: hashPassword(password),
-    createdAt: new Date().toISOString(),
+    createdAt: now,
   };
-  const role = resolveRole(draft);
-  draft.role = role;
+  draft.role = resolveRole(draft);
 
   await saveUser(draft);
 
-  const token = signStaffToken(process.env.STAFF_JWT_SECRET, email, name, role);
-  return json({
-    token,
-    user: publicUser(draft),
-    expiresInSeconds: 8 * 3600,
-  });
+  if (!isAdmin) {
+    await notifyAdmins({
+      title: 'Neue Registrierung',
+      body: `${name} wartet auf Freischaltung.`,
+      url: '/mitarbeiter.html#admin-registrations',
+    });
+  }
+
+  return json({ ok: true, pending: !isAdmin });
 };
