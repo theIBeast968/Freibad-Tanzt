@@ -41,6 +41,13 @@ export default async (request) => {
   }
 
   const role = resolveRole(user);
+
+  // Nur explizit 'pending' sperrt den Login. Accounts ohne accountStatus-Feld
+  // (aus der Zeit vor dieser Freischaltungspflicht) bleiben bewusst nutzbar.
+  if (user.accountStatus === 'pending' && role !== 'admin') {
+    return json({ error: 'Deine Registrierung wartet noch auf Freischaltung durch den Admin.' }, 403);
+  }
+
   if (user.role !== role) {
     await saveUser({ ...user, role });
   }
