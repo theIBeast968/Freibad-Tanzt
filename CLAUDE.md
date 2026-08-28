@@ -18,10 +18,13 @@ Bei Umbauten an Login, Auth oder Datenstruktur besser über Branch plus Pull Req
 ## Aufbau
 
 - `index.html`, `mitarbeiter.html` – Seiten
-- `js/` – Frontend
-- `netlify/functions/` – Backend: Login, Schichten, Aufgaben, Stats, Tracking
-- `netlify/functions/lib/` – geteilte Helfer
-- `attractions/`, `bands/`, `gallery/`, `exports/` – Inhalte und Assets
+- `js/`, `js/mitarbeiter/` – Frontend (Helferbereich-Frontend modular unter `js/mitarbeiter/`, inkl. `views/`)
+- `netlify/functions/` – Backend: Login, Schichten, Aufgaben, Bereiche, Chat, Push, Stats, Tracking, Chatbot
+- `netlify/functions/lib/` – geteilte Helfer (u. a. `claude.js` fürs Chatbot-Backend)
+- `attractions/`, `bands/`, `gallery/`, `exports/`, `content/` – Inhalte und Assets
+- `gallery/<jahr>/` – Festivalfotos liegen pro Jahr in einem Unterordner (z. B. `gallery/2025/`, `gallery/2026/`), referenziert über `photoPath(year, filename)` in `index.html`
+- `.claude/launch.json` – Dev-Server-Konfiguration für den Browser-Preview in Claude Code
+- `Helferbereich_Konzept_2027.md`, `Status.md`, `Uebergabe.md` – fachliche/organisatorische Doku, kein Code
 
 Daten liegen in **Netlify Blobs**, es gibt keine klassische Datenbank.
 
@@ -44,7 +47,9 @@ Ohne `netlify dev` laufen die Functions und der Mitarbeiterbereich nicht.
 Produktiv-Secrets stehen ausschließlich in den Netlify-Environment-Variablen, nie im Repo.
 Lokal: `.env.example` nach `.env` kopieren und eigene Testwerte eintragen. `.env` ist gitignored.
 
-Variablen: `STAFF_JWT_SECRET`, `STAFF_INVITE_CODE`, `STAFF_ADMIN_EMAILS`, `STATS_JWT_SECRET`, `STATS_PASSWORD`
+Variablen: `STAFF_JWT_SECRET`, `STAFF_INVITE_CODE`, `STAFF_ADMIN_EMAILS`, `STATS_JWT_SECRET`, `STATS_PASSWORD`, `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` (Web-Push), `ANTHROPIC_API_KEY` (Chatbot-Funktionen)
+
+Das Netlify-Projekt (`freibadtanzt`) läuft unter **Svens** Netlify-Account, nicht unter dem des Projektinhabers. Bei einem fehlgeschlagenen Deploy-Check ist der Build-Log nur über Svens Dashboard einsehbar – siehe `Uebergabe.md` für Details und einen lokalen Diagnose-Workaround.
 
 ## Stil
 
